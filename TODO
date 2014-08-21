@@ -2,9 +2,11 @@
 * copy to left / copy to right
 * move file / move code
 * update
-* copyright
-* github
+* copyright (done)
+* github (done)
 * save button should save both name and content
-* cmake
+* cmake (done)
 * use std::bind
 * namespace rename
+* codes in content
+* code formatting
