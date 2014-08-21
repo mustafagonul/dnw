@@ -19,3 +19,8 @@
 *.exe
 *.out
 *.app
+
+# Directories
+/Debug
+/data
+/resources
