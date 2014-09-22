@@ -20,7 +20,7 @@
 #include <fstream>
 
 
-namespace site {
+namespace dnw {
 namespace utility {
 namespace file {
 
@@ -46,5 +46,5 @@ void write(std::string const &filename, std::string const &str)
 
 } // file
 } // utility
-} // site
+} // dnw
 

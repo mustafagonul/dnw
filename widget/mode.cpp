@@ -18,7 +18,7 @@
 
 #include "widget/mode.hpp"
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -73,4 +73,4 @@ void Mode::update()
 
 
 } // widget
-} // site
+} // dnw

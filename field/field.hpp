@@ -21,23 +21,23 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_FIELD_FIELD_HPP
-#define SITE_FIELD_FIELD_HPP
+#ifndef DNW_FIELD_FIELD_HPP
+#define DNW_FIELD_FIELD_HPP
 
 #include "system/fwd.hpp"
 #include <string>
 
 
-namespace site {
+namespace dnw {
   namespace field {
 
     /**
-     * @class site::field::Field
+     * @class dnw::field::Field
      * @brief This class is a base class for working on fields of a node
      */
     class Field {
     protected:
-      using Device = site::system::Device;
+      using Device = dnw::system::Device;
       using String = std::string;
       using Index  = unsigned;
 
@@ -128,4 +128,4 @@ namespace site {
   }
 }
 
-#endif // SITE_FIELD_FIELD_HPP
+#endif // DNW_FIELD_FIELD_HPP

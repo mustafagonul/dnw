@@ -24,7 +24,7 @@
 #include <Wt/WColor>
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -182,4 +182,4 @@ bool Tree::index(Item const &item, Indexes &result) const
 
 
 } // widget
-} // site
+} // dnw

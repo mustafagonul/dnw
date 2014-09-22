@@ -21,11 +21,11 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_SYSTEM_FWD_HPP
-#define SITE_SYSTEM_FWD_HPP
+#ifndef DNW_SYSTEM_FWD_HPP
+#define DNW_SYSTEM_FWD_HPP
 
 
-namespace site {
+namespace dnw {
   namespace system {
 
     class Device;
@@ -34,4 +34,4 @@ namespace site {
 }
 
 
-#endif // SITE_SYSTEM_FWD_HPP
+#endif // DNW_SYSTEM_FWD_HPP

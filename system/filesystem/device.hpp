@@ -21,24 +21,24 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_SYSTEM_FILESYSTEM_DEVICE_HPP
-#define SITE_SYSTEM_FILESYSTEM_DEVICE_HPP
+#ifndef DNW_SYSTEM_FILESYSTEM_DEVICE_HPP
+#define DNW_SYSTEM_FILESYSTEM_DEVICE_HPP
 
 #include "system/device.hpp"
 #include "system/filesystem/key.hpp"
 
 
-namespace site {
+namespace dnw {
   namespace system {
     namespace filesystem {
 
       /**
-       * @class site::system::filesystem::Device
+       * @class dnw::system::filesystem::Device
        * @brief This class implements abstract Device class. Holds the information at filesystem.
        */
-      class Device : public site::system::Device {
+      class Device : public dnw::system::Device {
       private:
-        using Base = site::system::Device;
+        using Base = dnw::system::Device;
 
       public:
         /**
@@ -244,4 +244,4 @@ namespace site {
 }
 
 
-#endif // SITE_SYSTEM_FILESYSTEM_DEVICE_HPP
+#endif // DNW_SYSTEM_FILESYSTEM_DEVICE_HPP

@@ -21,7 +21,7 @@
 
 
 
-namespace site {
+namespace dnw {
 namespace field {
 
 
@@ -46,4 +46,4 @@ Content::String Content::content(String const &language) const
 }
 
 } // field
-} // site
+} // dnw

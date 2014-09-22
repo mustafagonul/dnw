@@ -16,15 +16,15 @@
  *
 **/
 
-#ifndef SITE_SYSTEM_DEVICE_HPP
-#define SITE_SYSTEM_DEVICE_HPP
+#ifndef DNW_SYSTEM_DEVICE_HPP
+#define DNW_SYSTEM_DEVICE_HPP
 
 #include <string>
 #include <memory>
 #include <boost/any.hpp>
 
 
-namespace site {
+namespace dnw {
   namespace system {
 
     class Device {
@@ -344,4 +344,4 @@ namespace site {
   }
 }
 
-#endif // SITE_SYSTEM_DEVICE_HPP
+#endif // DNW_SYSTEM_DEVICE_HPP

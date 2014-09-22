@@ -21,19 +21,19 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_SYSTEM_FILESYSTEM_KEY_HPP
-#define SITE_SYSTEM_FILESYSTEM_KEY_HPP
+#ifndef DNW_SYSTEM_FILESYSTEM_KEY_HPP
+#define DNW_SYSTEM_FILESYSTEM_KEY_HPP
 
 #include <string>
 #include <vector>
 
 
-namespace site {
+namespace dnw {
   namespace system {
     namespace filesystem {
 
       /**
-       * @class site::system::filesystem::Key
+       * @class dnw::system::filesystem::Key
        * @brief This class represents filesystem keys.
        */
       class Key {
@@ -133,4 +133,4 @@ namespace site {
 }
 
 
-#endif // SITE_SYSTEM_FILESYSTEM_KEY_HPP
+#endif // DNW_SYSTEM_FILESYSTEM_KEY_HPP

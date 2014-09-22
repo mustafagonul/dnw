@@ -21,17 +21,17 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_FIELD_CODE_HPP
-#define SITE_FIELD_CODE_HPP
+#ifndef DNW_FIELD_CODE_HPP
+#define DNW_FIELD_CODE_HPP
 
 #include "field/field.hpp"
 
 
-namespace site {
+namespace dnw {
   namespace field {
 
     /**
-     * @class site::field::Code
+     * @class dnw::field::Code
      * @brief This class is for working on code field of a node.
      */
     class Code : public Field {
@@ -83,4 +83,4 @@ namespace site {
   }
 }
 
-#endif // SITE_FIELD_CODE_HPP
+#endif // DNW_FIELD_CODE_HPP

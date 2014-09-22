@@ -16,21 +16,21 @@
  *
 **/
 
-#ifndef SITE_WIDGET_WIDGET_HPP
-#define SITE_WIDGET_WIDGET_HPP
+#ifndef DNW_WIDGET_WIDGET_HPP
+#define DNW_WIDGET_WIDGET_HPP
 
 #include "widget/base.hpp"
 #include "system/fwd.hpp"
 #include <boost/any.hpp>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Widget : public Base {
     protected:
       using Any    = boost::any;
-      using Device = site::system::Device;
+      using Device = dnw::system::Device;
 
     protected:
       Widget(Device const &device,
@@ -57,4 +57,4 @@ namespace site {
 }
 
 
-#endif // SITE_WIDGET_WIDGET_HPP
+#endif // DNW_WIDGET_WIDGET_HPP

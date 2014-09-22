@@ -22,7 +22,7 @@
 #include <boost/lexical_cast.hpp>
 
 
-namespace site {
+namespace dnw {
 namespace system {
 namespace filesystem {
 
@@ -31,7 +31,7 @@ Key::Key(String const &str)
   : indices()
 {
   using Strings = std::vector<String>;
-  using site::utility::string::split;
+  using dnw::utility::string::split;
 
   Strings items;
   split(str, delimiter(), items);
@@ -126,4 +126,4 @@ char Key::delimiter()
 
 } // filesystem
 } // system
-} // site
+} // dnw

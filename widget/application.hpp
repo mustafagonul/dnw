@@ -16,8 +16,8 @@
  *
 **/
 
-#ifndef SITE_WIDGET_APPLICATION_HPP
-#define SITE_WIDGET_APPLICATION_HPP
+#ifndef DNW_WIDGET_APPLICATION_HPP
+#define DNW_WIDGET_APPLICATION_HPP
 
 #include "widget/fwd.hpp"
 #include "system/filesystem/device.hpp"
@@ -27,7 +27,7 @@
 #include <boost/any.hpp>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Application : public Wt::WApplication {
@@ -35,7 +35,7 @@ namespace site {
       using String      = std::string;
       using Any         = boost::any;
       using Environment = Wt::WEnvironment;
-      using Device      = site::system::filesystem::Device;
+      using Device      = dnw::system::filesystem::Device;
       using Container   = Wt::WContainerWidget;
 
     public:
@@ -66,4 +66,4 @@ namespace site {
 }
 
 
-#endif // SITE_WIDGET_APPLICATION_HPP
+#endif // DNW_WIDGET_APPLICATION_HPP

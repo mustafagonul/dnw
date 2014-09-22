@@ -16,14 +16,14 @@
  *
 **/
 
-#ifndef SITE_WIDGET_ADMIN_HPP
-#define SITE_WIDGET_ADMIN_HPP
+#ifndef DNW_WIDGET_ADMIN_HPP
+#define DNW_WIDGET_ADMIN_HPP
 
 #include "widget/widget.hpp"
 #include <Wt/WInPlaceEdit>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Admin : public Widget {
@@ -79,4 +79,4 @@ namespace site {
   }
 }
 
-#endif // SITE_WIDGET_ADMIN_HPP
+#endif // DNW_WIDGET_ADMIN_HPP

@@ -16,15 +16,15 @@
  *
 **/
 
-#ifndef SITE_WIDGET_CONTENT_HPP
-#define SITE_WIDGET_CONTENT_HPP
+#ifndef DNW_WIDGET_CONTENT_HPP
+#define DNW_WIDGET_CONTENT_HPP
 
 #include "widget/widget.hpp"
 #include "system/fwd.hpp"
 #include <map>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Content : public Widget {
@@ -56,4 +56,4 @@ namespace site {
 }
 
 
-#endif // SITE_WIDGET_CONTENT_HPP
+#endif // DNW_WIDGET_CONTENT_HPP

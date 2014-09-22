@@ -73,7 +73,7 @@ static std::string base64Encode(unsigned char const* bytes_to_encode, unsigned i
 
 }
 
-std::string site::utility::encryption::base64Decode(std::string const &encoded_string)
+std::string dnw::utility::encryption::base64Decode(std::string const &encoded_string)
 {
   int in_len = encoded_string.size();
   int i = 0;
@@ -115,7 +115,7 @@ std::string site::utility::encryption::base64Decode(std::string const &encoded_s
   return ret;
 }
 
-void site::utility::encryption::md5(std::string const &str, std::vector<unsigned char> &result)
+void dnw::utility::encryption::md5(std::string const &str, std::vector<unsigned char> &result)
 {
   result.clear();
   if (str.empty())

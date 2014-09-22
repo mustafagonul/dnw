@@ -19,7 +19,7 @@
 #include "widget/base.hpp"
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -50,4 +50,4 @@ Base::String const &Base::language() const
 
 
 } // widget
-} // site
+} // dnw

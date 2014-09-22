@@ -21,13 +21,13 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_UTILITY_FILE_HPP
-#define SITE_UTILITY_FILE_HPP
+#ifndef DNW_UTILITY_FILE_HPP
+#define DNW_UTILITY_FILE_HPP
 
 #include <string>
 
 
-namespace site {
+namespace dnw {
   namespace utility {
     namespace file {
 
@@ -52,4 +52,4 @@ namespace site {
 }
 
 
-#endif // SITE_UTILITY_FILE_HPP
+#endif // DNW_UTILITY_FILE_HPP

@@ -28,7 +28,7 @@
 #include <boost/regex.hpp>
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -89,7 +89,7 @@ void Content::update()
 
 Content::String Content::convert(String const &str) const
 {
-  using site::utility::string::replace;
+  using dnw::utility::string::replace;
 
   String result = str;
 
@@ -126,4 +126,4 @@ Content::String Content::convert(String const &str, String const &expressionStr)
 
 
 } // widget
-} // site
+} // dnw

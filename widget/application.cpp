@@ -30,7 +30,7 @@
 #include <Wt/Auth/AuthModel>
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -165,4 +165,4 @@ void Application::update()
 
 
 } // widget
-} // site
+} // dnw

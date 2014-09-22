@@ -16,8 +16,8 @@
  *
 **/
 
-#ifndef SITE_WIDGET_TREE_HPP
-#define SITE_WIDGET_TREE_HPP
+#ifndef DNW_WIDGET_TREE_HPP
+#define DNW_WIDGET_TREE_HPP
 
 
 #include "widget/widget.hpp"
@@ -25,7 +25,7 @@
 #include <Wt/WStandardItemModel>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Tree : public Widget {
@@ -71,4 +71,4 @@ namespace site {
   }
 }
 
-#endif // SITE_WIDGET_TREE_HPP
+#endif // DNW_WIDGET_TREE_HPP

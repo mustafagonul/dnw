@@ -25,7 +25,7 @@ using namespace Wt;
 
 WApplication *createApplication(const WEnvironment& env)
 {
-  return new site::widget::Application(env);
+  return new dnw::widget::Application(env);
 }
 
 

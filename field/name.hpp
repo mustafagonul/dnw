@@ -21,17 +21,17 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_FIELD_NAME_HPP
-#define SITE_FIELD_NAME_HPP
+#ifndef DNW_FIELD_NAME_HPP
+#define DNW_FIELD_NAME_HPP
 
 #include "field/field.hpp"
 
 
-namespace site {
+namespace dnw {
   namespace field {
 
     /**
-     * @class site::field::Name
+     * @class dnw::field::Name
      * @brief This class is for working on name field of a node.
      */
     class Name : public Field {
@@ -70,4 +70,4 @@ namespace site {
 }
 
 
-#endif // SITE_FIELD_NAME_HPP
+#endif // DNW_FIELD_NAME_HPP

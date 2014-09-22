@@ -21,14 +21,14 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_UTILITY_STRING_HPP
-#define SITE_UTILITY_STRING_HPP
+#ifndef DNW_UTILITY_STRING_HPP
+#define DNW_UTILITY_STRING_HPP
 
 #include <vector>
 #include <string>
 
 
-namespace site {
+namespace dnw {
   namespace utility {
     namespace string {
 
@@ -79,4 +79,4 @@ namespace site {
 }
 
 
-#endif // SITE_UTILITY_STRING_HPP
+#endif // DNW_UTILITY_STRING_HPP

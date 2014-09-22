@@ -16,15 +16,15 @@
  *
 **/
 
-#ifndef SITE_WIDGET_MODE_HPP
-#define SITE_WIDGET_MODE_HPP
+#ifndef DNW_WIDGET_MODE_HPP
+#define DNW_WIDGET_MODE_HPP
 
 #include "widget/base.hpp"
 #include <Wt/WToolBar>
 #include <Wt/WPushButton>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Mode : public Base {
@@ -53,4 +53,4 @@ namespace site {
   }
 }
 
-#endif // SITE_WIDGET_MODE_HPP
+#endif // DNW_WIDGET_MODE_HPP

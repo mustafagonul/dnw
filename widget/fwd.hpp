@@ -16,11 +16,11 @@
  *
 **/
 
-#ifndef SITE_WIDGET_FWD_HPP
-#define SITE_WIDGET_FWD_HPP
+#ifndef DNW_WIDGET_FWD_HPP
+#define DNW_WIDGET_FWD_HPP
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Mode;
@@ -36,4 +36,4 @@ namespace site {
 
 
 
-#endif // SITE_WIDGET_FWD_HPP
+#endif // DNW_WIDGET_FWD_HPP

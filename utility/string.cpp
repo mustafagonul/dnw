@@ -20,7 +20,7 @@
 #include <sstream>
 
 
-namespace site {
+namespace dnw {
 namespace utility {
 namespace string {
 
@@ -120,4 +120,4 @@ void html::replaceExpression(std::string &str, std::string const &expressionStr,
 
 } // string
 } // utility
-} // site
+} // dnw

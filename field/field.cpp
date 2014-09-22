@@ -20,7 +20,7 @@
 #include "system/device.hpp"
 
 
-namespace site {
+namespace dnw {
 namespace field {
 
 
@@ -72,4 +72,4 @@ Field::String Field::path(String const &name) const
 
 
 } // field
-} // site
+} // dnw

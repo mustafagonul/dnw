@@ -28,7 +28,7 @@
 namespace fs = boost::filesystem;
 
 
-namespace site {
+namespace dnw {
 namespace system {
 namespace filesystem {
 
@@ -40,7 +40,7 @@ static fs::path relativePath(fs::path const &);
 
 
 Device::Device(Key const &k)
-  : site::system::Device()
+  : dnw::system::Device()
   , m_key(k)
 {
 }
@@ -338,7 +338,7 @@ try {
 
   p /= name;
 
-  site::utility::file::write(p.string(), data);
+  dnw::utility::file::write(p.string(), data);
 
   return fs::exists(p);
 }
@@ -382,7 +382,7 @@ Device::String Device::data(String const &field, String const &name) const
 
   std::string p = path(field, name);
 
-  return site::utility::file::read(p);
+  return dnw::utility::file::read(p);
 }
 
 Device::String Device::path(String const &field, String const &name) const
@@ -475,4 +475,4 @@ static fs::path relativePath(const fs::path &p)
 
 } // filesystem
 } // system
-} // site
+} // dnw

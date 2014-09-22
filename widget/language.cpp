@@ -19,7 +19,7 @@
 #include "widget/language.hpp"
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -74,4 +74,4 @@ void Language::onTr()
 
 
 } // widget
-} // site
+} // dnw

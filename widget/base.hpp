@@ -16,14 +16,14 @@
  *
 **/
 
-#ifndef SITE_WIDGET_BASE_HPP
-#define SITE_WIDGET_BASE_HPP
+#ifndef DNW_WIDGET_BASE_HPP
+#define DNW_WIDGET_BASE_HPP
 
 #include <Wt/WContainerWidget>
 #include <boost/any.hpp>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Base : public Wt::WContainerWidget {
@@ -59,4 +59,4 @@ namespace site {
 }
 
 
-#endif // SITE_WIDGET_BASE_HPP
+#endif // DNW_WIDGET_BASE_HPP

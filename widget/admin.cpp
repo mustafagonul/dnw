@@ -42,7 +42,7 @@
 #define EMPTY_NAME ("!!!! EMPTY !!!!")
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -686,7 +686,7 @@ void Admin::addFile()
 
     auto files = fileUpload->uploadedFiles();
     for (auto &f : files) {
-      using site::utility::file::read;
+      using dnw::utility::file::read;
 
       auto str = read(f.spoolFileName());
       file.editFile(f.clientFileName(), str);
@@ -797,7 +797,7 @@ void Admin::addCode()
 
     auto files = fileUpload->uploadedFiles();
     for (auto &f : files) {
-      using site::utility::file::read;
+      using dnw::utility::file::read;
 
       auto str = read(f.spoolFileName());
       code.editCode(f.clientFileName(), str);
@@ -877,4 +877,4 @@ void Admin::moveCode()
 
 
 } // widget
-} // site
+} // dnw

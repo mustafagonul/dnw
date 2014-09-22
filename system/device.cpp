@@ -20,7 +20,7 @@
 #include <memory>
 
 
-namespace site {
+namespace dnw {
 namespace system {
 
 
@@ -192,5 +192,5 @@ bool Device::moveNodeToNode(unsigned source, unsigned destination) const
 
 
 } // system
-} // site
+} // dnw
 

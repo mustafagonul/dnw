@@ -19,7 +19,7 @@
 #include "field/name.hpp"
 
 
-namespace site {
+namespace dnw {
 namespace field {
 
 
@@ -45,4 +45,4 @@ Name::String Name::name(String const &language) const
 
 
 } // field
-} // site
+} // dnw

@@ -20,17 +20,17 @@
  * @author Mustafa Gonul
  */
 
-#ifndef SITE_FIELD_CONTENT_HPP
-#define SITE_FIELD_CONTENT_HPP
+#ifndef DNW_FIELD_CONTENT_HPP
+#define DNW_FIELD_CONTENT_HPP
 
 #include "field/field.hpp"
 
 
-namespace site {
+namespace dnw {
   namespace field {
 
     /**
-     * @class site::field::Content
+     * @class dnw::field::Content
      * @brief This class is for working on content field of a node.
      */
     class Content : public Field {
@@ -70,4 +70,4 @@ namespace site {
 }
 
 
-#endif // SITE_FIELD_CONTENT_HPP
+#endif // DNW_FIELD_CONTENT_HPP

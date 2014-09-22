@@ -19,7 +19,7 @@
 #include "widget/widget.hpp"
 
 
-namespace site {
+namespace dnw {
 namespace widget {
 
 
@@ -55,4 +55,4 @@ Widget::Any const &Widget::key() const
 
 
 } // widget
-} // site
+} // dnw

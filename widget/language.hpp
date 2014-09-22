@@ -16,15 +16,15 @@
  *
 **/
 
-#ifndef SITE_WIDGET_LANGUAGE_HPP
-#define SITE_WIDGET_LANGUAGE_HPP
+#ifndef DNW_WIDGET_LANGUAGE_HPP
+#define DNW_WIDGET_LANGUAGE_HPP
 
 #include "widget/base.hpp"
 #include <Wt/WToolBar>
 #include <Wt/WPushButton>
 
 
-namespace site {
+namespace dnw {
   namespace widget {
 
     class Language : public Base {
@@ -52,4 +52,4 @@ namespace site {
   }
 }
 
-#endif // SITE_WIDGET_LANGUAGE_HPP
+#endif // DNW_WIDGET_LANGUAGE_HPP

@@ -16,14 +16,14 @@
  *
 **/
 
-#ifndef SITE_UTILITY_ENCRYPTION_HPP
-#define SITE_UTILITY_ENCRYPTION_HPP
+#ifndef DNW_UTILITY_ENCRYPTION_HPP
+#define DNW_UTILITY_ENCRYPTION_HPP
 
 #include <string>
 #include <vector>
 
 
-namespace site {
+namespace dnw {
   namespace utility {
     namespace encryption {
 
@@ -35,4 +35,4 @@ namespace site {
 }
 
 
-#endif // SITE_UTILITY_ENCRYPTION_HPP
+#endif // DNW_UTILITY_ENCRYPTION_HPP
