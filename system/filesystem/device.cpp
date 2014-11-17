@@ -36,7 +36,6 @@ namespace filesystem {
 static std::string rootDirectory();
 static std::string tempDirectory();
 static fs::path keyToDirectory(Key const &);
-static fs::path relativePath(fs::path const &);
 
 
 Device::Device(Key const &k)
@@ -401,32 +400,6 @@ catch (...)
   return "";
 }
 
-Device::String Device::link(String const &field, String const &name) const
-try {
-  if (field.empty())
-    return "";
-  if (name.empty())
-    return "";
-
-  fs::path p = keyToDirectory(key());
-  p /= field;
-  p /= name;
-
-  p = relativePath(p);
-
-  auto instance = Wt::WApplication::instance();
-  if (instance == nullptr)
-    return "";
-
-  auto hostName = instance->environment().hostName();
-
-  return hostName + p.string(); // TODO mustafa path.make_preferred()
-}
-catch (...)
-{
-  return "";
-}
-
 Key const &Device::key() const
 {
   return m_key;
@@ -448,26 +421,6 @@ static fs::path keyToDirectory(Key const &key)
 
   for (unsigned i = 0; i < key.depth(); ++i)
     result /= std::to_string(key.index(i));
-
-  return result;
-}
-
-static fs::path relativePath(const fs::path &p)
-{
-  fs::path result = "/";
-  fs::path current;
-  bool ok = false;
-
-  for (fs::path::iterator it(p.begin()), it_end(p.end()); it != it_end; ++it) {
-    if (current == fs::current_path()) // TODO mustafa
-    //if (current == "/var/www/htdocs")
-      ok = true;
-
-    if (ok == true)
-      result /= *it;
-    else
-      current /= *it;
-  }
 
   return result;
 }

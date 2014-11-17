@@ -104,13 +104,6 @@ namespace dnw {
       String data(String const &name) const;
 
       /**
-       * @brief Returns link to file.
-       * @param name
-       * @return File link. If there is no link, returns an empty string.
-       */
-      String link(String const &name) const;
-
-      /**
        * @ Returns path to file.
        * @param name
        * @return File path

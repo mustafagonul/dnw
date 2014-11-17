@@ -66,22 +66,9 @@ namespace dnw {
       /**
        * @brief TODO mustafa
        * @param index
-       * @return File link
-       */
-      String fileLink(Index index) const;
-
-      /**
-       * @brief TODO mustafa
-       * @param index
        * @return File path
        */
       String filePath(Index index) const;
-
-      /**
-       * @brief TODO mustafa
-       * @return Directory link.
-       */
-      String directoryLink() const;
 
       /**
        * @brief TODO mustafass

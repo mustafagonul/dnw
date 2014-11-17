@@ -44,23 +44,11 @@ File::String File::file(String const &name) const
   return data(name);
 }
 
-File::String File::fileLink(Index index) const
-{
-  auto name = fileName(index);
-
-  return link(name);
-}
-
 File::String File::filePath(Index index) const
 {
   auto name = fileName(index);
 
   return path(name);
-}
-
-File::String File::directoryLink() const
-{
-  return link("");
 }
 
 bool File::fileExists(String const &name) const

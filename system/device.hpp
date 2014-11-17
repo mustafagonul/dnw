@@ -190,14 +190,6 @@ namespace dnw {
       virtual String data(String const &field, String const &name) const = 0;
 
       /**
-       * @brief Returns link to file.
-       * @param field
-       * @param name
-       * @return Link to file. If there is no link, returns an empty string.
-       */
-      virtual String link(String const &field, String const &name) const = 0;
-
-      /**
        * @brief Returns path of the file
        * @param field
        * @param name

@@ -60,11 +60,6 @@ Field::String Field::data(String const &name) const
   return device.data(field, name);
 }
 
-Field::String Field::link(String const &name) const
-{
-  return device.link(field, name);
-}
-
 Field::String Field::path(String const &name) const
 {
   return device.path(field, name);
