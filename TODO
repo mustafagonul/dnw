@@ -1,12 +1,19 @@
-* Authentication
-* copy to left / copy to right
-* move file / move code
+* Authentication (Done)
+* Copy to left / Copy to right
+* Move file / Move code
 * update
 * copyright (done)
 * github (done)
-* save button should save both name and content
+* save button should save both name and content (Don't do that)
 * cmake (done)
 * use std::bind
-* namespace rename
+* namespace rename (to Driver or Device)
 * codes in content
 * code formatting
+* Base language
+* Multi language
+* History
+* Config
+* HTML upload
+* Diff
+* Names should be on the top of the article.
