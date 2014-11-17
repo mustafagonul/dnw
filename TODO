@@ -1,3 +1,7 @@
+* Introduce dnw::field::FileBase (base class of File and Code classes)
+* Introduce dnw::field::Text (base class of Name and Content classes)
+* Improve dnw::widget::Admin::onCodes(). Look at dnw::widget::Admin::onFiles() function 
+
 * Authentication (Done)
 * Copy to left / Copy to right
 * Move file / Move code
@@ -5,9 +9,11 @@
 * copyright (done)
 * github (done)
 * save button should save both name and content (Don't do that)
+* You can introduce types headers in the namespaces. 
 * cmake (done)
 * use std::bind
-* namespace rename (to Driver or Device)
+* rename Driver (to Node)
+* move admin into system namespace
 * codes in content
 * code formatting
 * Base language
