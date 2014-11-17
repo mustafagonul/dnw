@@ -36,36 +36,3 @@ int main(int argc, char **argv)
   return WRun(argc, argv, &createApplication);
 }
 
-/*
-#include <boost/filesystem.hpp>
-#include <limits>
-#include <string>
-
-namespace fs = boost::filesystem;
-
-void move(fs::path const &current)
-{
-  fs::create_directory(current / "content");
-  try { fs::rename(current / "en", current / "content" / "en");  } catch (...) {}
-  try { fs::rename(current / "tr", current / "content" / "tr");  } catch (...) {}
-
-  unsigned max = std::numeric_limits<unsigned>::max();
-
-  for (unsigned i = 0; i < max; ++i) {
-    auto sub = current / std::to_string(i);
-    if (fs::exists(sub) == false)
-      break;
-
-    move(sub);
-  }
-}
-
-int main()
-{
-  auto current = fs::current_path();
-
-  move(current / "data");
-
-  return 0;
-}
-*/
