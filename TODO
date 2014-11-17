@@ -1,7 +1,11 @@
 * Introduce dnw::field::FileBase (base class of File and Code classes)
 * Introduce dnw::field::Text (base class of Name and Content classes)
 * Improve dnw::widget::Admin::onCodes(). Look at dnw::widget::Admin::onFiles() function 
+* Dialogs should be introduced. In admin.cpp dialog codes mostly are repeated, copied and pasted. unify them.
+* Devices should be created in main.cpp and should be passed other classes by references.
 
+* Write a read me for github.
+* Write a coding standard including doxygen.
 * Authentication (Done)
 * Copy to left / Copy to right
 * Move file / Move code
@@ -12,14 +16,14 @@
 * You can introduce types headers in the namespaces. 
 * cmake (done)
 * use std::bind
-* rename Driver (to Node)
+* rename Device (to Node)
 * move admin into system namespace
 * codes in content
 * code formatting
 * Base language
 * Multi language
 * History
-* Config
+* Config field
 * HTML upload
 * Diff
 * Names should be on the top of the article.
