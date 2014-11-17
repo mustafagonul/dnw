@@ -37,6 +37,7 @@
 #include <Wt/WSelectionBox>
 #include <Wt/WFileUpload>
 #include <Wt/WProgressBar>
+#include <Wt/WFileResource>
 
 
 #define EMPTY_NAME ("!!!! EMPTY !!!!")
@@ -296,6 +297,8 @@ void Admin::update()
 void Admin::onCodes()
 {
   using Text = Wt::WText;
+  using Link = Wt::WLink;
+  using Button = Wt::WPushButton;
 
   auto clone = device().clone(key());
   if (clone == nullptr)
@@ -317,10 +320,14 @@ void Admin::onCodes()
   auto count = code.codeCount();
 
   for (decltype(count) i = 0; i < count; ++i) {
-    auto str = code.codeName(i);
-    auto text = new Text(str);
+    //Link link(Link::Url, code.codePath(i));
 
-    codes->elementAt(i + 1, 0)->addWidget(text);
+    auto str = code.codeName(i);
+    auto button = new Button();
+    button->setText(str);
+    //button->setLink(link);
+
+    codes->elementAt(i + 1, 0)->addWidget(button);
   }
 
   dialog.exec();
@@ -329,6 +336,9 @@ void Admin::onCodes()
 void Admin::onFiles()
 {
   using Text = Wt::WText;
+  using Link = Wt::WLink;
+  using Button = Wt::WPushButton;
+  using FileResource = Wt::WFileResource;
 
   auto clone = device().clone(key());
   if (clone == nullptr)
@@ -350,10 +360,16 @@ void Admin::onFiles()
   auto count = file.fileCount();
 
   for (decltype(count) i = 0; i < count; ++i) {
+    auto resource = new FileResource(file.filePath(i), dialog.contents());
     auto str = file.fileName(i);
-    auto text = new Text(str);
+    auto button = new Button();
+    Link link(resource);
 
-    files->elementAt(i + 1, 0)->addWidget(text);
+    resource->suggestFileName(str);
+    button->setText(str);
+    button->setLink(link);
+
+    files->elementAt(i + 1, 0)->addWidget(button);
   }
 
   dialog.exec();
