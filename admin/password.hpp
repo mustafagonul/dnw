@@ -16,23 +16,23 @@
  *
 **/
 
-#ifndef DNW_UTILITY_ENCRYPTION_HPP
-#define DNW_UTILITY_ENCRYPTION_HPP
+#ifndef DNW_ADMIN_PASSWORD_HPP
+#define DNW_ADMIN_PASSWORD_HPP
 
-#include <string>
-#include <vector>
+#include "utility/types.hpp"
 
 
 namespace dnw {
-  namespace utility {
-    namespace encryption {
+  namespace admin {
 
-      std::string base64Decode(std::string const &encoded_string);
-      void md5(std::string const &str, std::vector<unsigned char> &result);
+    void setPassword(String const &salt);
+    bool checkPassword(String const &pass);
+    bool passwordExists();
+    String hash();
+    String salt();
 
-    }
+
   }
 }
 
-
-#endif // DNW_UTILITY_ENCRYPTION_HPP
+#endif // DNW_ADMIN_PASSWORD_HPP

@@ -20,6 +20,7 @@
 #define DNW_WIDGET_APPLICATION_HPP
 
 #include "widget/fwd.hpp"
+#include "authentication/session.hpp"
 #include "system/filesystem/device.hpp"
 #include <Wt/WApplication>
 #include <Wt/WPushButton>
@@ -35,8 +36,9 @@ namespace dnw {
       using String      = std::string;
       using Any         = boost::any;
       using Environment = Wt::WEnvironment;
-      using Device      = dnw::system::filesystem::Device;
       using Container   = Wt::WContainerWidget;
+      using Device      = dnw::system::filesystem::Device;
+      using Session     = dnw::authentication::Session;
 
     public:
       explicit Application(Environment const &);
@@ -48,15 +50,17 @@ namespace dnw {
       void onTree(Any const &);
 
       void update();
+      bool setPasswordDialog();
 
     private:
       Device    device;
+      Session   session;
 
       Tree      *tree;
       Mode      *mode;
       Language  *language;
       Container *container;
-      Widget      *main;
+      Widget    *main;
 
       String currentLanguage;
       Any currentKey;

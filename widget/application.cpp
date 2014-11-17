@@ -22,12 +22,17 @@
 #include "widget/mode.hpp"
 #include "widget/tree.hpp"
 #include "widget/content.hpp"
+#include "admin/password.hpp"
+#include <Wt/WLabel>
+#include <Wt/WLineEdit>
+#include <Wt/WBootstrapTheme>
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WBreak>
 #include <Wt/Auth/PasswordPromptDialog>
 #include <Wt/Auth/Login>
 #include <Wt/Auth/AuthModel>
+
 
 
 namespace dnw {
@@ -37,6 +42,7 @@ namespace widget {
 Application::Application(Environment const &env)
   : Wt::WApplication(env)
   , device()
+  , session()
   , tree(nullptr)
   , mode(nullptr)
   , language(nullptr)
@@ -51,6 +57,8 @@ Application::Application(Environment const &env)
   // UTF8
   Wt::WString::setDefaultEncoding(Wt::UTF8);
 
+  // Theme
+  setTheme(new Wt::WBootstrapTheme());
 
   // Title
   setTitle("Documentator");
@@ -105,6 +113,22 @@ void Application::onMode(Any const &any)
 try
 {
   auto mode = boost::any_cast<String>(any);
+
+  if (admin::passwordExists() == false)
+    if (setPasswordDialog() == false)
+      mode = "guest";
+
+  if (mode == "admin" && session.login().loggedIn() == false) {
+    Wt::Auth::User user("admin", session.users());
+    session.login().login(user, Wt::Auth::WeakLogin);
+    Wt::Auth::PasswordPromptDialog promptDialog(session.login(), &session.authModel());
+
+    if (promptDialog.exec() == Wt::Auth::PasswordPromptDialog::Rejected ||
+        session.login().loggedIn() == false) {
+      session.login().logout();
+      mode = "guest";
+    }
+  }
 
   if (mode == "guest") {
     container->clear();
@@ -161,6 +185,76 @@ void Application::onTree(Any const &key)
 void Application::update()
 {
 
+}
+
+bool Application::setPasswordDialog()
+{
+  // Dialog
+  Wt::WDialog *dialog = new Wt::WDialog("Set Password");
+
+  // PASS 1 Edit
+  Wt::WLabel *passLabel1 = new Wt::WLabel("Password 1", dialog->contents());
+  Wt::WLineEdit *passEdit1 = new Wt::WLineEdit(dialog->contents());
+  passEdit1->setEchoMode(Wt::WLineEdit::Password);
+  passLabel1->setBuddy(passEdit1);
+
+  // PASS 2 Edit
+  Wt::WLabel *passLabel2 = new Wt::WLabel("Password 2", dialog->contents());
+  Wt::WLineEdit *passEdit2 = new Wt::WLineEdit(dialog->contents());
+  passEdit2->setEchoMode(Wt::WLineEdit::Password);
+  passLabel2->setBuddy(passEdit2);
+
+  // Message
+  Wt::WLabel *message = new Wt::WLabel(dialog->contents());
+
+  // Push button
+  Wt::WPushButton *ok = new Wt::WPushButton("OK", dialog->footer());
+  ok->setDefault(true);
+  ok->disable();
+
+  // Check
+  auto checkFunction = [&]{
+    message->setText("");
+    ok->disable();
+
+    if (passEdit1->textSize() < 8) {
+      message->setText("Password is too short!");
+      return false;
+    }
+
+    if (passEdit1->text().value() != passEdit2->text().value()) {
+      message->setText("Passwords do not match!");
+      return false;
+    }
+
+    message->setText("OK!");
+    ok->enable();
+
+    return true;
+  };
+
+  passEdit1->changed().connect(std::bind(checkFunction));
+  passEdit2->changed().connect(std::bind(checkFunction));
+  ok->clicked().connect(dialog, &Wt::WDialog::accept);
+
+  /*
+   * Process the dialog result.
+   */
+  dialog->finished().connect(std::bind([=] () {
+    if (dialog->result() == Wt::WDialog::Accepted) {
+      auto pass = passEdit1->text().toUTF8();
+
+      admin::setPassword(pass);
+    }
+  }));
+
+  auto result = dialog->exec();
+  delete dialog;
+
+  if (result == Wt::WDialog::Accepted)
+    return true;
+
+  return false;
 }
 
 

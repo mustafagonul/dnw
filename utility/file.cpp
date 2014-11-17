@@ -25,10 +25,10 @@ namespace utility {
 namespace file {
 
 
-std::string read(std::string const &filename)
+String read(String const &filename)
 {
   std::ifstream file(filename);
-  std::string result;
+  String result;
 
   char ch;
   while (file.get(ch))
@@ -37,10 +37,11 @@ std::string read(std::string const &filename)
   return result;
 }
 
-void write(std::string const &filename, std::string const &str)
+void write(String const &filename, String const &str)
 {
   std::ofstream file(filename);
-  file << str;
+  for (auto ch : str)
+    file.put(ch);
 }
 
 

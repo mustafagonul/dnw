@@ -24,14 +24,12 @@
 #ifndef DNW_UTILITY_FILE_HPP
 #define DNW_UTILITY_FILE_HPP
 
-#include <string>
+#include "utility/types.hpp"
 
 
 namespace dnw {
   namespace utility {
     namespace file {
-
-      using String = std::string;
 
       /**
        * @brief Writes @a data to the file named @a filename.
@@ -40,13 +38,13 @@ namespace dnw {
        */
       void write(String const &filename, String const &data);
 
+
       /**
        * @brief Reads the data from the file specified with @a filename
        * @param filename
        * @return Data in the file.
        */
       String read(String const &filename);
-
     }
   }
 }

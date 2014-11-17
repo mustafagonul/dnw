@@ -31,6 +31,8 @@ WApplication *createApplication(const WEnvironment& env)
 
 int main(int argc, char **argv)
 {
+  dnw::authentication::Session::configureAuth();
+
   return WRun(argc, argv, &createApplication);
 }
 
