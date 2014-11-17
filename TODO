@@ -4,6 +4,9 @@
 * Dialogs should be introduced. In admin.cpp dialog codes mostly are repeated, copied and pasted. unify them.
 * Devices should be created in main.cpp and should be passed other classes by references.
 
+* Deploy using cmake or a script (deploy.sh)
+* If necessary, create a run script (run.sh)
+
 * Write a read me for github.
 * Write a coding standard including doxygen.
 * Authentication (Done)
