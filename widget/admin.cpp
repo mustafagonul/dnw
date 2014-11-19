@@ -304,6 +304,13 @@ void Admin::onCodes()
   if (clone == nullptr)
     return;
 
+  field::Code code(*clone);
+  auto count = code.codeCount();
+  if (count == 0) {
+    Wt::WMessageBox::show("Code", "There is no code!", Wt::Ok);
+    return;
+  }
+
   Wt::WDialog dialog("Codes", this);
   dialog.setClosable(true);
   dialog.setResizable(true);
@@ -316,8 +323,7 @@ void Admin::onCodes()
   codes->clear();
   codes->elementAt(0, 0)->addWidget(new Text("Codes"));
 
-  field::Code code(*clone);
-  auto count = code.codeCount();
+
 
   for (decltype(count) i = 0; i < count; ++i) {
     //Link link(Link::Url, code.codePath(i));
@@ -344,6 +350,13 @@ void Admin::onFiles()
   if (clone == nullptr)
     return;
 
+  field::File file(*clone);
+  auto count = file.fileCount();
+  if (count == 0) {
+    Wt::WMessageBox::show("File", "There is no file!", Wt::Ok);
+    return;
+  }
+
   Wt::WDialog dialog("Files", this);
   dialog.setClosable(true);
   dialog.setResizable(true);
@@ -355,9 +368,6 @@ void Admin::onFiles()
   // files
   files->clear();
   files->elementAt(0, 0)->addWidget(new Text("Files"));
-
-  field::File file(*clone);
-  auto count = file.fileCount();
 
   for (decltype(count) i = 0; i < count; ++i) {
     auto resource = new FileResource(file.filePath(i), dialog.contents());

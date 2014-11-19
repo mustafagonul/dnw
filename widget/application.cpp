@@ -190,25 +190,25 @@ void Application::update()
 bool Application::setPasswordDialog()
 {
   // Dialog
-  Wt::WDialog *dialog = new Wt::WDialog("Set Password");
+  Wt::WDialog dialog("Set Password");
 
   // PASS 1 Edit
-  Wt::WLabel *passLabel1 = new Wt::WLabel("Password 1", dialog->contents());
-  Wt::WLineEdit *passEdit1 = new Wt::WLineEdit(dialog->contents());
+  Wt::WLabel *passLabel1 = new Wt::WLabel("Password 1", dialog.contents());
+  Wt::WLineEdit *passEdit1 = new Wt::WLineEdit(dialog.contents());
   passEdit1->setEchoMode(Wt::WLineEdit::Password);
   passLabel1->setBuddy(passEdit1);
 
   // PASS 2 Edit
-  Wt::WLabel *passLabel2 = new Wt::WLabel("Password 2", dialog->contents());
-  Wt::WLineEdit *passEdit2 = new Wt::WLineEdit(dialog->contents());
+  Wt::WLabel *passLabel2 = new Wt::WLabel("Password 2", dialog.contents());
+  Wt::WLineEdit *passEdit2 = new Wt::WLineEdit(dialog.contents());
   passEdit2->setEchoMode(Wt::WLineEdit::Password);
   passLabel2->setBuddy(passEdit2);
 
   // Message
-  Wt::WLabel *message = new Wt::WLabel(dialog->contents());
+  Wt::WLabel *message = new Wt::WLabel(dialog.contents());
 
   // Push button
-  Wt::WPushButton *ok = new Wt::WPushButton("OK", dialog->footer());
+  Wt::WPushButton *ok = new Wt::WPushButton("OK", dialog.footer());
   ok->setDefault(true);
   ok->disable();
 
@@ -235,22 +235,20 @@ bool Application::setPasswordDialog()
 
   passEdit1->changed().connect(std::bind(checkFunction));
   passEdit2->changed().connect(std::bind(checkFunction));
-  ok->clicked().connect(dialog, &Wt::WDialog::accept);
+  ok->clicked().connect(&dialog, &Wt::WDialog::accept);
 
   /*
    * Process the dialog result.
    */
-  dialog->finished().connect(std::bind([=] () {
-    if (dialog->result() == Wt::WDialog::Accepted) {
+  dialog.finished().connect(std::bind([&] () {
+    if (dialog.result() == Wt::WDialog::Accepted) {
       auto pass = passEdit1->text().toUTF8();
 
       admin::setPassword(pass);
     }
   }));
 
-  auto result = dialog->exec();
-  delete dialog;
-
+  auto result = dialog.exec();
   if (result == Wt::WDialog::Accepted)
     return true;
 
