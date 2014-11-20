@@ -24,8 +24,6 @@
 #include "system/filesystem/device.hpp"
 #include <Wt/WApplication>
 #include <Wt/WPushButton>
-#include <string>
-#include <boost/any.hpp>
 
 
 namespace dnw {
@@ -33,8 +31,6 @@ namespace dnw {
 
     class Application : public Wt::WApplication {
     private:
-      using String      = std::string;
-      using Any         = boost::any;
       using Environment = Wt::WEnvironment;
       using Container   = Wt::WContainerWidget;
       using Device      = dnw::system::filesystem::Device;

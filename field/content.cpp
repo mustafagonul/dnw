@@ -40,7 +40,7 @@ bool Content::editContent(String const &language, String const &data) const
   return edit(language, data);
 }
 
-Content::String Content::content(String const &language) const
+String Content::content(String const &language) const
 {
   return data(language);
 }

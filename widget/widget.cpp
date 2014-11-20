@@ -48,7 +48,7 @@ Widget::Device const &Widget::device() const
   return m_device;
 }
 
-Widget::Any const &Widget::key() const
+Any const &Widget::key() const
 {
   return m_key;
 }

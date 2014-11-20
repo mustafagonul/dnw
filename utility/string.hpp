@@ -24,16 +24,12 @@
 #ifndef DNW_UTILITY_STRING_HPP
 #define DNW_UTILITY_STRING_HPP
 
-#include <vector>
-#include <string>
+#include "utility/common.hpp"
 
 
 namespace dnw {
   namespace utility {
     namespace string {
-
-      using String  = std::string;
-      using Strings = std::vector<std::string>;
 
       /**
        * @brief Splits @a str with @a delimiter into @a result.

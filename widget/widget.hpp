@@ -21,7 +21,6 @@
 
 #include "widget/base.hpp"
 #include "system/fwd.hpp"
-#include <boost/any.hpp>
 
 
 namespace dnw {
@@ -29,7 +28,6 @@ namespace dnw {
 
     class Widget : public Base {
     protected:
-      using Any    = boost::any;
       using Device = dnw::system::Device;
 
     protected:

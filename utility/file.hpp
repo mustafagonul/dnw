@@ -24,7 +24,7 @@
 #ifndef DNW_UTILITY_FILE_HPP
 #define DNW_UTILITY_FILE_HPP
 
-#include "utility/types.hpp"
+#include "utility/common.hpp"
 
 
 namespace dnw {

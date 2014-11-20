@@ -40,17 +40,17 @@ Key::Key(String const &str)
     push(boost::lexical_cast<unsigned>(item));
 }
 
-Key::Index Key::depth() const
+Index Key::depth() const
 {
   return indices.size();
 }
 
-Key::Index Key::index(Level level) const
+Index Key::index(Level level) const
 {
   return indices[level];
 }
 
-Key::Index Key::last() const
+Index Key::last() const
 {
   return index(depth() - 1);
 }
@@ -73,7 +73,7 @@ bool Key::empty() const
   return depth() == 0;
 }
 
-Key::String Key::string() const
+String Key::string() const
 {
   std::stringstream ss;
 

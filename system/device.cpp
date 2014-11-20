@@ -110,7 +110,7 @@ bool Device::moveNodeUp(Index index) const
   return swapNodes(index, otherIndex);
 }
 
-bool Device::moveNodeDown(unsigned index) const
+bool Device::moveNodeDown(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -124,7 +124,7 @@ bool Device::moveNodeDown(unsigned index) const
   return swapNodes(index, otherIndex);
 }
 
-bool Device::moveNodeToLast(unsigned index) const
+bool Device::moveNodeToLast(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -134,7 +134,7 @@ bool Device::moveNodeToLast(unsigned index) const
   return moveNode(index, last);
 }
 
-bool Device::moveLastToNode(unsigned index) const
+bool Device::moveLastToNode(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -144,7 +144,7 @@ bool Device::moveLastToNode(unsigned index) const
   return moveNode(last, index);
 }
 
-bool Device::moveNodeToParent(unsigned index) const
+bool Device::moveNodeToParent(Index index) const
 {
   if (moveNodeToLast(index) == false)
     return false;
@@ -157,7 +157,7 @@ bool Device::moveNodeToParent(unsigned index) const
   return true;
 }
 
-bool Device::moveNodeToNode(unsigned source, unsigned destination) const
+bool Device::moveNodeToNode(Index source, Index destination) const
 {
   unsigned count = nodeCount();
 

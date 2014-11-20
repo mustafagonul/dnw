@@ -30,7 +30,7 @@ Field::Field(Device const &d, String const &f)
 {
 }
 
-Field::Index Field::count() const
+Index Field::count() const
 {
   return device.count(field);
 }
@@ -50,17 +50,17 @@ bool Field::edit(String const &name, String const &data) const
   return device.edit(field, name, data);
 }
 
-Field::String Field::name(Index index) const
+String Field::name(Index index) const
 {
   return device.name(field, index);
 }
 
-Field::String Field::data(String const &name) const
+String Field::data(String const &name) const
 {
   return device.data(field, name);
 }
 
-Field::String Field::path(String const &name) const
+String Field::path(String const &name) const
 {
   return device.path(field, name);
 }

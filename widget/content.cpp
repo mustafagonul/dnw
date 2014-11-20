@@ -87,7 +87,7 @@ void Content::update()
   new Wt::WText(content, Wt::XHTMLUnsafeText, this);
 }
 
-Content::String Content::convert(String const &str) const
+String Content::convert(String const &str) const
 {
   using dnw::utility::string::replace;
 
@@ -103,7 +103,7 @@ Content::String Content::convert(String const &str) const
   return result;
 }
 
-Content::String Content::convert(String const &str, String const &expressionStr) const
+String Content::convert(String const &str, String const &expressionStr) const
 {
   boost::regex expression(expressionStr);
   boost::match_results<std::string::const_iterator> what;

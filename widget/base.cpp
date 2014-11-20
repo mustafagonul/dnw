@@ -43,7 +43,7 @@ Base::Signal &Base::changed()
   return m_changed;
 }
 
-Base::String const &Base::language() const
+String const &Base::language() const
 {
   return m_language;
 }

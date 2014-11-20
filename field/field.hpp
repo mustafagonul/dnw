@@ -24,8 +24,8 @@
 #ifndef DNW_FIELD_FIELD_HPP
 #define DNW_FIELD_FIELD_HPP
 
+#include "utility/common.hpp"
 #include "system/fwd.hpp"
-#include <string>
 
 
 namespace dnw {
@@ -38,8 +38,6 @@ namespace dnw {
     class Field {
     protected:
       using Device = dnw::system::Device;
-      using String = std::string;
-      using Index  = unsigned;
 
     protected:
       /**

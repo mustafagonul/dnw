@@ -19,7 +19,7 @@
 #ifndef DNW_ADMIN_PASSWORD_HPP
 #define DNW_ADMIN_PASSWORD_HPP
 
-#include "utility/types.hpp"
+#include "utility/common.hpp"
 
 
 namespace dnw {

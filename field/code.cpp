@@ -28,17 +28,17 @@ Code::Code(Device const &device)
 {
 }
 
-Code::Index Code::codeCount() const
+Index Code::codeCount() const
 {
   return count();
 }
 
-Code::String Code::codeName(Index index) const
+String Code::codeName(Index index) const
 {
   return name(index);
 }
 
-Code::String Code::code(String const &name) const
+String Code::code(String const &name) const
 {
   return data(name);
 }

@@ -35,8 +35,6 @@ namespace dnw {
       using Item    = Wt::WStandardItem;
       using Index   = Wt::WModelIndex;
       using Indexes = Wt::WModelIndexList;
-      using Strings = std::vector<String>;
-      using Any     = boost::any;
 
     public:
       Tree(Device const &device,

@@ -19,6 +19,7 @@
 #ifndef DNW_AUTHENTICATION_USERDATABASE_HPP
 #define DNW_AUTHENTICATION_USERDATABASE_HPP
 
+#include "utility/common.hpp"
 #include <Wt/Auth/AbstractUserDatabase>
 #include <Wt/Auth/User>
 #include <Wt/Auth/PasswordHash>
@@ -30,7 +31,6 @@ namespace dnw {
     class UserDatabase : public Wt::Auth::AbstractUserDatabase {
     private:
       using BaseClass = Wt::Auth::AbstractUserDatabase;
-      using String = std::string;
       using WString = Wt::WString;
       using User = Wt::Auth::User;
       using PasswordHash = Wt::Auth::PasswordHash;

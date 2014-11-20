@@ -61,7 +61,7 @@ Application::Application(Environment const &env)
   setTheme(new Wt::WBootstrapTheme());
 
   // Title
-  setTitle("Documentator");
+  setTitle("Dnw");
 
 
   // Layouts
@@ -103,6 +103,9 @@ Application::Application(Environment const &env)
   mode->changed().connect(this, &Application::onMode);
   language->changed().connect(this, &Application::onLanguage);
   tree->changed().connect(this, &Application::onTree);
+
+  // Main update
+  main->update();
 }
 
 Application::~Application()

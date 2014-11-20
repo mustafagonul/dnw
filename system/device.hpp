@@ -19,9 +19,8 @@
 #ifndef DNW_SYSTEM_DEVICE_HPP
 #define DNW_SYSTEM_DEVICE_HPP
 
-#include <string>
+#include "utility/common.hpp"
 #include <memory>
-#include <boost/any.hpp>
 
 
 namespace dnw {
@@ -29,9 +28,6 @@ namespace dnw {
 
     class Device {
     protected:
-      using Any       = boost::any;
-      using Index     = unsigned;
-      using String    = std::string;
       using DevicePtr = std::shared_ptr<Device>;
 
     protected:

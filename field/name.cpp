@@ -38,7 +38,7 @@ bool Name::editName(String const &language, String const &data) const
   return edit(language, data);
 }
 
-Name::String Name::name(String const &language) const
+String Name::name(String const &language) const
 {
   return data(language);
 }

@@ -53,7 +53,7 @@ Device::~Device()
 {
 }
 
-Device::Index Device::nodeCount() const
+Index Device::nodeCount() const
 try {
 
   unsigned max = std::numeric_limits<unsigned>::max();
@@ -72,12 +72,12 @@ catch (...)
   return 0;
 }
 
-Device::Any Device::currentKey() const
+Any Device::currentKey() const
 {
   return key().string();
 }
 
-Device::Any Device::rootKey() const
+Any Device::rootKey() const
 {
   return Key().string();
 }
@@ -118,7 +118,7 @@ FilesystemDevice::String FilesystemDevice::nextKey() const
 }
 */
 
-Device::Any Device::parentKey() const
+Any Device::parentKey() const
 {
   Key pKey = key();
 
@@ -127,7 +127,7 @@ Device::Any Device::parentKey() const
   return pKey.string();
 }
 
-Device::Any Device::nodeKey(Index index) const
+Any Device::nodeKey(Index index) const
 {
   if (index >= nodeCount())
     return Key().string();
@@ -278,7 +278,7 @@ bool Device::swapNodes(Index i1, Index i2) const
   return true;
 }
 
-Device::Index Device::count(String const &field) const
+Index Device::count(String const &field) const
 try {
   if (field.empty())
     return 0;
@@ -347,7 +347,7 @@ catch (fs::filesystem_error const &)
 }
 
 
-Device::String Device::name(String const &field, Index index) const
+String Device::name(String const &field, Index index) const
 try {
   if (field.empty())
     return "";
@@ -374,7 +374,7 @@ catch (fs::filesystem_error const &)
 }
 
 
-Device::String Device::data(String const &field, String const &name) const
+String Device::data(String const &field, String const &name) const
 {
   if (exists(field, name) == false)
     return "";
@@ -384,7 +384,7 @@ Device::String Device::data(String const &field, String const &name) const
   return dnw::utility::file::read(p);
 }
 
-Device::String Device::path(String const &field, String const &name) const
+String Device::path(String const &field, String const &name) const
 try {
   if (name.empty() == true)
     return "";
@@ -405,12 +405,12 @@ Key const &Device::key() const
   return m_key;
 }
 
-static std::string rootDirectory()
+static String rootDirectory()
 {
   return "data";
 }
 
-static std::string tempDirectory()
+static String tempDirectory()
 {
   return "temp";
 }

@@ -24,8 +24,7 @@
 #ifndef DNW_SYSTEM_FILESYSTEM_KEY_HPP
 #define DNW_SYSTEM_FILESYSTEM_KEY_HPP
 
-#include <string>
-#include <vector>
+#include "utility/common.hpp"
 
 
 namespace dnw {
@@ -38,10 +37,7 @@ namespace dnw {
        */
       class Key {
       private:
-        using String  = std::string;
-        using Index   = unsigned;
-        using Indices = std::vector<Index>;
-        using Level   = unsigned;
+        using Level = Index;
 
       public:
         /**

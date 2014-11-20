@@ -19,8 +19,8 @@
 #ifndef DNW_WIDGET_BASE_HPP
 #define DNW_WIDGET_BASE_HPP
 
+#include "utility/common.hpp"
 #include <Wt/WContainerWidget>
-#include <boost/any.hpp>
 
 
 namespace dnw {
@@ -30,7 +30,6 @@ namespace dnw {
     protected:
       using Parent = Wt::WContainerWidget;
       using Signal = Wt::Signal<boost::any>;
-      using String = std::string;
 
     protected:
       Base(String const &language, Parent *parent = nullptr);

@@ -29,22 +29,22 @@ File::File(Device const &device)
 {
 }
 
-File::Index File::fileCount() const
+Index File::fileCount() const
 {
   return count();
 }
 
-File::String File::fileName(Index index) const
+String File::fileName(Index index) const
 {
   return name(index);
 }
 
-File::String File::file(String const &name) const
+String File::file(String const &name) const
 {
   return data(name);
 }
 
-File::String File::filePath(Index index) const
+String File::filePath(Index index) const
 {
   auto name = fileName(index);
 

@@ -3,13 +3,16 @@
 
 #include <string>
 #include <vector>
+#include <boost/any.hpp>
 
 
 namespace dnw {
 
+  using Index = std::size_t;
+  using Indices = std::vector<Index>;
   using String = std::string;
   using Strings = std::vector<std::string>;
-  using UCharVector = std::vector<unsigned char>;
+  using Any = boost::any;
 
 }
 

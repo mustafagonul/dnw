@@ -33,7 +33,7 @@ namespace dnw {
 namespace admin {
 
 
-inline static std::string directory() { return "user"; }
+inline static String directory() { return "user"; }
 
 
 String md5(String const &salt, String const &password)
