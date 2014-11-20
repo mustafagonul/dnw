@@ -25,85 +25,8 @@ namespace field {
 
 
 File::File(Device const &device)
-  : Field(device, "file")
+  : Resource(device, "file")
 {
-}
-
-Index File::fileCount() const
-{
-  return count();
-}
-
-String File::fileName(Index index) const
-{
-  return name(index);
-}
-
-String File::file(String const &name) const
-{
-  return data(name);
-}
-
-String File::filePath(Index index) const
-{
-  auto name = fileName(index);
-
-  return path(name);
-}
-
-bool File::fileExists(String const &name) const
-{
-  return exists(name);
-}
-
-bool File::editFile(String const &name, String const &data) const
-{
-  return edit(name, data);
-}
-
-bool File::removeFile(String const &name) const
-{
-  return remove(name);
-}
-
-bool File::moveFileToChild(Index index, String const &name) const
-{
-  auto child = device.nodeDevice(index);
-
-  if (child == nullptr)
-    return false;
-  if (child->isSame(device) == true)
-    return false;
-
-  File childFile(*child);
-
-  if (childFile.fileExists(name) == true)
-    return false;
-
-  if (childFile.editFile(name, file(name)) == false)
-    return false;
-
-  return removeFile(name);
-}
-
-bool File::moveFileToParent(String const &name) const
-{
-  auto parent = device.parentDevice();
-
-  if (parent == nullptr)
-    return false;
-  if (parent->isSame(device) == true)
-    return false;
-
-  File parentFile(*parent);
-
-  if (parentFile.fileExists(name) == true)
-    return false;
-
-  if (parentFile.editFile(name, file(name)) == false)
-    return false;
-
-  return removeFile(name);
 }
 
 

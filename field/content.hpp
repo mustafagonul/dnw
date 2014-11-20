@@ -17,7 +17,7 @@
 **/
 /**
  * @file field/content.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_FIELD_CONTENT_HPP

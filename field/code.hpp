@@ -18,13 +18,13 @@
 
 /**
  * @file field/code.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_FIELD_CODE_HPP
 #define DNW_FIELD_CODE_HPP
 
-#include "field/field.hpp"
+#include "field/resource.hpp"
 
 
 namespace dnw {
@@ -34,49 +34,13 @@ namespace dnw {
      * @class dnw::field::Code
      * @brief This class is for working on code field of a node.
      */
-    class Code : public Field {
+    class Code : public Resource {
     public:
       /**
        * @brief Constructor
        * @param device
        */
       explicit Code(Device const &device);
-
-    public:
-      /**
-       * @brief Returns file count in the code field.
-       * @return Code count
-       */
-      Index codeCount() const;
-
-      /**
-       * @brief Returns file name in the code field with the given @a index.
-       * @param index
-       * @return Code file name
-       */
-      String codeName(Index index) const;
-
-      /**
-       * @brief Returns internal data of the code file given with @a name.
-       * @param name
-       * @return Code data
-       */
-      String code(String const &name) const;
-
-      /**
-       * @brief Edits code file given in @a name with @a data.
-       * @param name
-       * @param data
-       * @return Success value
-       */
-      bool editCode(String const &name, String const &data) const;
-
-      /**
-       * @brief Removes code file in the field given with @a name.
-       * @param name
-       * @return Success value
-       */
-      bool removeCode(String const &name) const;
 
     };
 

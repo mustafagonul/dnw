@@ -18,7 +18,7 @@
 
 /**
  * @file system/filesystem/device.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_SYSTEM_FILESYSTEM_DEVICE_HPP

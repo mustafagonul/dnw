@@ -8,6 +8,8 @@
 
 namespace dnw {
 
+  using Count = std::size_t;
+  using Size = std::size_t;
   using Index = std::size_t;
   using Indices = std::vector<Index>;
   using String = std::string;

@@ -17,14 +17,14 @@
 **/
 
 /**
- * @file field/code.hpp
- * @author Mustafa Gonul
+ * @file field/file.hpp
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_FIELD_FILE_HPP
 #define DNW_FIELD_FILE_HPP
 
-#include "field/field.hpp"
+#include "field/resource.hpp"
 
 
 namespace dnw {
@@ -34,78 +34,13 @@ namespace dnw {
      * @class dnw::field::File
      * @brief This class is for working on file field of a node.
      */
-    class File : public Field {
+    class File : public Resource {
     public:
       /**
        * @brief Constructor
        * @param device
        */
       explicit File(Device const &device);
-
-    public:
-      /**
-       * @brief Returns file count in the file field.
-       * @return File count
-       */
-      Index fileCount() const;
-
-      /**
-       * @brief Returns file name in the file field with the given @a index.
-       * @param index
-       * @return File name
-       */
-      String fileName(Index index) const;
-
-      /**
-       * @brief Internal data of @a name.
-       * @param name
-       * @return File data
-       */
-      String file(String const &name) const;
-
-      /**
-       * @brief TODO mustafa
-       * @param index
-       * @return File path
-       */
-      String filePath(Index index) const;
-
-      /**
-       * @brief TODO mustafass
-       * @param name
-       * @return Check value
-       */
-      bool fileExists(String const &name) const;
-
-      /**
-       * @brief Edits @a name file with @a data.
-       * @param name
-       * @param data
-       * @return Success value
-       */
-      bool editFile(String const &name, String const &data) const;
-
-      /**
-       * @brief Removes the @a name file.
-       * @param name
-       * @return Success value
-       */
-      bool removeFile(String const &name) const;
-
-      /**
-       * @brief Moves the file given with @a name to child node at @a index.
-       * @param index
-       * @param name
-       * @return Success value
-       */
-      bool moveFileToChild(Index index, String const &name) const;
-
-      /**
-       * @brief Moves the file given with @a name to parent node.
-       * @param name
-       * @return Success value
-       */
-      bool moveFileToParent(String const &name) const;
     };
 
   }

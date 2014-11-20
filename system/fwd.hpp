@@ -18,7 +18,7 @@
 
 /**
  * @file system/fwd.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_SYSTEM_FWD_HPP

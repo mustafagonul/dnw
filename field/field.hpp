@@ -18,7 +18,7 @@
 
 /**
  * @file field/field.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_FIELD_FIELD_HPP
@@ -63,7 +63,7 @@ namespace dnw {
        * @brief Returns the number of files in the field.
        * @return The number of the files.
        */
-      Index count() const;
+      Count count() const;
 
       /**
        * @brief Checks if the file given with @a name parameter exists in the field.
@@ -111,9 +111,7 @@ namespace dnw {
 
     protected:
       Device const &device; /**< device */
-
-    private:
-      String field;         /**< field */
+      String const field;   /**< field */
     };
 
   }

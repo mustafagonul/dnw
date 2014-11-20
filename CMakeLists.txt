@@ -6,7 +6,7 @@ file(GLOB_RECURSE files ${dnw_SOURCE_DIR} *.cpp *.hpp )
 
 include_directories(.)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 add_executable(${PROJECT_NAME} ${files})
 

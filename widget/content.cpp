@@ -60,7 +60,7 @@ void Content::update()
 
   // codes
   field::Code code(*clone);
-  auto codeCount = code.codeCount();
+  auto codeCount = code.resourceCount();
 
   // if ()
 
@@ -69,11 +69,11 @@ void Content::update()
   fileMap.clear();
 
   field::File file(*clone);
-  auto fileCount = file.fileCount();
+  auto fileCount = file.resourceCount();
 
   for (decltype(fileCount) i = 0; i < fileCount; ++i) {
-    auto name = file.fileName(i);
-    auto path = file.filePath(i);
+    auto name = file.resourceName(i);
+    auto path = file.resourcePath(i);
     auto res = new Wt::WFileResource(path, this);
 
     Wt::WLink link(res);

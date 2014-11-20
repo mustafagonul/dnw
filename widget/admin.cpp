@@ -23,6 +23,9 @@
 #include "field/code.hpp"
 #include "field/file.hpp"
 #include "utility/file.hpp"
+#include "dialog/resource.hpp"
+#include "dialog/addresource.hpp"
+#include "dialog/removeresource.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WPushButton>
@@ -47,7 +50,7 @@ namespace dnw {
 namespace widget {
 
 
-void configureTextEdit(Wt::WTextEdit *textEdit)
+static void configureTextEdit(Wt::WTextEdit *textEdit)
 {
   // General options
   /*
@@ -136,16 +139,14 @@ void configureTextEdit(Wt::WTextEdit *textEdit)
                           "insertfile,insertimage");
 }
 
-void prepareTable(Wt::WTable *table)
+inline static void errorMessageBox(String const &str)
 {
-  table->setHeaderCount(1);
-  table->setWidth("100%");
+  Wt::WMessageBox messageBox(str, "Error!", Wt::Warning, Wt::Ok);
 
-  Wt::WCssDecorationStyle style;
-  Wt::WBorder border(Wt::WBorder::Solid, Wt::WBorder::Thin, Wt::black);
-  style.setBorder(border);
-  table->setDecorationStyle(style);
+  messageBox.exec();
 }
+
+
 
 
 Admin::Admin(Device const &device,
@@ -296,93 +297,22 @@ void Admin::update()
 
 void Admin::onCodes()
 {
-  using Text = Wt::WText;
-  using Link = Wt::WLink;
-  using Button = Wt::WPushButton;
-
   auto clone = device().clone(key());
   if (clone == nullptr)
     return;
 
   field::Code code(*clone);
-  auto count = code.codeCount();
-  if (count == 0) {
-    Wt::WMessageBox::show("Code", "There is no code!", Wt::Ok);
-    return;
-  }
-
-  Wt::WDialog dialog("Codes", this);
-  dialog.setClosable(true);
-  dialog.setResizable(true);
-  dialog.rejectWhenEscapePressed();
-
-  auto codes = new Wt::WTable(dialog.contents());
-  prepareTable(codes);
-
-  // codes
-  codes->clear();
-  codes->elementAt(0, 0)->addWidget(new Text("Codes"));
-
-
-
-  for (decltype(count) i = 0; i < count; ++i) {
-    //Link link(Link::Url, code.codePath(i));
-
-    auto str = code.codeName(i);
-    auto button = new Button();
-    button->setText(str);
-    //button->setLink(link);
-
-    codes->elementAt(i + 1, 0)->addWidget(button);
-  }
-
-  dialog.exec();
+  dialog::resource("Codes", code);
 }
 
 void Admin::onFiles()
 {
-  using Text = Wt::WText;
-  using Link = Wt::WLink;
-  using Button = Wt::WPushButton;
-  using FileResource = Wt::WFileResource;
-
   auto clone = device().clone(key());
   if (clone == nullptr)
     return;
 
   field::File file(*clone);
-  auto count = file.fileCount();
-  if (count == 0) {
-    Wt::WMessageBox::show("File", "There is no file!", Wt::Ok);
-    return;
-  }
-
-  Wt::WDialog dialog("Files", this);
-  dialog.setClosable(true);
-  dialog.setResizable(true);
-  dialog.rejectWhenEscapePressed();
-
-  auto files = new Wt::WTable(dialog.contents());
-  prepareTable(files);
-
-  // files
-  files->clear();
-  files->elementAt(0, 0)->addWidget(new Text("Files"));
-
-  for (decltype(count) i = 0; i < count; ++i) {
-    auto resource = new FileResource(file.filePath(i), dialog.contents());
-    auto str = file.fileName(i);
-    auto button = new Button();
-    Link link(resource);
-
-    resource->suggestFileName(str);
-    button->setText(str);
-    button->setLink(link);
-
-    files->elementAt(i + 1, 0)->addWidget(button);
-  }
-
-  dialog.exec();
+  dialog::resource("Files", file);
 }
 
 void Admin::saveLeftName()
@@ -682,223 +612,59 @@ void Admin::moveNodeDown()
 void Admin::addFile()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be added!", Wt::Ok);
+    errorMessageBox("Add File");
     return;
   }
 
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Add File", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-
-  // File upload
-  auto fileUpload = new Wt::WFileUpload(dialog->contents());
-  auto uploadButton = new Wt::WPushButton("Add", dialog->contents());
-  fileUpload->setProgressBar(new Wt::WProgressBar());
-  fileUpload->setMultiple(false);
-
-
-  uploadButton->clicked().connect(std::bind([=] {
-    fileUpload->upload();
-    uploadButton->disable();
-  }));
-
-  fileUpload->uploaded().connect(std::bind([=] {
-    field::File file(*clone);
-
-    auto files = fileUpload->uploadedFiles();
-    for (auto &f : files) {
-      using dnw::utility::file::read;
-
-      auto str = read(f.spoolFileName());
-      file.editFile(f.clientFileName(), str);
-    }
-
-    dialog->accept();
-  }));
-
-  fileUpload->fileTooLarge().connect(std::bind([=] {
-    Wt::WMessageBox::show("Admin", "File Too Large!", Wt::Ok);
-    dialog->reject();
-  }));
-
-
-  if (dialog->exec() == Wt::WDialog::Accepted)
-    Wt::WMessageBox::show("Admin", "File Added.", Wt::Ok);
+  field::File file(*clone);
+  dialog::addResource("Add File", file);
 }
 
 void Admin::removeFile()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be removed!", Wt::Ok);
+    errorMessageBox("Remove File");
     return;
   }
 
   field::File file(*clone);
-  auto fileCount = file.fileCount();
-  if (fileCount < 1) {
-    Wt::WMessageBox::show("Admin", "There is no file to remove!", Wt::Ok);
-    return;
-  }
-
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Add File", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-  // Selection box
-  auto selectionBox = new Wt::WSelectionBox(dialog->contents());
-  for (decltype(fileCount) i = 0; i < fileCount; ++i) {
-    auto str = file.fileName(i);
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Remove button
-  auto remove = new Wt::WPushButton("Remove", dialog->contents());
-  remove->clicked().connect(std::bind([=] {
-    auto result = Wt::WMessageBox::show("Admin", "Do you want to remove file?", Wt::Ok | Wt::Cancel);
-
-    if (result == Wt::Ok)
-      dialog->accept();
-  }));
-
-  // Accepted
-  dialog->finished().connect(std::bind([=] {
-    if (dialog->result() != Wt::WDialog::Accepted)
-      return;
-
-    field::File file(*clone);
-    auto current = static_cast<decltype(fileCount)>(selectionBox->currentIndex());
-    auto str = file.fileName(current);
-    file.removeFile(str);
-  }));
-
-  if (dialog->exec() == Wt::WDialog::Accepted)
-    Wt::WMessageBox::show("Admin", "File Removed.", Wt::Ok);
+  dialog::removeResource("Remove File", file);
 }
 
 void Admin::moveFile()
 {
-
+  // TODO mustafa:
 }
 
 void Admin::addCode()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be added!", Wt::Ok);
+    errorMessageBox("Add Code");
     return;
   }
 
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Add Code", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-
-  // File upload
-  auto fileUpload = new Wt::WFileUpload(dialog->contents());
-  auto uploadButton = new Wt::WPushButton("Add", dialog->contents());
-  fileUpload->setProgressBar(new Wt::WProgressBar());
-  fileUpload->setMultiple(false);
-
-
-  uploadButton->clicked().connect(std::bind([=] {
-    fileUpload->upload();
-    uploadButton->disable();
-  }));
-
-  fileUpload->uploaded().connect(std::bind([=] {
-    field::Code code(*clone);
-
-    auto files = fileUpload->uploadedFiles();
-    for (auto &f : files) {
-      using dnw::utility::file::read;
-
-      auto str = read(f.spoolFileName());
-      code.editCode(f.clientFileName(), str);
-    }
-
-    dialog->accept();
-  }));
-
-  fileUpload->fileTooLarge().connect(std::bind([=] {
-    Wt::WMessageBox::show("Admin", "Code Too Large!", Wt::Ok);
-    dialog->reject();
-  }));
-
-
-  if (dialog->exec() == Wt::WDialog::Accepted)
-    Wt::WMessageBox::show("Admin", "Code Added.", Wt::Ok);
+  field::Code code(*clone);
+  dialog::addResource("Add Code", code);
 }
 
 void Admin::removeCode()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be removed!", Wt::Ok);
+    errorMessageBox("Remove Code");
     return;
   }
 
   field::Code code(*clone);
-  auto codeCount = code.codeCount();
-  if (codeCount < 1) {
-    Wt::WMessageBox::show("Admin", "There is no code to remove!", Wt::Ok);
-    return;
-  }
-
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Add Code", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-  // Selection box
-  auto selectionBox = new Wt::WSelectionBox(dialog->contents());
-  for (decltype(codeCount) i = 0; i < codeCount; ++i) {
-    auto str = code.codeName(i);
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Remove button
-  auto remove = new Wt::WPushButton("Remove", dialog->contents());
-  remove->clicked().connect(std::bind([=] {
-    auto result = Wt::WMessageBox::show("Admin", "Do you want to remove code?", Wt::Ok | Wt::Cancel);
-
-    if (result == Wt::Ok)
-      dialog->accept();
-  }));
-
-  // Accepted
-  dialog->finished().connect(std::bind([=] {
-    if (dialog->result() != Wt::WDialog::Accepted)
-      return;
-
-    field::Code code(*clone);
-    auto current = static_cast<decltype(codeCount)>(selectionBox->currentIndex());
-    auto str = code.codeName(current);
-    code.removeCode(str);
-  }));
-
-  if (dialog->exec() == Wt::WDialog::Accepted)
-    Wt::WMessageBox::show("Admin", "Code Removed.", Wt::Ok);
+  dialog::removeResource("Remove Code", code);
 }
 
 void Admin::moveCode()
 {
-
+  // TODO mustafa:
 }
 
 

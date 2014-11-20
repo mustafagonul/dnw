@@ -24,33 +24,8 @@ namespace field {
 
 
 Code::Code(Device const &device)
-  : Field(device, "code")
+  : Resource(device, "code")
 {
-}
-
-Index Code::codeCount() const
-{
-  return count();
-}
-
-String Code::codeName(Index index) const
-{
-  return name(index);
-}
-
-String Code::code(String const &name) const
-{
-  return data(name);
-}
-
-bool Code::editCode(String const &name, String const &data) const
-{
-  return edit(name, data);
-}
-
-bool Code::removeCode(String const &name) const
-{
-  return remove(name);
 }
 
 

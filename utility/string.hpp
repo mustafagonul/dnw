@@ -18,7 +18,7 @@
 
 /**
  * @file utility/string.hpp
- * @author Mustafa Gonul
+ * @author Mustafa Gönül
  */
 
 #ifndef DNW_UTILITY_STRING_HPP
