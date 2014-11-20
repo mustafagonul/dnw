@@ -18,11 +18,13 @@
 
 #include "widget/content.hpp"
 #include "system/device.hpp"
+#include "field/name.hpp"
 #include "field/content.hpp"
 #include "field/file.hpp"
 #include "field/code.hpp"
 #include "utility/string.hpp"
 #include <Wt/WText>
+#include <Wt/WBreak>
 #include <Wt/WFileResource>
 #include <Wt/WLink>
 #include <boost/regex.hpp>
@@ -78,6 +80,13 @@ void Content::update()
 
     fileMap[name] = link.url();
   }
+
+  // name
+  auto name = field::Name(*clone).name(language());
+  new Wt::WText("<h3>" + name + "</h3>", this);
+
+  // break
+  new Wt::WBreak(this);
 
   // content
   auto content = field::Content(*clone).content(language());
