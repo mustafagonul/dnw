@@ -16,18 +16,22 @@
  *
 **/
 
-#ifndef DNW_FIELD_FWD_HPP
-#define DNW_FIELD_FWD_HPP
+#ifndef DNW_DIALOG_NODE_HPP
+#define DNW_DIALOG_NODE_HPP
+
+#include "utility/common.hpp"
+#include "system/fwd.hpp"
 
 
 namespace dnw {
-  namespace field{
+  namespace dialog {
 
-    class Text;
-    class Resource;
+    bool removeNode(system::Device const &device, String const &language, Wt::WObject *parent);
+    bool moveNodeUp(system::Device const &device, String const &language, Wt::WObject *parent);
+    bool moveNodeDown(system::Device const &device, String const &language, Wt::WObject *parent);
 
   }
 }
 
 
-#endif // DNW_FIELD_FWD_HPP
+#endif // DNW_DIALOG_NODE_HPP

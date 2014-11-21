@@ -16,18 +16,25 @@
  *
 **/
 
-#ifndef DNW_FIELD_FWD_HPP
-#define DNW_FIELD_FWD_HPP
+#ifndef DNW_DIALOG_MESSAGEBOX_HPP
+#define DNW_DIALOG_MESSAGEBOX_HPP
 
+#include "utility/common.hpp"
+
+
+namespace Wt {
+  class WObject;
+}
 
 namespace dnw {
-  namespace field{
+  namespace dialog {
 
-    class Text;
-    class Resource;
+    void messageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
+    void errorMessageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
+    bool booleanMessageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
 
   }
 }
 
 
-#endif // DNW_FIELD_FWD_HPP
+#endif // DNW_DIALOG_MESSAGEBOX_HPP

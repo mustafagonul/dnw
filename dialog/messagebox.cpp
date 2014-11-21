@@ -16,18 +16,37 @@
  *
 **/
 
-#ifndef DNW_FIELD_FWD_HPP
-#define DNW_FIELD_FWD_HPP
+#include "dialog/messagebox.hpp"
+#include <Wt/WMessageBox>
 
 
 namespace dnw {
-  namespace field{
+namespace dialog {
 
-    class Text;
-    class Resource;
 
-  }
+void messageBox(String const &str, String const &message)
+{
+  Wt::WMessageBox messageBox(str, message, Wt::Information, Wt::Ok);
+
+  messageBox.exec();
+}
+
+void errorMessageBox(String const &str, String const &message)
+{
+  Wt::WMessageBox messageBox(str, message, Wt::Warning, Wt::Ok);
+
+  messageBox.exec();
+}
+
+bool booleanMessageBox(String const &str, String const &message)
+{
+  Wt::WMessageBox messageBox(str, message, Wt::Question, Wt::Ok | Wt::Cancel);
+
+  auto result = messageBox.exec();
+
+  return result != Wt::WMessageBox::Accepted;
 }
 
 
-#endif // DNW_FIELD_FWD_HPP
+} // dialog
+} // dnw

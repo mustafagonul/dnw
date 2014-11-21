@@ -16,18 +16,18 @@
  *
 **/
 
-#ifndef DNW_FIELD_FWD_HPP
-#define DNW_FIELD_FWD_HPP
+#include "dialog/search.hpp"
 
 
 namespace dnw {
-  namespace field{
+namespace dialog {
 
-    class Text;
-    class Resource;
 
-  }
+Any search()
+{
+
 }
 
 
-#endif // DNW_FIELD_FWD_HPP
+} // dialog
+} // dnw

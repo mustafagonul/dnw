@@ -22,25 +22,14 @@
 #include "field/content.hpp"
 #include "field/code.hpp"
 #include "field/file.hpp"
-#include "utility/file.hpp"
+#include "dialog/messagebox.hpp"
 #include "dialog/resource.hpp"
-#include "dialog/addresource.hpp"
-#include "dialog/removeresource.hpp"
+#include "dialog/node.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WPushButton>
 #include <Wt/WLabel>
 #include <Wt/WTextEdit>
-#include <Wt/WInPlaceEdit>
-#include <Wt/WText>
-#include <Wt/WCssDecorationStyle>
-#include <Wt/WMessageBox>
-#include <Wt/WLink>
-#include <Wt/WTable>
-#include <Wt/WSelectionBox>
-#include <Wt/WFileUpload>
-#include <Wt/WProgressBar>
-#include <Wt/WFileResource>
 
 
 #define EMPTY_NAME ("!!!! EMPTY !!!!")
@@ -48,6 +37,14 @@
 
 namespace dnw {
 namespace widget {
+
+
+using HBoxLayout = Wt::WHBoxLayout;
+using VBoxLayout = Wt::WVBoxLayout;
+using Button = Wt::WPushButton;
+using Label = Wt::WLabel;
+using Container = Wt::WContainerWidget;
+using Length = Wt::WLength;
 
 
 static void configureTextEdit(Wt::WTextEdit *textEdit)
@@ -139,15 +136,15 @@ static void configureTextEdit(Wt::WTextEdit *textEdit)
                           "insertfile,insertimage");
 }
 
-inline static void errorMessageBox(String const &str)
+inline static void errorMessageBox(String const &str = "Admin", String const &message = "Error!")
 {
-  Wt::WMessageBox messageBox(str, "Error!", Wt::Warning, Wt::Ok);
-
-  messageBox.exec();
+  dialog::errorMessageBox(str, message);
 }
 
-
-
+inline static void messageBox(String const &str = "Admin", String const &message = "Success.")
+{
+  dialog::messageBox(str, message);
+}
 
 Admin::Admin(Device const &device,
              String const &language,
@@ -159,13 +156,6 @@ Admin::Admin(Device const &device,
   , leftTextEdit(nullptr)
   , rightTextEdit(nullptr)
 {
-  using HBoxLayout  = Wt::WHBoxLayout;
-  using VBoxLayout  = Wt::WVBoxLayout;
-  using PushButton  = Wt::WPushButton;
-  using Label       = Wt::WLabel;
-  using Container   = Wt::WContainerWidget;
-
-
   // layout
   auto mainLayout = new VBoxLayout();
   auto topLayout = new HBoxLayout();
@@ -180,20 +170,20 @@ Admin::Admin(Device const &device,
 
 
   // Node commands
-  auto addNodeButton = new PushButton("Add Node", this);
-  auto removeNodeButton = new PushButton("Remove Node", this);
-  auto moveNodeUpButton = new PushButton("Move Node Up", this);
-  auto moveNodeDownButton = new PushButton("Move Node Down", this);
+  auto addNodeButton = new Button("Add Node", this);
+  auto removeNodeButton = new Button("Remove Node", this);
+  auto moveNodeUpButton = new Button("Move Node Up", this);
+  auto moveNodeDownButton = new Button("Move Node Down", this);
 
   // File commands
-  auto addFileButton = new PushButton("Add File", this);
-  auto removeFileButton = new PushButton("Remove File", this);
-  auto moveFileButton = new PushButton("Move File", this);
+  auto addFileButton = new Button("Add File", this);
+  auto removeFileButton = new Button("Remove File", this);
+  auto moveFileButton = new Button("Move File", this);
 
   // Code commands
-  auto addCodeButton = new PushButton("Add Code", this);
-  auto removeCodeButton = new PushButton("Remove Code", this);
-  auto moveCodeButton = new PushButton("Move Code", this);
+  auto addCodeButton = new Button("Add Code", this);
+  auto removeCodeButton = new Button("Remove Code", this);
+  auto moveCodeButton = new Button("Move Code", this);
 
   topLayout->addWidget(addNodeButton);
   topLayout->addWidget(removeNodeButton);
@@ -214,13 +204,13 @@ Admin::Admin(Device const &device,
   auto rightEditContainer = new Container(this);
   auto leftTextEditContainer = new Container(this);
   auto rightTextEditContainer = new Container(this);
-  auto leftButton = new PushButton("Save", this);
-  auto rightButton = new PushButton("Save", this);
-  auto codesButton = new PushButton("Codes", this);
-  auto filesButton = new PushButton("Files", this);
+  auto leftButton = new Button("Save", this);
+  auto rightButton = new Button("Save", this);
+  auto codesButton = new Button("Codes", this);
+  auto filesButton = new Button("Files", this);
 
-  leftTextEditContainer->setOverflow(Wt::WContainerWidget::OverflowAuto);
-  rightTextEditContainer->setOverflow(Wt::WContainerWidget::OverflowAuto);
+  leftTextEditContainer->setOverflow(Container::OverflowAuto);
+  rightTextEditContainer->setOverflow(Container::OverflowAuto);
 
   // Edits
   leftEdit = new InPlaceEdit("Empty", leftEditContainer);
@@ -229,8 +219,8 @@ Admin::Admin(Device const &device,
   rightTextEdit = new TextEdit(rightTextEditContainer);
   configureTextEdit(leftTextEdit);
   configureTextEdit(rightTextEdit);
-  leftTextEdit->resize(Wt::WLength::Auto, 600);
-  rightTextEdit->resize(Wt::WLength::Auto, 600);
+  leftTextEdit->resize(Length::Auto, 600);
+  rightTextEdit->resize(Length::Auto, 600);
 
   bottomLeftLayout->addWidget(leftLabel);
   bottomLeftLayout->addWidget(leftEditContainer);
@@ -319,7 +309,7 @@ void Admin::saveLeftName()
 {
   auto clone = device().clone(key());
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be saved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
@@ -339,7 +329,7 @@ void Admin::saveRightName()
 {
   auto clone = device().clone(key());
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be saved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
@@ -358,7 +348,7 @@ void Admin::saveLeftContent()
 {
   auto clone = device().clone(key());
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be saved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
@@ -367,14 +357,14 @@ void Admin::saveLeftContent()
   field::Content content(*clone);
   content.editContent("en", str);
 
-  Wt::WMessageBox::show("Admin", "Saved.", Wt::Ok);
+  messageBox("Admin", "Saved.");
 }
 
 void Admin::saveRightContent()
 {
   auto clone = device().clone(key());
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be saved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
@@ -383,7 +373,7 @@ void Admin::saveRightContent()
   field::Content content(*clone);
   content.editContent("tr", str);
 
-  Wt::WMessageBox::show("Admin", "Saved.", Wt::Ok);
+  messageBox("Admin", "Saved.");
 }
 
 void Admin::addNode()
@@ -391,222 +381,70 @@ void Admin::addNode()
   auto clone = device().clone(key());
 
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be added!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be added!");
     return;
   }
 
   if (clone->pushNode() == false) {
-    Wt::WMessageBox::show("Admin", "Cannot be added!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be added!");
     return;
   }
 
   auto last = clone->lastDevice();
   if (last == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be added!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be added!");
     return;
   }
 
   auto k = last->currentKey();
   changed().emit(k);
 
-  Wt::WMessageBox::show("Admin", "Added.", Wt::Ok);
+  messageBox("Admin", "Added.");
 }
 
 void Admin::removeNode()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be removed!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be removed!");
     return;
   }
 
-  if (clone->nodeCount() == 0) {
-    Wt::WMessageBox::show("Admin", "There is no node!", Wt::Ok);
-    return;
-  }
-
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Remove Node", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-
-  // Selection box
-  auto selectionBox = new Wt::WSelectionBox(dialog->contents());
-  auto nodeCount = clone->nodeCount();
-  for (decltype(nodeCount) i = 0; i < nodeCount; ++i) {
-    auto sub = clone->nodeDevice(i);
-
-    field::Name name(*sub);
-    auto str = name.name(language());
-    if (str.empty())
-      str = EMPTY_NAME;
-
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Ok push button
-  auto ok = new Wt::WPushButton("Ok", dialog->contents());
-  ok->clicked().connect(std::bind([=] {
-    auto result = Wt::WMessageBox::show("Admin", "Do you want to remove node?", Wt::Ok | Wt::Cancel);
-
-    if (result == Wt::Ok)
-      dialog->accept();
-    else
-      dialog->reject();
-  }));
-
-  // Accepted
-  dialog->finished().connect(std::bind([=] {
-    if (dialog->result() != Wt::WDialog::Accepted)
-      return;
-
-    auto current = static_cast<decltype(nodeCount)>(selectionBox->currentIndex());
-
-    clone->removeNode(current);
-  }));
-
-  // Exec
-  if (dialog->exec() == Wt::WDialog::Accepted) {
+  auto result = dialog::removeNode(*clone, language());
+  if (result) {
     changed().emit(key());
-
-    Wt::WMessageBox::show("Admin", "Removed.", Wt::Ok);
+    messageBox("Admin", "Removed.");
   }
 }
 
 void Admin::moveNodeUp()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be moved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be moved!");
     return;
   }
 
-  if (clone->nodeCount() < 2) {
-    Wt::WMessageBox::show("Admin", "There is no node!", Wt::Ok);
-    return;
-  }
-
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Move Node Up", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-
-  // Selection box
-  auto selectionBox = new Wt::WSelectionBox(dialog->contents());
-  auto nodeCount = clone->nodeCount();
-  for (decltype(nodeCount) i = 0; i < nodeCount; ++i) {
-    auto sub = clone->nodeDevice(i);
-
-    field::Name name(*sub);
-    auto str = name.name(language());
-    if (str.empty())
-      str = EMPTY_NAME;
-
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Ok push button
-  auto ok = new Wt::WPushButton("Ok", dialog->contents());
-  ok->clicked().connect(std::bind([=] {
-    auto result = Wt::WMessageBox::show("Admin", "Do you want to move node up?", Wt::Ok | Wt::Cancel);
-
-    if (result == Wt::Ok)
-      dialog->accept();
-    else
-      dialog->reject();
-  }));
-
-  // Accepted
-  dialog->finished().connect(std::bind([=] {
-    if (dialog->result() != Wt::WDialog::Accepted)
-      return;
-
-    auto current = static_cast<decltype(nodeCount)>(selectionBox->currentIndex());
-
-    clone->moveNodeUp(current);
-  }));
-
-  // Exec
-  if (dialog->exec() == Wt::WDialog::Accepted) {
+  auto result = dialog::moveNodeUp(*clone, language());
+  if (result) {
     changed().emit(key());
-
-    Wt::WMessageBox::show("Admin", "Moved.", Wt::Ok);
+    messageBox("Admin", "Moved");
   }
-
 }
 
 void Admin::moveNodeDown()
 {
   auto clone = device().clone(key());
-
   if (clone == nullptr) {
-    Wt::WMessageBox::show("Admin", "Cannot be moved!", Wt::Ok);
+    errorMessageBox("Admin", "Cannot be moved!");
     return;
   }
 
-  if (clone->nodeCount() < 2) {
-    Wt::WMessageBox::show("Admin", "There is no node!", Wt::Ok);
-    return;
-  }
-
-  // Dialog
-  auto dialog = std::make_shared<Wt::WDialog>("Move Node Down", this);
-  dialog->setClosable(true);
-  dialog->setResizable(true);
-  dialog->rejectWhenEscapePressed();
-
-
-  // Selection box
-  auto selectionBox = new Wt::WSelectionBox(dialog->contents());
-  auto nodeCount = clone->nodeCount();
-  for (decltype(nodeCount) i = 0; i < nodeCount; ++i) {
-    auto sub = clone->nodeDevice(i);
-
-    field::Name name(*sub);
-    auto str = name.name(language());
-    if (str.empty())
-      str = EMPTY_NAME;
-
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Ok button
-  auto ok = new Wt::WPushButton("Ok", dialog->contents());
-  ok->clicked().connect(std::bind([=] {
-    auto result = Wt::WMessageBox::show("Admin", "Do you want to move node down?", Wt::Ok | Wt::Cancel);
-
-    if (result == Wt::Ok)
-      dialog->accept();
-    else
-      dialog->reject();
-  }));
-
-  // Accepted
-  dialog->finished().connect(std::bind([=] {
-    if (dialog->result() != Wt::WDialog::Accepted)
-      return;
-
-    auto current = static_cast<decltype(nodeCount)>(selectionBox->currentIndex());
-
-    clone->moveNodeDown(current);
-  }));
-
-  // Exec
-  if (dialog->exec() == Wt::WDialog::Accepted) {
+  auto result = dialog::moveNodeDown(*clone, language());
+  if (result) {
     changed().emit(key());
-
-    Wt::WMessageBox::show("Admin", "Moved.", Wt::Ok);
+    messageBox("Admin", "Moved");
   }
-
 }
 
 void Admin::addFile()

@@ -64,6 +64,7 @@ namespace dnw {
       void saveLeftContent();
       void saveRightContent();
 
+      // Resources
       void onCodes();
       void onFiles();
 
