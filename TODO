@@ -7,13 +7,13 @@
 * Deploy using cmake or a script (deploy.sh)
 * If necessary, create a run script (run.sh) (done)
 
-* Write a read me for github.
+* Write a read me for github. (a few words added)
 * Write a coding standard including doxygen.
 * Authentication (Done)
 * Copy to left / Copy to right
 * Move file / Move code
 * binary update
-* tree update
+* tree update (done)
 * copyright (done)
 * github (done)
 * save button should save both name and content (Don't do that)
@@ -32,5 +32,6 @@
 * Diff
 * Names should be on the top of the article.
 
+* Plugin and framework should be added.
 * Content has plugins (Here codes and files)
-* 
+ 
