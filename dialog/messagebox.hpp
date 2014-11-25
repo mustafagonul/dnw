@@ -29,9 +29,10 @@ namespace Wt {
 namespace dnw {
   namespace dialog {
 
-    void messageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
-    void errorMessageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
-    bool booleanMessageBox(String const &str, String const &message, Wt::WObject *parent = nullptr);
+    void messageBox(String const &str, String const &message);
+    void errorMessageBox(String const &str);
+    void errorMessageBox(String const &str, String const &message);
+    bool booleanMessageBox(String const &str, String const &message);
 
   }
 }

@@ -28,12 +28,25 @@ void messageBox(String const &str, String const &message)
 {
   Wt::WMessageBox messageBox(str, message, Wt::Information, Wt::Ok);
 
+  messageBox.buttonClicked().connect(std::bind([&]{
+    messageBox.accept();
+  }));
+
   messageBox.exec();
+}
+
+void errorMessageBox(String const &str)
+{
+  errorMessageBox(str, "Error!");
 }
 
 void errorMessageBox(String const &str, String const &message)
 {
   Wt::WMessageBox messageBox(str, message, Wt::Warning, Wt::Ok);
+
+  messageBox.buttonClicked().connect(std::bind([&]{
+    messageBox.accept();
+  }));
 
   messageBox.exec();
 }
@@ -42,9 +55,16 @@ bool booleanMessageBox(String const &str, String const &message)
 {
   Wt::WMessageBox messageBox(str, message, Wt::Question, Wt::Ok | Wt::Cancel);
 
+  messageBox.buttonClicked().connect(std::bind([&]{
+    if (messageBox.buttonResult() == Wt::Ok)
+      messageBox.accept();
+    else
+      messageBox.reject();
+  }));
+
   auto result = messageBox.exec();
 
-  return result != Wt::WMessageBox::Accepted;
+  return result == Wt::WMessageBox::Accepted;
 }
 
 

@@ -26,9 +26,9 @@
 namespace dnw {
   namespace dialog {
 
-    bool removeNode(system::Device const &device, String const &language, Wt::WObject *parent);
-    bool moveNodeUp(system::Device const &device, String const &language, Wt::WObject *parent);
-    bool moveNodeDown(system::Device const &device, String const &language, Wt::WObject *parent);
+    bool removeNode(system::Device const &device, String const &language);
+    bool moveNodeUp(system::Device const &device, String const &language);
+    bool moveNodeDown(system::Device const &device, String const &language);
 
   }
 }

@@ -62,7 +62,7 @@ static void prepareTable(Wt::WTable *table)
 }
 
 
-void resource(String const &name, field::Resource const &resource, Wt::WObject *parent)
+void resource(String const &name, field::Resource const &resource)
 {
   auto count = resource.resourceCount();
   if (count == 0) {
@@ -70,7 +70,7 @@ void resource(String const &name, field::Resource const &resource, Wt::WObject *
     return;
   }
 
-  Dialog dialog(name, parent);
+  Dialog dialog(name);
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -98,7 +98,7 @@ void resource(String const &name, field::Resource const &resource, Wt::WObject *
   dialog.exec();
 }
 
-void addResource(String const &name, field::Resource const &resource, Wt::WObject *parent)
+void addResource(String const &name, field::Resource const &resource)
 {
   // Dialog
   Dialog dialog(name);
@@ -144,11 +144,8 @@ void addResource(String const &name, field::Resource const &resource, Wt::WObjec
     messageBox("Admin", "Added");
 }
 
-void removeResource(String const &name, field::Resource const &resource, Wt::WObject *parent)
+void removeResource(String const &name, field::Resource const &resource)
 {
-
-
-
   auto count = resource.resourceCount();
   if (count < 1) {
     errorMessageBox("Admin", "There is nothing to remove!");

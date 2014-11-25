@@ -90,11 +90,8 @@ static bool operate(system::Device const &device,
 
   // Exec
   auto result = dialog.exec();
-  if (result == Dialog::Accepted) {
-    messageBox("Admin", "Done.");
-
+  if (result == Dialog::Accepted)
     return true;
-  }
 
   return false;
 }

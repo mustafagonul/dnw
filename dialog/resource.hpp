@@ -26,9 +26,9 @@
 namespace dnw {
   namespace dialog {
 
-    void resource(String const &name, field::Resource const &resource, Wt::WObject *parent);
-    void addResource(String const &name, field::Resource const &resource, Wt::WObject *parent);
-    void removeResource(String const &name, field::Resource const &resource, Wt::WObject *parent);
+    void resource(String const &name, field::Resource const &resource);
+    void addResource(String const &name, field::Resource const &resource);
+    void removeResource(String const &name, field::Resource const &resource);
 
   }
 }
