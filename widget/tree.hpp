@@ -23,6 +23,7 @@
 #include "widget/widget.hpp"
 #include <Wt/WTreeView>
 #include <Wt/WStandardItemModel>
+#include <set>
 
 
 namespace dnw {
@@ -30,11 +31,16 @@ namespace dnw {
 
     class Tree : public Widget {
     private:
+      struct Comparator {
+        bool operator()(Any const &a1, Any const &a2);
+      };
+
       using View    = Wt::WTreeView;
       using Model   = Wt::WStandardItemModel;
       using Item    = Wt::WStandardItem;
       using Index   = Wt::WModelIndex;
       using Indexes = Wt::WModelIndexList;
+      using Keys    = std::set<Any, Comparator>;
 
     public:
       Tree(Device const &device,
@@ -44,26 +50,23 @@ namespace dnw {
       virtual ~Tree();
 
     public:
-      virtual void update();
-
-    private:
-      void updateModel();
-      void updateItem(String const &, Item &);
+      virtual void update() final;
 
     private:
       void onItemClick(Index);
       void onItemDoubleClick(Index);
+      void onExpanded(Index);
+      void onCollapsed(Index);
+
       void populateModel();
       void populateItem(Any const &, Item &);
-      void expanded(Strings &) const;
-      void expanded(Item const &, Strings &) const;
-
-      bool index(Indexes &) const;
-      bool index(Item const &, Indexes &) const;
+      void expandModel();
+      void expandItem(Item &);
 
     private:
       View view;
       Model model;
+      Keys keys;
     };
 
   }

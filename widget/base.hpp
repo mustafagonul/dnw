@@ -29,7 +29,7 @@ namespace dnw {
     class Base : public Wt::WContainerWidget {
     protected:
       using Parent = Wt::WContainerWidget;
-      using Signal = Wt::Signal<boost::any>;
+      using Signal = Wt::Signal<Any>;
 
     protected:
       Base(String const &language, Parent *parent = nullptr);

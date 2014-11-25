@@ -28,6 +28,22 @@ namespace dnw {
 namespace widget {
 
 
+bool Tree::Comparator::operator()(Any const &a1, Any const &a2)
+{
+  auto s1 = boost::any_cast<String>(a1);
+  auto s2 = boost::any_cast<String>(a2);
+
+  return s1 < s2;
+}
+
+bool operator==(Any const &a1, Any const &a2)
+{
+  auto s1 = boost::any_cast<String>(a1);
+  auto s2 = boost::any_cast<String>(a2);
+
+  return s1 == s2;
+}
+
 Tree::Tree(Device const &device,
            String const &language,
            Any const &key,
@@ -35,8 +51,12 @@ Tree::Tree(Device const &device,
   : Widget(device, language, key, parent)
   , view(this)
   , model(this)
+  , keys()
 {
-  populateModel();
+  view.clicked().connect(this, &Tree::onItemClick);
+  view.doubleClicked().connect(this, &Tree::onItemDoubleClick);
+  view.expanded().connect(this, &Tree::onExpanded);
+  view.collapsed().connect(this, &Tree::onCollapsed);
 
   view.setModel(&model);
   view.setSelectionMode(Wt::SingleSelection);
@@ -44,8 +64,7 @@ Tree::Tree(Device const &device,
   view.setColumnBorder(Wt::WColor(Wt::black));
   view.setSortingEnabled(false);
 
-  view.clicked().connect(this, &Tree::onItemClick);
-  view.doubleClicked().connect(this, &Tree::onItemDoubleClick);
+  Tree::update();
 }
 
 Tree::~Tree()
@@ -55,14 +74,7 @@ Tree::~Tree()
 void Tree::update()
 {
   populateModel();
-
-  Indexes indexes;
-  index(indexes);
-  for (auto index : indexes)
-    view.expand(index);
-
-  if (indexes.size())
-    view.select(indexes.front());
+  expandModel();
 }
 
 void Tree::onItemClick(Index index)
@@ -83,16 +95,25 @@ void Tree::onItemDoubleClick(Index index)
     view.expand(index);
 }
 
-void Tree::updateModel()
+void Tree::onExpanded(Index index)
 {
+  using std::less;
 
+  auto data = model.data(index, Wt::UserRole);
+  auto key = boost::any_cast<String>(data);
+
+  keys.insert(key);
 }
 
-void Tree::updateItem(String const &key, Item &item)
+void Tree::onCollapsed(Index index)
 {
+  using std::less;
 
+  auto data = model.data(index, Wt::UserRole);
+  auto key = boost::any_cast<String>(data);
+
+  keys.erase(key);
 }
-
 
 void Tree::populateModel()
 {
@@ -133,51 +154,39 @@ void Tree::populateItem(Any const &key, Item &item)
   }
 }
 
-void Tree::expanded(Strings &result) const
+void Tree::expandModel()
 {
-  //view.
-}
+  view.expanded().setBlocked(true);
+  view.collapsed().setBlocked(true);
 
-void Tree::expanded(Item const &item, Strings &result) const
-{
-
-}
-
-
-bool Tree::index(Indexes &result) const
-{
-  result.clear();
+  keys.insert(key());
 
   auto root = model.item(0, 0);
   if (root == nullptr)
-    return false;
+    return;
 
-  return index(*root, result);
+  expandItem(*root);
+
+  view.expanded().setBlocked(false);
+  view.collapsed().setBlocked(false);
 }
 
-bool Tree::index(Item const &item, Indexes &result) const
+void Tree::expandItem(Item &item)
 {
   auto any = item.data();
-  auto data = boost::any_cast<String>(any);
-  auto keyStr = boost::any_cast<String>(key());
+  if (keys.find(any) == keys.end())
+    view.collapse(item.index());
+  else
+    view.expand(item.index());
 
+  if (any == key())
+    view.select(item.index());
 
-  if (data == keyStr) {
-    result.push_back(item.index());
-
-    return true;
-  }
-
-  for (int i = 0; i < item.rowCount(); ++i) {
+  auto count = item.rowCount();
+  for (decltype(count) i = 0; i < count; ++i) {
     auto subItem = item.child(i, 0);
-    if (index(*subItem, result)) {
-      result.push_back(item.index());
-
-      return true;
-    }
+    expandItem(*subItem);
   }
-
-  return false;
 }
 
 

@@ -43,7 +43,8 @@ namespace dnw {
     private:
       void onMode(Any const &);
       void onLanguage(Any const &);
-      void onTree(Any const &);
+      void onKey(Any const &);
+      void onMain(Any const &);
 
       void update();
       bool setPasswordDialog();

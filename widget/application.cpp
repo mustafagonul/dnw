@@ -102,7 +102,7 @@ Application::Application(Environment const &env)
   // Connections
   mode->changed().connect(this, &Application::onMode);
   language->changed().connect(this, &Application::onLanguage);
-  tree->changed().connect(this, &Application::onTree);
+  tree->changed().connect(this, &Application::onKey);
 
   // Main update
   main->update();
@@ -149,6 +149,7 @@ try
     main = new Admin(device, currentLanguage, currentKey, root());
     container->addWidget(main);
     main->update();
+    main->changed().connect(this, &Application::onKey);
 
     return;
   }
@@ -176,12 +177,14 @@ try
 catch (...) {
 }
 
-void Application::onTree(Any const &key)
+void Application::onKey(Any const &key)
 {
   currentKey = key;
 
+  tree->setKey(key);
   main->setKey(key);
 
+  tree->update();
   main->update();
 }
 
