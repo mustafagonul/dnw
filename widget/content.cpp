@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Mustafa Gönül
+ * Copyright (C) 2014 Mustafa G??n??l
  *
  * dnw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,17 +83,18 @@ void Content::update()
 
   // name
   auto name = field::Name(*clone).name(language());
-  new Wt::WText("<h3>" + name + "</h3>", this);
+  addWidget(new Wt::WText("<h3>" + name + "</h3>"));
 
   // break
-  new Wt::WBreak(this);
+  addWidget(new Wt::WBreak());
 
   // content
   auto content = field::Content(*clone).content(language());
   content = convert(content, "<img [[:print:]]*>");
   content = convert(content, "<a href=[[:print:]]*>");
 
-  new Wt::WText(content, Wt::XHTMLUnsafeText, this);
+  auto text = new Wt::WText(content, Wt::XHTMLUnsafeText);
+  addWidget(text);
 }
 
 String Content::convert(String const &str) const

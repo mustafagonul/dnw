@@ -36,7 +36,7 @@ namespace dnw {
       virtual ~Content();
 
     public:
-      virtual void update();
+      virtual void update() final;
 
     private:
       // void on

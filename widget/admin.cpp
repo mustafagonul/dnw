@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Mustafa Gönül
+ * Copyright (C) 2014 Mustafa G??n??l
  *
  * dnw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,8 @@ static void configureTextEdit(Wt::WTextEdit *textEdit)
   */
 
   textEdit->setExtraPlugins("autolink,lists,spellchecker,pagebreak,style,layer,table,"
-                            "save,advhr,advimage,advlink,emotions,iespell,inlinepopups,"
+                            //"save,advhr,advimage,advlink,emotions,iespell,inlinepopups,"
+                            "advhr,advimage,advlink,emotions,iespell,inlinepopups,"
                             "insertdatetime,preview,media,searchreplace,print,contextmenu,"
                             "paste,directionality,fullscreen,noneditable,visualchars,"
                             "nonbreaking,xhtmlxtras,template");
@@ -199,9 +200,6 @@ Admin::Admin(Device const &device,
   auto codesButton = new Button("Codes", this);
   auto filesButton = new Button("Files", this);
 
-  leftTextEditContainer->setOverflow(Container::OverflowAuto);
-  rightTextEditContainer->setOverflow(Container::OverflowAuto);
-
   // Edits
   leftEdit = new InPlaceEdit("Empty", leftEditContainer);
   rightEdit = new InPlaceEdit("Empty", rightEditContainer);
@@ -209,6 +207,8 @@ Admin::Admin(Device const &device,
   rightTextEdit = new TextEdit(rightTextEditContainer);
   configureTextEdit(leftTextEdit);
   configureTextEdit(rightTextEdit);
+  leftTextEdit->setInline(false);
+  leftTextEdit->setInline(false);
   leftTextEdit->resize(Length::Auto, 600);
   rightTextEdit->resize(Length::Auto, 600);
 
@@ -246,6 +246,14 @@ Admin::Admin(Device const &device,
 
   codesButton->clicked().connect(this, &Admin::onCodes);
   filesButton->clicked().connect(this, &Admin::onFiles);
+
+
+  // TODO mustafa:
+  /*
+  leftTextEdit->keyPressed().connect(std::bind([]{
+
+  }));
+  */
 }
 
 Admin::~Admin()

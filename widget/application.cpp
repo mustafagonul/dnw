@@ -79,7 +79,8 @@ Application::Application(Environment const &env)
   language = new Language(currentLanguage, root());
 
   // main
-  main = new Content(device, currentLanguage, currentKey, root());
+  main = new Content(device, currentLanguage, currentKey);
+  container->setOverflow(Container::OverflowAuto);
   container->addWidget(main);
 
 
@@ -136,7 +137,7 @@ try
   if (mode == "guest") {
     container->clear();
 
-    main = new Content(device, currentLanguage, currentKey, root());
+    main = new Content(device, currentLanguage, currentKey);
     container->addWidget(main);
     main->update();
 
@@ -146,7 +147,7 @@ try
   if (mode == "admin") {
     container->clear();
 
-    main = new Admin(device, currentLanguage, currentKey, root());
+    main = new Admin(device, currentLanguage, currentKey);
     container->addWidget(main);
     main->update();
     main->changed().connect(this, &Application::onKey);
