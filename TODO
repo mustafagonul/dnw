@@ -1,7 +1,7 @@
-* Introduce dnw::field::Resource (base class of File and Code classes)
-* Introduce dnw::field::Text (base class of Name and Content classes)
+* Introduce dnw::field::Resource (base class of File and Code classes) (done)
+* Introduce dnw::field::Text (base class of Name and Content classes) (done)
 * Improve dnw::widget::Admin::onCodes(). Look at dnw::widget::Admin::onFiles() function (done)
-* Dialogs should be introduced. In admin.cpp dialog codes mostly are repeated, copied and pasted. unify them.
+* Dialogs should be introduced. In admin.cpp dialog codes mostly are repeated, copied and pasted. unify them. (done)
 * Devices should be created in main.cpp and should be passed other classes by references.
 
 * Deploy using cmake or a script (deploy.sh)
@@ -26,11 +26,12 @@
 * code formatting
 * Base language
 * Multi language
+* Suspicious
 * History
 * Config field
-* HTML upload
+* HTML upload (done)
 * Diff
-* Names should be on the top of the article.
+* Names should be on the top of the article. (done)
 
 * Plugin and framework should be added.
 * Content has plugins (Here codes and files)
