@@ -24,23 +24,8 @@ namespace field {
 
 
 Name::Name(Device const &device)
-  : Field(device, "name")
+  : Text(device, "name")
 {
-}
-
-bool Name::nameExists(String const &language) const
-{
-  return exists(language);
-}
-
-bool Name::editName(String const &language, String const &data) const
-{
-  return edit(language, data);
-}
-
-String Name::name(String const &language) const
-{
-  return data(language);
 }
 
 

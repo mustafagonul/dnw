@@ -133,7 +133,7 @@ void Tree::populateItem(Any const &key, Item &item)
   if (clone == nullptr)
     return;
 
-  auto name = String("   ") + field::Name(*clone).name(language());
+  auto name = String("   ") + field::Name(*clone).text(language());
   auto count = clone->nodeCount();
 
   item.setText(name);

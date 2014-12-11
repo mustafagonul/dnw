@@ -82,14 +82,14 @@ void Content::update()
   }
 
   // name
-  auto name = field::Name(*clone).name(language());
+  auto name = field::Name(*clone).text(language());
   addWidget(new Wt::WText("<h3>" + name + "</h3>"));
 
   // break
   addWidget(new Wt::WBreak());
 
   // content
-  auto content = field::Content(*clone).content(language());
+  auto content = field::Content(*clone).text(language());
   content = convert(content, "<img [[:print:]]*>");
   content = convert(content, "<a href=[[:print:]]*>");
 

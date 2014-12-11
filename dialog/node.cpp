@@ -60,7 +60,7 @@ static bool operate(system::Device const &device,
     auto sub = device.nodeDevice(i);
 
     field::Name name(*sub);
-    auto str = name.name(language);
+    auto str = name.text(language);
     if (str.empty())
       str = "-------"; // TODO mustafa:
 

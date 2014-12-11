@@ -15,35 +15,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 **/
-/**
- * @file field/content.hpp
- * @author Mustafa Gönül
- */
-
-#ifndef DNW_FIELD_CONTENT_HPP
-#define DNW_FIELD_CONTENT_HPP
 
 #include "field/text.hpp"
 
 
 namespace dnw {
-  namespace field {
+namespace field {
 
-    /**
-     * @class dnw::field::Content
-     * @brief This class is for working on content field of a node.
-     */
-    class Content : public Text {
-    public:
-      /**
-       * @brief Constructor
-       * @param device
-       */
-      explicit Content(Device const &device);
-    };
 
-  }
+Text::Text(Device const &device, String const &field)
+  : Field(device, field)
+{
+}
+
+bool Text::textExists(String const &language) const
+{
+  return exists(language);
+}
+
+bool Text::editText(String const &language, String const &data) const
+{
+  return edit(language, data);
+}
+
+String Text::text(String const &language) const
+{
+  return data(language);
 }
 
 
-#endif // DNW_FIELD_CONTENT_HPP
+} // field
+} // dnw

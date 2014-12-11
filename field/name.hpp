@@ -24,7 +24,7 @@
 #ifndef DNW_FIELD_NAME_HPP
 #define DNW_FIELD_NAME_HPP
 
-#include "field/field.hpp"
+#include "field/text.hpp"
 
 
 namespace dnw {
@@ -34,36 +34,13 @@ namespace dnw {
      * @class dnw::field::Name
      * @brief This class is for working on name field of a node.
      */
-    class Name : public Field {
+    class Name : public Text {
     public:
       /**
        * @brief Constructor
        * @param device
        */
       explicit Name(Device const &device);
-
-    public:
-      /**
-       * @brief Checks if name exists in the given @a language
-       * @param language
-       * @return Success value
-       */
-      bool nameExists(String const &language) const;
-
-      /**
-       * @brief Edits name of the node in the given @a language with @a data.
-       * @param language
-       * @param data
-       * @return Success value
-       */
-      bool editName(String const &language, String const &data) const;
-
-      /**
-       * @brief Returns name of the node in the given @a language.
-       * @param language
-       * @return Name of the node in the given @a language.
-       */
-      String name(String const &language) const;
     };
 
   }

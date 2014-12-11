@@ -17,8 +17,6 @@
 **/
 
 #include "field/content.hpp"
-#include "field/file.hpp"
-
 
 
 namespace dnw {
@@ -26,24 +24,10 @@ namespace field {
 
 
 Content::Content(Device const &device)
-  : Field(device, "content")
+  : Text(device, "content")
 {
 }
 
-bool Content::contentExists(String const &language) const
-{
-  return exists(language);
-}
-
-bool Content::editContent(String const &language, String const &data) const
-{
-  return edit(language, data);
-}
-
-String Content::content(String const &language) const
-{
-  return data(language);
-}
 
 } // field
 } // dnw

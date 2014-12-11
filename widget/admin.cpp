@@ -195,8 +195,10 @@ Admin::Admin(Device const &device,
   auto rightEditContainer = new Container(this);
   auto leftTextEditContainer = new Container(this);
   auto rightTextEditContainer = new Container(this);
-  auto leftButton = new Button("Save", this);
-  auto rightButton = new Button("Save", this);
+  auto leftSaveButton = new Button("Save", this);
+  auto rightSaveButton = new Button("Save", this);
+  auto leftUploadButton = new Button("Upload", this);
+  auto rightUploadButton = new Button("Upload", this);
   auto codesButton = new Button("Codes", this);
   auto filesButton = new Button("Files", this);
 
@@ -215,11 +217,13 @@ Admin::Admin(Device const &device,
   bottomLeftLayout->addWidget(leftLabel);
   bottomLeftLayout->addWidget(leftEditContainer);
   bottomLeftLayout->addWidget(leftTextEditContainer);
-  bottomLeftLayout->addWidget(leftButton);
+  bottomLeftLayout->addWidget(leftSaveButton);
+  bottomLeftLayout->addWidget(leftUploadButton);
   bottomRightLayout->addWidget(rightLabel);
   bottomRightLayout->addWidget(rightEditContainer);
   bottomRightLayout->addWidget(rightTextEditContainer);
-  bottomRightLayout->addWidget(rightButton);
+  bottomRightLayout->addWidget(rightSaveButton);
+  bottomRightLayout->addWidget(rightUploadButton);
   mainLayout->addWidget(filesButton);
   mainLayout->addWidget(codesButton);
 
@@ -241,19 +245,11 @@ Admin::Admin(Device const &device,
 
   leftEdit->saveButton()->clicked().connect(this, &Admin::saveLeftName);
   rightEdit->saveButton()->clicked().connect(this, &Admin::saveRightName);
-  leftButton->clicked().connect(this, &Admin::saveLeftContent);
-  rightButton->clicked().connect(this, &Admin::saveRightContent);
+  leftSaveButton->clicked().connect(this, &Admin::saveLeftContent);
+  rightSaveButton->clicked().connect(this, &Admin::saveRightContent);
 
   codesButton->clicked().connect(this, &Admin::onCodes);
   filesButton->clicked().connect(this, &Admin::onFiles);
-
-
-  // TODO mustafa:
-  /*
-  leftTextEdit->keyPressed().connect(std::bind([]{
-
-  }));
-  */
 }
 
 Admin::~Admin()
@@ -269,18 +265,18 @@ void Admin::update()
   field::Name name(*clone);
   field::Content content(*clone);
 
-  auto leftName = name.name("en");
+  auto leftName = name.text("en");
   if (leftName.empty())
     leftName = EMPTY_NAME;
-  auto rightName = name.name("tr");
+  auto rightName = name.text("tr");
   if (rightName.empty())
     rightName = EMPTY_NAME;
 
 
   leftEdit->setText(leftName);
   rightEdit->setText(rightName);
-  leftTextEdit->setText(content.content("en"));
-  rightTextEdit->setText(content.content("tr"));
+  leftTextEdit->setText(content.text("en"));
+  rightTextEdit->setText(content.text("tr"));
 }
 
 void Admin::onCodes()
@@ -317,7 +313,7 @@ void Admin::saveLeftName()
     str = "";
 
   field::Name name(*clone);
-  name.editName("en", str);
+  name.editText("en", str);
 
 
   changed().emit();
@@ -336,7 +332,7 @@ void Admin::saveRightName()
     str = "";
 
   field::Name name(*clone);
-  name.editName("tr", str);
+  name.editText("tr", str);
 
 
   changed().emit();
@@ -353,7 +349,7 @@ void Admin::saveLeftContent()
   auto str = leftTextEdit->text().toUTF8();
 
   field::Content content(*clone);
-  content.editContent("en", str);
+  content.editText("en", str);
 
   dialog::messageBox("Admin", "Saved.");
 }
@@ -369,9 +365,19 @@ void Admin::saveRightContent()
   auto str = rightTextEdit->text().toUTF8();
 
   field::Content content(*clone);
-  content.editContent("tr", str);
+  content.editText("tr", str);
 
   dialog::messageBox("Admin", "Saved.");
+}
+
+void Admin::uploadLeftContent()
+{
+
+}
+
+void Admin::uploadRightContent()
+{
+
 }
 
 void Admin::addNode()
