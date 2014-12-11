@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Mustafa G??n??l
+ * Copyright (C) 2014 Mustafa Gönül
  *
  * dnw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include "field/file.hpp"
 #include "dialog/messagebox.hpp"
 #include "dialog/resource.hpp"
+#include "dialog/text.hpp"
 #include "dialog/node.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
@@ -247,6 +248,8 @@ Admin::Admin(Device const &device,
   rightEdit->saveButton()->clicked().connect(this, &Admin::saveRightName);
   leftSaveButton->clicked().connect(this, &Admin::saveLeftContent);
   rightSaveButton->clicked().connect(this, &Admin::saveRightContent);
+  leftUploadButton->clicked().connect(this, &Admin::uploadLeftContent);
+  rightUploadButton->clicked().connect(this, &Admin::uploadRightContent);
 
   codesButton->clicked().connect(this, &Admin::onCodes);
   filesButton->clicked().connect(this, &Admin::onFiles);
@@ -372,12 +375,24 @@ void Admin::saveRightContent()
 
 void Admin::uploadLeftContent()
 {
+  auto clone = device().clone(key());
+  if (clone == nullptr)
+    return;
 
+  field::Content content(*clone);
+  dialog::uploadText("en", content);
+  leftTextEdit->setText(content.text("en"));
 }
 
 void Admin::uploadRightContent()
 {
+  auto clone = device().clone(key());
+  if (clone == nullptr)
+    return;
 
+  field::Content content(*clone);
+  dialog::uploadText("tr", content);
+  rightTextEdit->setText(content.text("tr"));
 }
 
 void Admin::addNode()

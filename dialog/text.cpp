@@ -16,66 +16,33 @@
  *
 **/
 
-#include "dialog/resource.hpp"
+#include "dialog/text.hpp"
 #include "dialog/messagebox.hpp"
-#include "field/resource.hpp"
+#include "field/text.hpp"
 #include "utility/file.hpp"
-#include <Wt/WTable>
-#include <Wt/WCssDecorationStyle>
-#include <Wt/WMessageBox>
-#include <Wt/WText>
-#include <Wt/WFileResource>
-#include <Wt/WPushButton>
 #include <Wt/WDialog>
+#include <Wt/WPushButton>
 #include <Wt/WFileUpload>
 #include <Wt/WProgressBar>
-#include <Wt/WSelectionBox>
 
 
 namespace dnw {
 namespace dialog {
 
 
-using Text = Wt::WText;
-using Link = Wt::WLink;
-using Button = Wt::WPushButton;
-using FileResource = Wt::WFileResource;
 using Dialog = Wt::WDialog;
+using Button = Wt::WPushButton;
 using FileUpload = Wt::WFileUpload;
-using Button = Wt::WPushButton;
 using ProgressBar = Wt::WProgressBar;
-using Dialog = Wt::WDialog;
-using SelectionBox = Wt::WSelectionBox;
-using Button = Wt::WPushButton;
 
 
-static void prepareTable(Wt::WTable *table)
+/*
+void text(String const &language, field::Text const &text)
 {
-  table->setHeaderCount(1);
-  table->setWidth("100%");
-
-  Wt::WCssDecorationStyle style;
-  Wt::WBorder border(Wt::WBorder::Solid, Wt::WBorder::Thin, Wt::black);
-  style.setBorder(border);
-  table->setDecorationStyle(style);
-}
-
-
-void resource(String const &name, field::Resource const &resource)
-{
-  auto count = resource.resourceCount();
-  if (count == 0) {
-    errorMessageBox(name, "Empty!");
-    return;
-  }
-
   Dialog dialog(name);
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
-
-  auto files = new Wt::WTable(dialog.contents());
-  prepareTable(files);
 
   // files
   files->clear();
@@ -96,11 +63,12 @@ void resource(String const &name, field::Resource const &resource)
 
   dialog.exec();
 }
+*/
 
-void addResource(String const &name, field::Resource const &resource)
+void uploadText(String const &language, field::Text const &text)
 {
   // Dialog
-  Dialog dialog(name);
+  Dialog dialog("Upload");
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -108,9 +76,10 @@ void addResource(String const &name, field::Resource const &resource)
 
   // File upload
   auto fileUpload = new FileUpload(dialog.contents());
-  auto button = new Button("Add", dialog.contents());
+  auto button = new Button("Upload", dialog.contents());
   fileUpload->setProgressBar(new ProgressBar());
   fileUpload->setMultiple(false);
+  fileUpload->setFilters("text/html");
 
   // Button clicked
   button->clicked().connect(std::bind([&] {
@@ -125,7 +94,7 @@ void addResource(String const &name, field::Resource const &resource)
       using dnw::utility::file::read;
 
       auto str = read(f.spoolFileName());
-      resource.editResource(f.clientFileName(), str);
+      text.editText(language, str);
     }
 
     dialog.accept();
@@ -143,52 +112,9 @@ void addResource(String const &name, field::Resource const &resource)
     messageBox("Admin", "Added");
 }
 
-void removeResource(String const &name, field::Resource const &resource)
-{
-  auto count = resource.resourceCount();
-  if (count < 1) {
-    errorMessageBox("Admin", "There is nothing to remove!");
-    return;
-  }
-
-  // Dialog
-  Dialog dialog("Add File");
-  dialog.setClosable(true);
-  dialog.setResizable(true);
-  dialog.rejectWhenEscapePressed();
-
-  // Selection box
-  auto selectionBox = new SelectionBox(dialog.contents());
-  for (decltype(count) i = 0; i < count; ++i) {
-    auto str = resource.resourceName(i);
-    selectionBox->addItem(str);
-  }
-  selectionBox->setCurrentIndex(0);
-
-  // Remove button
-  auto button = new Button("Remove", dialog.contents());
-  button->clicked().connect(std::bind([&] {
-    auto result = booleanMessageBox("Admin", "Do you want to remove?");
-    if (result)
-      dialog.accept();
-  }));
-
-  // Accepted
-  dialog.finished().connect(std::bind([&] {
-    if (dialog.result() != Dialog::Accepted)
-      return;
-
-    auto current = static_cast<decltype(count)>(selectionBox->currentIndex());
-    auto str = resource.resourceName(current);
-    resource.removeResource(str);
-  }));
-
-  auto result = dialog.exec();
-  if (result == Dialog::Accepted)
-    messageBox("Admin", "Removed.");
-}
-
 
 } // dialog
 } // dnw
+
+
 

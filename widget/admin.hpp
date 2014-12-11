@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Mustafa G??n??l
+ * Copyright (C) 2014 Mustafa Gönül
  *
  * dnw is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ namespace dnw {
       virtual ~Admin();
 
     public:
-      virtual void update();
+      virtual void update() final;
 
     private:
       // Child commands
