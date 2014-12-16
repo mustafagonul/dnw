@@ -16,9 +16,9 @@
  *
 **/
 
+#include "system/node.hpp"
 #include "dialog/node.hpp"
 #include "dialog/messagebox.hpp"
-#include "system/device.hpp"
 #include "field/name.hpp"
 #include <Wt/WDialog>
 #include <Wt/WSelectionBox>
@@ -33,15 +33,15 @@ namespace dialog {
 using Dialog = Wt::WDialog;
 using SelectionBox = Wt::WSelectionBox;
 using Button = Wt::WPushButton;
-using Operation = std::function<bool(system::Device const &, Index)>;
+using Operation = std::function<bool(system::Node const &, Index)>;
 
-static bool operate(system::Device const &device,
+static bool operate(system::Node const &node,
                     String const &language,
                     String const &str,
                     String const &question,
                     Operation operation)
 {
-  if (device.nodeCount() == 0) {
+  if (node.nodeCount() == 0) {
     errorMessageBox("Admin", "There is no node!");
     return false;
   }
@@ -55,9 +55,9 @@ static bool operate(system::Device const &device,
 
   // Selection box
   auto selectionBox = new SelectionBox(dialog.contents());
-  auto nodeCount = device.nodeCount();
+  auto nodeCount = node.nodeCount();
   for (decltype(nodeCount) i = 0; i < nodeCount; ++i) {
-    auto sub = device.nodeDevice(i);
+    auto sub = node.node(i);
 
     field::Name name(*sub);
     auto str = name.text(language);
@@ -85,7 +85,7 @@ static bool operate(system::Device const &device,
 
     auto current = static_cast<decltype(nodeCount)>(selectionBox->currentIndex());
 
-    operation(device, current);
+    operation(node, current);
   }));
 
   // Exec
@@ -96,31 +96,31 @@ static bool operate(system::Device const &device,
   return false;
 }
 
-bool removeNode(system::Device const &device, String const &language)
+bool removeNode(system::Node const &node, String const &language)
 {
-  auto op = [](system::Device const &device, Index index) -> bool {
-    device.removeNode(index);
+  auto op = [](system::Node const &node, Index index) -> bool {
+    node.removeNode(index);
   };
 
-  return operate(device, language, "Remove Node", "Do you want to remove node?", op);
+  return operate(node, language, "Remove Node", "Do you want to remove node?", op);
 }
 
-bool moveNodeUp(system::Device const &device, String const &language)
+bool moveNodeUp(system::Node const &node, String const &language)
 {
-  auto op = [](system::Device const &device, Index index) -> bool {
-    device.moveNodeUp(index);
+  auto op = [](system::Node const &node, Index index) -> bool {
+    node.moveNodeUp(index);
   };
 
-  return operate(device, language, "Move Node Up", "Do you want to move node up?", op);
+  return operate(node, language, "Move Node Up", "Do you want to move node up?", op);
 }
 
-bool moveNodeDown(system::Device const &device, String const &language)
+bool moveNodeDown(system::Node const &node, String const &language)
 {
-  auto op = [](system::Device const &device, Index index) -> bool {
-    device.moveNodeDown(index);
+  auto op = [](system::Node const &node, Index index) -> bool {
+    node.moveNodeDown(index);
   };
 
-  return operate(device, language, "Move Node Down", "Do you want to move node down?", op);
+  return operate(node, language, "Move Node Down", "Do you want to move node down?", op);
 }
 
 

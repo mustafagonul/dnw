@@ -23,34 +23,24 @@ namespace dnw {
 namespace widget {
 
 
-Widget::Widget(Device const &device,
-               String const &language,
-               Any const &key,
-               Parent *parent)
-  : Base(language, parent)
-  , m_device(device)
-  , m_key(key)
+Widget::Widget(System const &system, Parent *parent)
+  : Wt::WContainerWidget(parent)
+  , m_system(system)
 {
-  setOverflow(Wt::WContainerWidget::OverflowAuto);
 }
 
 Widget::~Widget()
 {
 }
 
-void Widget::setKey(Any const &k)
+Widget::Signal &Widget::changed()
 {
-  m_key = k;
+  return m_changed;
 }
 
-Widget::Device const &Widget::device() const
+Widget::System const &Widget::system() const
 {
-  return m_device;
-}
-
-Any const &Widget::key() const
-{
-  return m_key;
+  return m_system;
 }
 
 

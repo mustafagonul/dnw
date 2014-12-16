@@ -23,8 +23,8 @@ namespace dnw {
 namespace field {
 
 
-Name::Name(Device const &device)
-  : Text(device, "name")
+Name::Name(Node const &node)
+  : Text(node, "name")
 {
 }
 

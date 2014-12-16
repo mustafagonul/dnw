@@ -38,9 +38,9 @@ namespace dnw {
     public:
       /**
        * @brief Constructor
-       * @param device
+       * @param node
        */
-      explicit Code(Device const &device);
+      explicit Code(Node const &node);
 
     };
 

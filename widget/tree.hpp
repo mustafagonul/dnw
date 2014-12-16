@@ -43,10 +43,7 @@ namespace dnw {
       using Keys    = std::set<Any, Comparator>;
 
     public:
-      Tree(Device const &device,
-           String const &language,
-           Any const &key,
-           Parent *parent = nullptr);
+      Tree(System const &system, Parent *parent = nullptr);
       virtual ~Tree();
 
     public:

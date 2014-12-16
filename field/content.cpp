@@ -23,8 +23,8 @@ namespace dnw {
 namespace field {
 
 
-Content::Content(Device const &device)
-  : Text(device, "content")
+Content::Content(Node const &node)
+  : Text(node, "content")
 {
 }
 

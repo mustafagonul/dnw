@@ -16,9 +16,10 @@
  *
 **/
 
+#include "system/system.hpp"
+#include "system/node.hpp"
 #include "widget/tree.hpp"
 #include "widget/content.hpp"
-#include "system/device.hpp"
 #include "field/name.hpp"
 #include <Wt/WStandardItem>
 #include <Wt/WColor>
@@ -44,11 +45,8 @@ bool operator==(Any const &a1, Any const &a2)
   return s1 == s2;
 }
 
-Tree::Tree(Device const &device,
-           String const &language,
-           Any const &key,
-           Parent *parent)
-  : Widget(device, language, key, parent)
+Tree::Tree(System const &system, Parent *parent)
+  : Widget(system, parent)
   , view(this)
   , model(this)
   , keys()
@@ -81,8 +79,6 @@ void Tree::onItemClick(Index index)
 {
   auto data = model.data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
-
-  setKey(key);
 
   changed().emit(key);
 }
@@ -120,7 +116,7 @@ void Tree::populateModel()
   model.clear();
 
   auto root = new Item();
-  auto rootKey = device().rootKey();
+  auto rootKey = system().node()->rootKey();
 
   model.appendRow(root);
 
@@ -129,11 +125,11 @@ void Tree::populateModel()
 
 void Tree::populateItem(Any const &key, Item &item)
 {
-  auto clone = device().clone(key);
+  auto clone = system().node()->clone(key);
   if (clone == nullptr)
     return;
 
-  auto name = String("   ") + field::Name(*clone).text(language());
+  auto name = String("   ") + field::Name(*clone).text(system().language());
   auto count = clone->nodeCount();
 
   item.setText(name);
@@ -144,7 +140,7 @@ void Tree::populateItem(Any const &key, Item &item)
     item.setIcon("icons/yellow-folder-open.png");
 
   for (unsigned i = 0; i < count; ++i) {
-    auto nodeClone = clone->nodeDevice(i);
+    auto nodeClone = clone->node(i);
     auto nodeKey = nodeClone->currentKey();
     auto nodeItem = new Item();
 
@@ -159,7 +155,7 @@ void Tree::expandModel()
   view.expanded().setBlocked(true);
   view.collapsed().setBlocked(true);
 
-  keys.insert(key());
+  keys.insert(system().key());
 
   auto root = model.item(0, 0);
   if (root == nullptr)
@@ -179,7 +175,7 @@ void Tree::expandItem(Item &item)
   else
     view.expand(item.index());
 
-  if (any == key())
+  if (any == system().key())
     view.select(item.index());
 
   auto count = item.rowCount();

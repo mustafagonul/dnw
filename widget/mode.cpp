@@ -17,13 +17,15 @@
 **/
 
 #include "widget/mode.hpp"
+#include "system/system.hpp"
+
 
 namespace dnw {
 namespace widget {
 
 
-Mode::Mode(String const &language, Parent *parent)
-  : Base(language, parent)
+Mode::Mode(System const &system, Parent *parent)
+  : Widget(system, parent)
   , toolbar(this)
   , guestButton(nullptr)
   , adminButton(nullptr)
@@ -59,7 +61,7 @@ void Mode::onGuest()
 
 void Mode::update()
 {
-  if (language() == "tr") {
+  if (system().language() == "tr") {
     guestButton->setText("Ziyaretci");
     adminButton->setText("Yonetici");
 

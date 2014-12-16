@@ -37,15 +37,15 @@ namespace dnw {
      */
     class Field {
     protected:
-      using Device = dnw::system::Device;
+      using Node = dnw::system::Node;
 
     protected:
       /**
        * @brief Constructor
-       * @param device
+       * @param node
        * @param field
        */
-      Field(Device const &device, String const &field);
+      Field(Node const &node, String const &field);
 
       /**
        * @name Deleted functions
@@ -110,7 +110,7 @@ namespace dnw {
 
 
     protected:
-      Device const &device; /**< device */
+      Node const &node;     /**< node */
       String const field;   /**< field */
     };
 

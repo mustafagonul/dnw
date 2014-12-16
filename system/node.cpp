@@ -16,7 +16,7 @@
  *
 **/
 
-#include "system/device.hpp"
+#include "system/node.hpp"
 #include <memory>
 
 
@@ -24,15 +24,15 @@ namespace dnw {
 namespace system {
 
 
-Device::Device()
+Node::Node()
 {
 }
 
-Device::~Device()
+Node::~Node()
 {
 }
 
-Device::DevicePtr Device::nodeDevice(Index index) const
+Node::NodePtr Node::node(Index index) const
 {
   if (index >= nodeCount())
     return nullptr;
@@ -40,7 +40,7 @@ Device::DevicePtr Device::nodeDevice(Index index) const
   return clone(nodeKey(index));
 }
 
-Device::DevicePtr Device::lastDevice() const
+Node::NodePtr Node::last() const
 {
   auto count = nodeCount();
 
@@ -50,17 +50,17 @@ Device::DevicePtr Device::lastDevice() const
   return clone(nodeKey(count - 1));
 }
 
-Device::DevicePtr Device::parentDevice() const
+Node::NodePtr Node::parent() const
 {
   return clone(parentKey());
 }
 
-Device::DevicePtr Device::rootDevice() const
+Node::NodePtr Node::root() const
 {
   return clone(rootKey());
 }
 
-bool Device::removeNode(Index index) const
+bool Node::removeNode(Index index) const
 {
   if (moveNodeToLast(index) == false)
     return false;
@@ -73,7 +73,7 @@ bool Device::removeNode(Index index) const
   return true;
 }
 
-bool Device::moveNode(Index from, Index to) const
+bool Node::moveNode(Index from, Index to) const
 {
   unsigned count = nodeCount();
 
@@ -96,7 +96,7 @@ bool Device::moveNode(Index from, Index to) const
   return true;
 }
 
-bool Device::moveNodeUp(Index index) const
+bool Node::moveNodeUp(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -110,7 +110,7 @@ bool Device::moveNodeUp(Index index) const
   return swapNodes(index, otherIndex);
 }
 
-bool Device::moveNodeDown(Index index) const
+bool Node::moveNodeDown(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -124,7 +124,7 @@ bool Device::moveNodeDown(Index index) const
   return swapNodes(index, otherIndex);
 }
 
-bool Device::moveNodeToLast(Index index) const
+bool Node::moveNodeToLast(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -134,7 +134,7 @@ bool Device::moveNodeToLast(Index index) const
   return moveNode(index, last);
 }
 
-bool Device::moveLastToNode(Index index) const
+bool Node::moveLastToNode(Index index) const
 {
   if (nodeCount() == 0)
     return false;
@@ -144,7 +144,7 @@ bool Device::moveLastToNode(Index index) const
   return moveNode(last, index);
 }
 
-bool Device::moveNodeToParent(Index index) const
+bool Node::moveNodeToParent(Index index) const
 {
   if (moveNodeToLast(index) == false)
     return false;
@@ -157,7 +157,7 @@ bool Device::moveNodeToParent(Index index) const
   return true;
 }
 
-bool Device::moveNodeToNode(Index source, Index destination) const
+bool Node::moveNodeToNode(Index source, Index destination) const
 {
   unsigned count = nodeCount();
 

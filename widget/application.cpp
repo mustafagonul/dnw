@@ -22,6 +22,7 @@
 #include "widget/mode.hpp"
 #include "widget/tree.hpp"
 #include "widget/content.hpp"
+#include "system/system.hpp"
 #include "admin/password.hpp"
 #include <Wt/WLabel>
 #include <Wt/WLineEdit>
@@ -39,21 +40,16 @@ namespace dnw {
 namespace widget {
 
 
-Application::Application(Environment const &env)
+Application::Application(System &sys, Environment const &env)
   : Wt::WApplication(env)
-  , device()
+  , system(sys)
   , session()
   , tree(nullptr)
   , mode(nullptr)
   , language(nullptr)
   , container(nullptr)
   , main(nullptr)
-  , currentLanguage("en")
-  , currentKey()
 {
-  // Setting key
-  currentKey = device.currentKey();
-
   // UTF8
   Wt::WString::setDefaultEncoding(Wt::UTF8);
 
@@ -74,12 +70,12 @@ Application::Application(Environment const &env)
 
   // Items
   container = new Container(root());
-  tree = new Tree(device, currentLanguage, currentKey, root());
-  mode = new Mode(currentLanguage, root());
-  language = new Language(currentLanguage, root());
+  tree = new Tree(system, root());
+  mode = new Mode(system, root());
+  language = new Language(system, root());
 
   // main
-  main = new Content(device, currentLanguage, currentKey);
+  main = new Content(system);
   container->setOverflow(Container::OverflowAuto);
   container->addWidget(main);
 
@@ -137,7 +133,7 @@ try
   if (mode == "guest") {
     container->clear();
 
-    main = new Content(device, currentLanguage, currentKey);
+    main = new Content(system);
     container->addWidget(main);
     main->update();
 
@@ -147,7 +143,7 @@ try
   if (mode == "admin") {
     container->clear();
 
-    main = new Admin(device, currentLanguage, currentKey);
+    main = new Admin(system);
     container->addWidget(main);
     main->update();
     main->changed().connect(this, &Application::onKey);
@@ -163,12 +159,7 @@ try
 {
   auto lang = boost::any_cast<String>(any);
 
-  currentLanguage = lang;
-
-  mode->setLanguage(lang);
-  tree->setLanguage(lang);
-  main->setLanguage(lang);
-  language->setLanguage(lang);
+  system.setLanguage(lang);
 
   mode->update();
   tree->update();
@@ -180,10 +171,7 @@ catch (...) {
 
 void Application::onKey(Any const &key)
 {
-  currentKey = key;
-
-  tree->setKey(key);
-  main->setKey(key);
+  system.setKey(key);
 
   tree->update();
   main->update();

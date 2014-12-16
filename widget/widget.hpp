@@ -19,40 +19,42 @@
 #ifndef DNW_WIDGET_WIDGET_HPP
 #define DNW_WIDGET_WIDGET_HPP
 
-#include "widget/base.hpp"
+#include "utility/common.hpp"
 #include "system/fwd.hpp"
+#include <Wt/WContainerWidget>
 
 
 namespace dnw {
   namespace widget {
 
-    class Widget : public Base {
+    class Widget : public Wt::WContainerWidget {
     protected:
-      using Device = dnw::system::Device;
+      using System = dnw::system::System;
+      using Parent = Wt::WContainerWidget;
+      using Signal = Wt::Signal<Any>;
 
     protected:
-      Widget(Device const &device,
-             String const &language,
-             Any const &key,
-             Parent *parent = nullptr);
+      Widget(System const &system, Parent *parent = nullptr);
 
     public:
       virtual ~Widget() = 0;
 
     public:
-      void setKey(Any const &);
+      virtual void update() = 0;
+
+    public:
+      Signal &changed();
 
     protected:
-      Device const &device() const;
-      Any const &key() const;
+      System const &system() const;
 
     private:
-      Device const &m_device;
-      Any m_key;
+      System const &m_system;
+      Signal m_changed;
     };
 
   }
 }
 
 
-#endif // DNW_WIDGET_WIDGET_HPP
+#endif // DNW_WIDGET_SYSTEM_HPP

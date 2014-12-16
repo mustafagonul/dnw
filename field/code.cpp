@@ -23,8 +23,8 @@ namespace dnw {
 namespace field {
 
 
-Code::Code(Device const &device)
-  : Resource(device, "code")
+Code::Code(Node const &node)
+  : Resource(node, "code")
 {
 }
 

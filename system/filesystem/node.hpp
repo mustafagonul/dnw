@@ -17,14 +17,14 @@
 **/
 
 /**
- * @file system/filesystem/device.hpp
+ * @file system/filesystem/node.hpp
  * @author Mustafa Gönül
  */
 
-#ifndef DNW_SYSTEM_FILESYSTEM_DEVICE_HPP
-#define DNW_SYSTEM_FILESYSTEM_DEVICE_HPP
+#ifndef DNW_SYSTEM_FILESYSTEM_NODE_HPP
+#define DNW_SYSTEM_FILESYSTEM_NODE_HPP
 
-#include "system/device.hpp"
+#include "system/node.hpp"
 #include "system/filesystem/key.hpp"
 
 
@@ -33,32 +33,32 @@ namespace dnw {
     namespace filesystem {
 
       /**
-       * @class dnw::system::filesystem::Device
-       * @brief This class implements abstract Device class. Holds the information at filesystem.
+       * @class dnw::system::filesystem::Node
+       * @brief This class implements abstract Node class. Holds the information at filesystem.
        */
-      class Device : public dnw::system::Device {
+      class Node : public dnw::system::Node {
       private:
-        using Base = dnw::system::Device;
+        using Base = dnw::system::Node;
 
       public:
         /**
          * @brief Default constructor
          */
-        Device();
+        Node();
 
       private:
         /**
          * Private constructor used by clone function.
          * @param key
          */
-        explicit Device(Key const &key);
+        explicit Node(Key const &key);
 
       public:
-        virtual ~Device();
+        virtual ~Node();
 
       public:
         // Clone function
-        virtual DevicePtr clone(Any const &key) const;
+        virtual NodePtr clone(Any const &key) const;
 
       public:
         /**
@@ -67,11 +67,11 @@ namespace dnw {
          */
 
         /**
-         * @brief Checks if devices points the same node.
-         * @param device
+         * @brief Checks if nodes points the same node.
+         * @param node
          * @return Sameness value
          */
-        virtual bool isSame(Base const &device) const;
+        virtual bool isSame(Base const &node) const;
 
         /** @} */ // end of check function
 
@@ -236,4 +236,4 @@ namespace dnw {
 }
 
 
-#endif // DNW_SYSTEM_FILESYSTEM_DEVICE_HPP
+#endif // DNW_SYSTEM_FILESYSTEM_NODE_HPP

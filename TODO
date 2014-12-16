@@ -17,7 +17,7 @@
 * copyright (done)
 * github (done)
 * save button should save both name and content (Don't do that)
-* You can introduce types headers in the namespaces. 
+* You can introduce types headers in the namespaces. (done)
 * cmake (done)
 * use std::bind
 * rename Device (to Node)

@@ -16,53 +16,53 @@
  *
 **/
 
+#include "system/node.hpp"
 #include "field/field.hpp"
-#include "system/device.hpp"
 
 
 namespace dnw {
 namespace field {
 
 
-Field::Field(Device const &d, String const &f)
-  : device(d)
+Field::Field(Node const &n, String const &f)
+  : node(n)
   , field(f)
 {
 }
 
 Index Field::count() const
 {
-  return device.count(field);
+  return node.count(field);
 }
 
 bool Field::exists(String const &name) const
 {
-  return device.exists(field, name);
+  return node.exists(field, name);
 }
 
 bool Field::remove(String const &name) const
 {
-  return device.remove(field, name);
+  return node.remove(field, name);
 }
 
 bool Field::edit(String const &name, String const &data) const
 {
-  return device.edit(field, name, data);
+  return node.edit(field, name, data);
 }
 
 String Field::name(Index index) const
 {
-  return device.name(field, index);
+  return node.name(field, index);
 }
 
 String Field::data(String const &name) const
 {
-  return device.data(field, name);
+  return node.data(field, name);
 }
 
 String Field::path(String const &name) const
 {
-  return device.path(field, name);
+  return node.path(field, name);
 }
 
 

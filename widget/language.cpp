@@ -17,31 +17,34 @@
 **/
 
 #include "widget/language.hpp"
+#include "system/system.hpp"
 
 
 namespace dnw {
 namespace widget {
 
 
-Language::Language(String const &language, Parent *parent)
-  : Base(language, parent)
+Language::Language(System const &system, Parent *parent)
+  : Widget(system, parent)
   , toolbar(this)
-  , enButton(nullptr)
-  , trButton(nullptr)
+  , pushbuttons()
 {
   addWidget(&toolbar);
 
-  enButton = new PushButton("English", this);
-  trButton = new PushButton("Turkish", this);
+  Size languageCount = system.languageCount();
+  for (Size i = 0; i < languageCount; ++i) {
+    auto languageStr = system.languageStr(i);
+    auto languageTag = system.languageTag(i);
 
-  toolbar.addButton(enButton);
-  toolbar.addButton(trButton);
+    PushButton *button = new PushButton(languageStr, this);
+    toolbar.addButton(button);
 
-  enButton->clicked().connect(this, &Language::onEn);
-  trButton->clicked().connect(this, &Language::onTr);
-  //enButton->clicked().connect([]{ languageSignal.emit("en"); }); // TODO
-  //trButton->clicked().connect([]{ languageSignal.emit("tr"); }); // TODO
+    pushbuttons[button] = languageTag;
 
+    button->clicked().connect(std::bind([this](String const &l){
+      changed().emit(String(l));
+    }, languageTag));
+  }
 }
 
 Language::~Language()
@@ -50,28 +53,7 @@ Language::~Language()
 
 void Language::update()
 {
-  if (language() == "tr") {
-    enButton->setText("Ingilizce");
-    trButton->setText("Turkce");
-
-    return;
-  }
-
-  enButton->setText("English");
-  trButton->setText("Turkish");
-
 }
-
-void Language::onEn()
-{
-  changed().emit(String("en"));
-}
-
-void Language::onTr()
-{
-  changed().emit(String("tr"));
-}
-
 
 } // widget
 } // dnw

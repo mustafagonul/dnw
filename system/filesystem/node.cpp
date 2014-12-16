@@ -16,7 +16,7 @@
  *
 **/
 
-#include "system/filesystem/device.hpp"
+#include "system/filesystem/node.hpp"
 #include "utility/file.hpp"
 #include <limits>
 #include <memory>
@@ -38,22 +38,22 @@ static std::string tempDirectory();
 static fs::path keyToDirectory(Key const &);
 
 
-Device::Device(Key const &k)
-  : dnw::system::Device()
+Node::Node(Key const &k)
+  : dnw::system::Node()
   , m_key(k)
 {
 }
 
-Device::Device()
-  : Device(Key())
+Node::Node()
+  : Node(Key())
 {
 }
 
-Device::~Device()
+Node::~Node()
 {
 }
 
-Index Device::nodeCount() const
+Index Node::nodeCount() const
 try {
 
   unsigned max = std::numeric_limits<unsigned>::max();
@@ -72,12 +72,12 @@ catch (...)
   return 0;
 }
 
-Any Device::currentKey() const
+Any Node::currentKey() const
 {
   return key().string();
 }
 
-Any Device::rootKey() const
+Any Node::rootKey() const
 {
   return Key().string();
 }
@@ -118,7 +118,7 @@ FilesystemDevice::String FilesystemDevice::nextKey() const
 }
 */
 
-Any Device::parentKey() const
+Any Node::parentKey() const
 {
   Key pKey = key();
 
@@ -127,7 +127,7 @@ Any Device::parentKey() const
   return pKey.string();
 }
 
-Any Device::nodeKey(Index index) const
+Any Node::nodeKey(Index index) const
 {
   if (index >= nodeCount())
     return Key().string();
@@ -138,7 +138,7 @@ Any Device::nodeKey(Index index) const
   return nKey.string();
 }
 
-Device::DevicePtr Device::clone(Any const &any) const
+Node::NodePtr Node::clone(Any const &any) const
 try {
   auto str = boost::any_cast<String>(any);
   Key key(str);
@@ -148,25 +148,25 @@ try {
   //if (fs::exists(p) == false)
   //  return nullptr;
 
-  auto ptr = new Device(key);
+  auto ptr = new Node(key);
 
-  return DevicePtr(ptr);
+  return NodePtr(ptr);
 }
 catch (...) {
   return nullptr;
 }
 
-bool Device::isSame(Base const &base) const
+bool Node::isSame(Base const &base) const
 try {
-  auto const &device = dynamic_cast<Device const &>(base);
+  auto const &node = dynamic_cast<Node const &>(base);
 
-  return device.key().same(key());
+  return node.key().same(key());
 }
 catch (...) {
   return false;
 }
 
-bool Device::pushNode() const
+bool Node::pushNode() const
 {
   Key cKey = key();
   cKey.push(nodeCount());
@@ -176,7 +176,7 @@ bool Device::pushNode() const
   return fs::create_directories(path);
 }
 
-bool Device::popNode() const
+bool Node::popNode() const
 {
   if (nodeCount() == 0)
     return false;
@@ -189,7 +189,7 @@ bool Device::popNode() const
   return fs::remove_all(path) > 0;
 }
 
-bool Device::popNodeToNode(Index index) const
+bool Node::popNodeToNode(Index index) const
 {
   // there should be at least two nodes to perform operation
   if (nodeCount() < 2)
@@ -204,7 +204,7 @@ bool Device::popNodeToNode(Index index) const
   sourceKey.push(nodeCount() - 1);
 
   // other node will destination
-  auto nd = nodeDevice(index);
+  auto nd = node(index);
   auto nk = boost::any_cast<String>(nodeKey(index));
   Key destinationKey(nk);
   destinationKey.push(nd->nodeCount());
@@ -219,7 +219,7 @@ bool Device::popNodeToNode(Index index) const
   return true;
 }
 
-bool Device::popNodeToParent() const
+bool Node::popNodeToParent() const
 {
   // if there is no node there is nothing to do
   if (nodeCount() == 0)
@@ -238,7 +238,7 @@ bool Device::popNodeToParent() const
 
   // destination key
   Key destinationKey(pk);
-  auto pd = parentDevice();
+  auto pd = parent();
   destinationKey.push(pd->nodeCount());
 
   // destinations
@@ -251,7 +251,7 @@ bool Device::popNodeToParent() const
   return true;
 }
 
-bool Device::swapNodes(Index i1, Index i2) const
+bool Node::swapNodes(Index i1, Index i2) const
 {
   if (i1 >= nodeCount())
     return false;
@@ -278,7 +278,7 @@ bool Device::swapNodes(Index i1, Index i2) const
   return true;
 }
 
-Index Device::count(String const &field) const
+Index Node::count(String const &field) const
 try {
   if (field.empty())
     return 0;
@@ -300,7 +300,7 @@ catch (...)
 }
 
 
-bool Device::exists(String const &field, String const &name) const
+bool Node::exists(String const &field, String const &name) const
 {
   std::string pStr = path(field, name);
 
@@ -312,7 +312,7 @@ bool Device::exists(String const &field, String const &name) const
   return fs::exists(p);
 }
 
-bool Device::remove(String const &field, String const &name) const
+bool Node::remove(String const &field, String const &name) const
 {
   std::string pStr = path(field, name);
 
@@ -325,7 +325,7 @@ bool Device::remove(String const &field, String const &name) const
   return fs::exists(p) == false;
 }
 
-bool Device::edit(String const &field, String const &name, String const & data) const
+bool Node::edit(String const &field, String const &name, String const & data) const
 try {
   if (field.empty())
     return false;
@@ -347,7 +347,7 @@ catch (fs::filesystem_error const &)
 }
 
 
-String Device::name(String const &field, Index index) const
+String Node::name(String const &field, Index index) const
 try {
   if (field.empty())
     return "";
@@ -374,7 +374,7 @@ catch (fs::filesystem_error const &)
 }
 
 
-String Device::data(String const &field, String const &name) const
+String Node::data(String const &field, String const &name) const
 {
   if (exists(field, name) == false)
     return "";
@@ -384,7 +384,7 @@ String Device::data(String const &field, String const &name) const
   return dnw::utility::file::read(p);
 }
 
-String Device::path(String const &field, String const &name) const
+String Node::path(String const &field, String const &name) const
 try {
   if (name.empty() == true)
     return "";
@@ -400,7 +400,7 @@ catch (...)
   return "";
 }
 
-Key const &Device::key() const
+Key const &Node::key() const
 {
   return m_key;
 }

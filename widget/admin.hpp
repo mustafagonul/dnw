@@ -32,10 +32,7 @@ namespace dnw {
       using TextEdit       = Wt::WTextEdit;
 
     public:
-      Admin(Device const &device,
-            String const &language,
-            Any const &key,
-            Parent *parent = nullptr);
+      Admin(System const &system, Parent *parent = nullptr);
       virtual ~Admin();
 
     public:

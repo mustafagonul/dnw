@@ -29,10 +29,7 @@ namespace dnw {
 
     class Content : public Widget {
     public:
-      Content(Device const &device,
-              String const &language,
-              Any const &key,
-              Parent *parent = nullptr);
+      Content(System const &system, Parent *parent = nullptr);
       virtual ~Content();
 
     public:

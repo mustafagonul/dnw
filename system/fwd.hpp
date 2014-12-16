@@ -28,7 +28,9 @@
 namespace dnw {
   namespace system {
 
-    class Device;
+    class Config;
+    class Node;
+    class System;
 
   }
 }

@@ -38,10 +38,10 @@ namespace dnw {
     protected:
       /**
        * @brief Constructor
-       * @param device
+       * @param node
        * @param field
        */
-      explicit Text(Device const &device, String const &field);
+      explicit Text(Node const &node, String const &field);
 
     public:
       /**

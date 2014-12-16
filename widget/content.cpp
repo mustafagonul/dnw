@@ -17,7 +17,7 @@
 **/
 
 #include "widget/content.hpp"
-#include "system/device.hpp"
+#include "system/system.hpp"
 #include "field/name.hpp"
 #include "field/content.hpp"
 #include "field/file.hpp"
@@ -28,17 +28,15 @@
 #include <Wt/WFileResource>
 #include <Wt/WLink>
 #include <boost/regex.hpp>
+#include "system/node.hpp"
 
 
 namespace dnw {
 namespace widget {
 
 
-Content::Content(Device const &device,
-                 String const &language,
-                 Any const &key,
-                 Parent *parent)
-  : Widget(device, language, key, parent)
+Content::Content(System const &system, Parent *parent)
+  : Widget(system, parent)
   , fileMap()
   , current()
 {
@@ -53,13 +51,13 @@ void Content::update()
   // clearing childs
   clear();
 
-  // current device
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  // current node
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
   // codes
-  field::Code code(*clone);
+  field::Code code(*node);
   auto codeCount = code.resourceCount();
 
   // if ()
@@ -68,7 +66,7 @@ void Content::update()
   // files
   fileMap.clear();
 
-  field::File file(*clone);
+  field::File file(*node);
   auto fileCount = file.resourceCount();
 
   for (decltype(fileCount) i = 0; i < fileCount; ++i) {
@@ -82,14 +80,14 @@ void Content::update()
   }
 
   // name
-  auto name = field::Name(*clone).text(language());
+  auto name = field::Name(*node).text(system().language());
   addWidget(new Wt::WText("<h3>" + name + "</h3>"));
 
   // break
   addWidget(new Wt::WBreak());
 
   // content
-  auto content = field::Content(*clone).text(language());
+  auto content = field::Content(*node).text(system().language());
   content = convert(content, "<img [[:print:]]*>");
   content = convert(content, "<a href=[[:print:]]*>");
 

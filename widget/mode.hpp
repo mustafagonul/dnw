@@ -19,7 +19,7 @@
 #ifndef DNW_WIDGET_MODE_HPP
 #define DNW_WIDGET_MODE_HPP
 
-#include "widget/base.hpp"
+#include "widget/widget.hpp"
 #include <Wt/WToolBar>
 #include <Wt/WPushButton>
 
@@ -27,13 +27,13 @@
 namespace dnw {
   namespace widget {
 
-    class Mode : public Base {
+    class Mode : public Widget {
     private:
       using Toolbar    = Wt::WToolBar;
       using PushButton = Wt::WPushButton;
 
     public:
-      Mode(String const &language, Parent * = nullptr);
+      Mode(System const &system, Parent * = nullptr);
       virtual ~Mode();
 
     public:

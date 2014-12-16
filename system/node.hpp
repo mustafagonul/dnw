@@ -16,8 +16,8 @@
  *
 **/
 
-#ifndef DNW_SYSTEM_DEVICE_HPP
-#define DNW_SYSTEM_DEVICE_HPP
+#ifndef DNW_SYSTEM_NODE_HPP
+#define DNW_SYSTEM_NODE_HPP
 
 #include "utility/common.hpp"
 #include <memory>
@@ -26,25 +26,25 @@
 namespace dnw {
   namespace system {
 
-    class Device {
+    class Node {
     protected:
-      using DevicePtr = std::shared_ptr<Device>;
+      using NodePtr = std::shared_ptr<Node>;
 
     protected:
       /**
        * @brief Constructor
        */
-      Device();
+      Node();
 
     private:
       /**
        * @name Deleted functions
        * @{
        */
-      Device(Device &&) = delete;
-      Device(Device const &) = delete;
-      void operator=(Device &&) = delete;
-      void operator=(Device const &) = delete;
+      Node(Node &&) = delete;
+      Node(Node const &) = delete;
+      void operator=(Node &&) = delete;
+      void operator=(Node const &) = delete;
 
       /** @} */ // end of deleted functions
 
@@ -52,7 +52,7 @@ namespace dnw {
       /**
        * @brief Destructor
        */
-      virtual ~Device() = 0;
+      virtual ~Node() = 0;
 
     public:
       /**
@@ -61,11 +61,11 @@ namespace dnw {
        */
 
       /**
-       * @brief Clones with the current device with @a key.
+       * @brief Clones with the current node with @a key.
        * @param key
-       * @return Clone of the device with @a key.
+       * @return Clone of the node with @a key.
        */
-      virtual DevicePtr clone(Any const &key) const = 0;
+      virtual NodePtr clone(Any const &key) const = 0;
 
       /** @} */ // end of clone function
 
@@ -76,11 +76,11 @@ namespace dnw {
        */
 
       /**
-       * @brief Checks if devices points the same node.
-       * @param device
+       * @brief Checks if nodes points the same node.
+       * @param node
        * @return Sameness value
        */
-      virtual bool isSame(Device const &device) const = 0;
+      virtual bool isSame(Node const &node) const = 0;
 
       /** @} */ // end of check function
 
@@ -296,7 +296,7 @@ namespace dnw {
 
     public:
       /**
-       * @name Device functions
+       * @name Node functions
        * @{
        */
 
@@ -305,31 +305,31 @@ namespace dnw {
        * @param index
        * @return
        */
-      DevicePtr nodeDevice(Index index) const;
+      NodePtr node(Index index) const;
 
       /**
        *
        * @return
        */
-      DevicePtr lastDevice() const;
+      NodePtr last() const;
 
       /**
        *
        * @return
        */
-      DevicePtr parentDevice() const;
+      NodePtr parent() const;
 
       /**
        *
        * @return
        */
-      DevicePtr rootDevice() const;
+      NodePtr root() const;
 
-      /** @} */ // end of device functions
+      /** @} */ // end of node functions
 
     };
 
   }
 }
 
-#endif // DNW_SYSTEM_DEVICE_HPP
+#endif // DNW_SYSTEM_NODE_HPP

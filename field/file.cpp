@@ -16,16 +16,16 @@
  *
 **/
 
+#include "system/node.hpp"
 #include "field/file.hpp"
-#include "system/device.hpp"
 
 
 namespace dnw {
 namespace field {
 
 
-File::File(Device const &device)
-  : Resource(device, "file")
+File::File(Node const &node)
+  : Resource(node, "file")
 {
 }
 

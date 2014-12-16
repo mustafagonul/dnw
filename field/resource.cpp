@@ -16,16 +16,16 @@
  *
 **/
 
+#include "system/node.hpp"
 #include "field/resource.hpp"
-#include "system/device.hpp"
 
 
 namespace dnw {
 namespace field {
 
 
-Resource::Resource(Device const &device, String const &field)
-  : Field(device, field)
+Resource::Resource(Node const &node, String const &field)
+  : Field(node, field)
 {
 }
 
@@ -68,11 +68,11 @@ bool Resource::removeResource(String const &name) const
 
 bool Resource::moveResourceToChild(Index index, String const &name) const
 {
-  auto child = device.nodeDevice(index);
+  auto child = node.node(index);
 
   if (child == nullptr)
     return false;
-  if (child->isSame(device) == true)
+  if (child->isSame(node) == true)
     return false;
 
   Resource childResource(*child, field);
@@ -88,11 +88,11 @@ bool Resource::moveResourceToChild(Index index, String const &name) const
 
 bool Resource::moveResourceToParent(String const &name) const
 {
-  auto parent = device.parentDevice();
+  auto parent = node.parent();
 
   if (parent == nullptr)
     return false;
-  if (parent->isSame(device) == true)
+  if (parent->isSame(node) == true)
     return false;
 
   Resource parentResource(*parent, field);

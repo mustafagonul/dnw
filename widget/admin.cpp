@@ -17,7 +17,8 @@
 **/
 
 #include "widget/admin.hpp"
-#include "system/device.hpp"
+#include "system/system.hpp"
+#include "system/node.hpp"
 #include "field/name.hpp"
 #include "field/content.hpp"
 #include "field/code.hpp"
@@ -138,11 +139,8 @@ static void configureTextEdit(Wt::WTextEdit *textEdit)
                           "insertfile,insertimage");
 }
 
-Admin::Admin(Device const &device,
-             String const &language,
-             Any const &key,
-             Parent *parent)
-  : Widget(device, language, key, parent)
+Admin::Admin(System const &system, Parent *parent)
+  : Widget(system, parent)
   , leftEdit(nullptr)
   , rightEdit(nullptr)
   , leftTextEdit(nullptr)
@@ -261,12 +259,12 @@ Admin::~Admin()
 
 void Admin::update()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
-  field::Name name(*clone);
-  field::Content content(*clone);
+  field::Name name(*node);
+  field::Content content(*node);
 
   auto leftName = name.text("en");
   if (leftName.empty())
@@ -284,28 +282,28 @@ void Admin::update()
 
 void Admin::onCodes()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
-  field::Code code(*clone);
+  field::Code code(*node);
   dialog::resource("Codes", code);
 }
 
 void Admin::onFiles()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
-  field::File file(*clone);
+  field::File file(*node);
   dialog::resource("Files", file);
 }
 
 void Admin::saveLeftName()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
@@ -315,7 +313,7 @@ void Admin::saveLeftName()
   if (str == EMPTY_NAME)
     str = "";
 
-  field::Name name(*clone);
+  field::Name name(*node);
   name.editText("en", str);
 
 
@@ -324,8 +322,8 @@ void Admin::saveLeftName()
 
 void Admin::saveRightName()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
@@ -334,7 +332,7 @@ void Admin::saveRightName()
   if (str == EMPTY_NAME)
     str = "";
 
-  field::Name name(*clone);
+  field::Name name(*node);
   name.editText("tr", str);
 
 
@@ -343,15 +341,15 @@ void Admin::saveRightName()
 
 void Admin::saveLeftContent()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
   auto str = leftTextEdit->text().toUTF8();
 
-  field::Content content(*clone);
+  field::Content content(*node);
   content.editText("en", str);
 
   dialog::messageBox("Admin", "Saved.");
@@ -359,15 +357,15 @@ void Admin::saveLeftContent()
 
 void Admin::saveRightContent()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be saved!");
     return;
   }
 
   auto str = rightTextEdit->text().toUTF8();
 
-  field::Content content(*clone);
+  field::Content content(*node);
   content.editText("tr", str);
 
   dialog::messageBox("Admin", "Saved.");
@@ -375,41 +373,41 @@ void Admin::saveRightContent()
 
 void Admin::uploadLeftContent()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
-  field::Content content(*clone);
+  field::Content content(*node);
   dialog::uploadText("en", content);
   leftTextEdit->setText(content.text("en"));
 }
 
 void Admin::uploadRightContent()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr)
+  auto node = system().node();
+  if (node == nullptr)
     return;
 
-  field::Content content(*clone);
+  field::Content content(*node);
   dialog::uploadText("tr", content);
   rightTextEdit->setText(content.text("tr"));
 }
 
 void Admin::addNode()
 {
-  auto clone = device().clone(key());
+  auto node = system().node();
 
-  if (clone == nullptr) {
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be added!");
     return;
   }
 
-  if (clone->pushNode() == false) {
+  if (node->pushNode() == false) {
     dialog::errorMessageBox("Admin", "Cannot be added!");
     return;
   }
 
-  auto last = clone->lastDevice();
+  auto last = node->last();
   if (last == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be added!");
     return;
@@ -423,70 +421,70 @@ void Admin::addNode()
 
 void Admin::removeNode()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be removed!");
     return;
   }
 
-  auto result = dialog::removeNode(*clone, language());
+  auto result = dialog::removeNode(*node, system().language());
   if (result) {
-    changed().emit(key());
+    changed().emit(system().key());
     dialog::messageBox("Admin", "Removed.");
   }
 }
 
 void Admin::moveNodeUp()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be moved!");
     return;
   }
 
-  auto result = dialog::moveNodeUp(*clone, language());
+  auto result = dialog::moveNodeUp(*node, system().language());
   if (result) {
-    changed().emit(key());
+    changed().emit(system().key());
     dialog::messageBox("Admin", "Moved");
   }
 }
 
 void Admin::moveNodeDown()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Admin", "Cannot be moved!");
     return;
   }
 
-  auto result = dialog::moveNodeDown(*clone, language());
+  auto result = dialog::moveNodeDown(*node, system().language());
   if (result) {
-    changed().emit(key());
+    changed().emit(system().key());
     dialog::messageBox("Admin", "Moved");
   }
 }
 
 void Admin::addFile()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Add File");
     return;
   }
 
-  field::File file(*clone);
+  field::File file(*node);
   dialog::addResource("Add File", file);
 }
 
 void Admin::removeFile()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Remove File");
     return;
   }
 
-  field::File file(*clone);
+  field::File file(*node);
   dialog::removeResource("Remove File", file);
 }
 
@@ -497,25 +495,25 @@ void Admin::moveFile()
 
 void Admin::addCode()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Add Code");
     return;
   }
 
-  field::Code code(*clone);
+  field::Code code(*node);
   dialog::addResource("Add Code", code);
 }
 
 void Admin::removeCode()
 {
-  auto clone = device().clone(key());
-  if (clone == nullptr) {
+  auto node = system().node();
+  if (node == nullptr) {
     dialog::errorMessageBox("Remove Code");
     return;
   }
 
-  field::Code code(*clone);
+  field::Code code(*node);
   dialog::removeResource("Remove Code", code);
 }
 

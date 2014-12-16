@@ -19,34 +19,31 @@
 #ifndef DNW_WIDGET_LANGUAGE_HPP
 #define DNW_WIDGET_LANGUAGE_HPP
 
-#include "widget/base.hpp"
+#include "widget/widget.hpp"
 #include <Wt/WToolBar>
 #include <Wt/WPushButton>
+#include <map>
 
 
 namespace dnw {
   namespace widget {
 
-    class Language : public Base {
+    class Language : public Widget {
     private:
-      using Toolbar    = Wt::WToolBar;
-      using PushButton = Wt::WPushButton;
+      using Toolbar     = Wt::WToolBar;
+      using PushButton  = Wt::WPushButton;
+      using PushButtons = std::map<PushButton *, String>;
 
     public:
-      Language(String const &language, Parent * = nullptr);
+      Language(System const &system, Parent * = nullptr);
       virtual ~Language();
 
     public:
       virtual void update();
 
     private:
-      void onEn();
-      void onTr();
-
-    private:
-      Toolbar toolbar;
-      PushButton *enButton;
-      PushButton *trButton;
+      Toolbar     toolbar;
+      PushButtons pushbuttons;
     };
 
   }
