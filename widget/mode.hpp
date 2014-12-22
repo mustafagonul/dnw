@@ -21,7 +21,6 @@
 
 #include "widget/widget.hpp"
 #include <Wt/WToolBar>
-#include <Wt/WPushButton>
 
 
 namespace dnw {
@@ -29,8 +28,7 @@ namespace dnw {
 
     class Mode : public Widget {
     private:
-      using Toolbar    = Wt::WToolBar;
-      using PushButton = Wt::WPushButton;
+      using Toolbar = Wt::WToolBar;
 
     public:
       Mode(System const &system, Parent * = nullptr);
@@ -40,14 +38,7 @@ namespace dnw {
       virtual void update();
 
     private:
-      void onAdmin();
-      void onGuest();
-
-    private:
       Toolbar toolbar;
-      PushButton *guestButton;
-      PushButton *adminButton;
-
     };
 
   }

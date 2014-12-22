@@ -18,6 +18,7 @@
 
 #include "widget/mode.hpp"
 #include "system/system.hpp"
+#include <Wt/WPushButton>
 
 
 namespace dnw {
@@ -27,46 +28,32 @@ namespace widget {
 Mode::Mode(System const &system, Parent *parent)
   : Widget(system, parent)
   , toolbar(this)
-  , guestButton(nullptr) // TODO mustafa: remove this
-  , adminButton(nullptr) // TODO mustafa: remove this
 {
+  using PushButton = Wt::WPushButton;
+
   addWidget(&toolbar);
 
-  guestButton = new PushButton(tr("Guest"), this);
-  adminButton = new PushButton(tr("Admin"), this);
+  auto guestButton = new PushButton(tr("Guest"), this);
+  auto adminButton = new PushButton(tr("Admin"), this);
 
   toolbar.addButton(guestButton);
   toolbar.addButton(adminButton);
 
-  guestButton->clicked().connect(this, &Mode::onGuest);
-  adminButton->clicked().connect(this, &Mode::onAdmin);
-
-  //enButton->clicked().connect([&]{ languageSignal.emit("en"); }); // TODO
-  //trButton->clicked().connect([&]{ languageSignal.emit("tr"); }); // TODO
+  guestButton->clicked().connect(std::bind([this]{
+    changed().emit(String("guest"));
+  }));
+  adminButton->clicked().connect(std::bind([this]{
+    changed().emit(String("admin"));
+  }));
 }
 
 Mode::~Mode()
 {
 }
 
-// TODO mustafa: remove this
-void Mode::onAdmin()
-{
-  changed().emit(String("admin"));
-}
-
-// TODO mustafa: remove this
-void Mode::onGuest()
-{
-  changed().emit(String("guest"));
-}
-
 void Mode::update()
 {
-  // guestButton->setText(tr("Guest"));
-  // adminButton->setText(tr("Admin"));
 }
-
 
 
 } // widget
