@@ -2,7 +2,7 @@
 * Introduce dnw::field::Text (base class of Name and Content classes) (done)
 * Improve dnw::widget::Admin::onCodes(). Look at dnw::widget::Admin::onFiles() function (done)
 * Dialogs should be introduced. In admin.cpp dialog codes mostly are repeated, copied and pasted. unify them. (done)
-* Devices should be created in main.cpp and should be passed other classes by references.
+* Devices should be created in main.cpp and should be passed other classes by references. (done)
 
 * Deploy using cmake or a script (deploy.sh)
 * If necessary, create a run script (run.sh) (done)
@@ -20,12 +20,12 @@
 * You can introduce types headers in the namespaces. (done)
 * cmake (done)
 * use std::bind
-* rename Device (to Node)
+* rename Device (to Node) (done)
 * move admin into system namespace
 * codes in content
 * code formatting
 * Base language
-* Multi language
+* Multi language (done)
 * Suspicious
 * History
 * Config field
