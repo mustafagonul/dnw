@@ -29,7 +29,9 @@ namespace dnw {
     class Admin : public Widget {
     private:
       using InPlaceEdit    = Wt::WInPlaceEdit;
+      using InPlaceEdits   = std::vector<InPlaceEdit *>;
       using TextEdit       = Wt::WTextEdit;
+      using TextEdits      = std::vector<TextEdit *>;
 
     public:
       Admin(System const &system, Parent *parent = nullptr);
@@ -55,27 +57,18 @@ namespace dnw {
       void removeCode();
       void moveCode();
 
-      // Save
-      void saveLeftName();
-      void saveRightName();
-      void saveLeftContent();
-      void saveRightContent();
-
-      // Upload
-      void uploadLeftContent();
-      void uploadRightContent();
+      // Save & upload
+      void saveName(String const &languageTag, InPlaceEdit *edit);
+      void saveContent(String const &languageTag, TextEdit *textEdit);
+      void uploadContent(String const &languageTag, TextEdit *textEdit);
 
       // Resources
       void onCodes();
       void onFiles();
 
-
-
     private:
-      InPlaceEdit *leftEdit;
-      InPlaceEdit *rightEdit;
-      TextEdit    *leftTextEdit;
-      TextEdit    *rightTextEdit;
+      InPlaceEdits edits;
+      TextEdits    textEdits;
     };
 
   }

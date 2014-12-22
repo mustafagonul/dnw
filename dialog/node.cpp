@@ -47,7 +47,7 @@ static bool operate(system::Node const &node,
   }
 
   // Dialog
-  Dialog dialog(str);
+  Dialog dialog(Dialog::tr(str));
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -69,7 +69,7 @@ static bool operate(system::Node const &node,
   selectionBox->setCurrentIndex(0);
 
   // Ok push button
-  auto ok = new Button("Ok", dialog.contents());
+  auto ok = new Button(Button::tr("Ok"), dialog.contents());
   ok->clicked().connect(std::bind([&] {
     auto result = booleanMessageBox("Admin", question);
     if (result)

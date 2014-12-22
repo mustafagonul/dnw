@@ -36,6 +36,7 @@ using FileUpload = Wt::WFileUpload;
 using ProgressBar = Wt::WProgressBar;
 
 
+// TODO mustafa: remove this code
 /*
 void text(String const &language, field::Text const &text)
 {
@@ -68,7 +69,7 @@ void text(String const &language, field::Text const &text)
 void uploadText(String const &language, field::Text const &text)
 {
   // Dialog
-  Dialog dialog("Upload");
+  Dialog dialog(Dialog::tr("Upload"));
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -76,7 +77,7 @@ void uploadText(String const &language, field::Text const &text)
 
   // File upload
   auto fileUpload = new FileUpload(dialog.contents());
-  auto button = new Button("Upload", dialog.contents());
+  auto button = new Button(Button::tr("Upload"), dialog.contents());
   fileUpload->setProgressBar(new ProgressBar());
   fileUpload->setMultiple(false);
   fileUpload->setFilters("text/html");
@@ -109,7 +110,7 @@ void uploadText(String const &language, field::Text const &text)
   // Exec
   auto result = dialog.exec();
   if (result == Dialog::Accepted)
-    messageBox("Admin", "Added");
+    messageBox("Admin", "Added.");
 }
 
 

@@ -26,7 +26,10 @@ namespace dialog {
 
 void messageBox(String const &str, String const &message)
 {
-  Wt::WMessageBox messageBox(str, message, Wt::Information, Wt::Ok);
+  Wt::WMessageBox messageBox(Wt::WString::tr(str),
+                             Wt::WString::tr(message),
+                             Wt::Information,
+                             Wt::Ok);
 
   messageBox.buttonClicked().connect(std::bind([&]{
     messageBox.accept();
@@ -42,7 +45,10 @@ void errorMessageBox(String const &str)
 
 void errorMessageBox(String const &str, String const &message)
 {
-  Wt::WMessageBox messageBox(str, message, Wt::Warning, Wt::Ok);
+  Wt::WMessageBox messageBox(Wt::WString::tr(str),
+                             Wt::WString::tr(message),
+                             Wt::Warning,
+                             Wt::Ok);
 
   messageBox.buttonClicked().connect(std::bind([&]{
     messageBox.accept();
@@ -53,7 +59,10 @@ void errorMessageBox(String const &str, String const &message)
 
 bool booleanMessageBox(String const &str, String const &message)
 {
-  Wt::WMessageBox messageBox(str, message, Wt::Question, Wt::Ok | Wt::Cancel);
+  Wt::WMessageBox messageBox(Wt::WString::tr(str),
+                             Wt::WString::tr(message),
+                             Wt::Question,
+                             Wt::Ok | Wt::Cancel);
 
   messageBox.buttonClicked().connect(std::bind([&]{
     if (messageBox.buttonResult() == Wt::Ok)

@@ -40,6 +40,24 @@ namespace dnw {
 namespace widget {
 
 
+static void setLanguage(String const &language)
+{
+  auto app = Wt::WApplication::instance();
+  if (app == nullptr)
+    return;
+
+  app->setLocale(language);
+}
+
+static void setMessages()
+{
+  auto app = Wt::WApplication::instance();
+  if (app == nullptr)
+    return;
+
+  app->messageResourceBundle().use("messages/general");
+}
+
 Application::Application(System &sys, Environment const &env)
   : Wt::WApplication(env)
   , system(sys)
@@ -58,6 +76,10 @@ Application::Application(System &sys, Environment const &env)
 
   // Title
   setTitle("Dnw");
+
+  // Language
+  setMessages();
+  setLanguage(system.language());
 
 
   // Layouts
@@ -160,6 +182,7 @@ try
   auto lang = boost::any_cast<String>(any);
 
   system.setLanguage(lang);
+  setLanguage(system.language());
 
   mode->update();
   tree->update();

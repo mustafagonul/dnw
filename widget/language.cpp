@@ -29,9 +29,15 @@ Language::Language(System const &system, Parent *parent)
   , toolbar(this)
   , pushbuttons()
 {
+  // if there is not enough language, there is nothing to create
+  Size languageCount = system.languageCount();
+  if (languageCount < 2)
+    return;
+
+  // adding toolbar
   addWidget(&toolbar);
 
-  Size languageCount = system.languageCount();
+  // buttons
   for (Size i = 0; i < languageCount; ++i) {
     auto languageStr = system.languageStr(i);
     auto languageTag = system.languageTag(i);
@@ -54,6 +60,7 @@ Language::~Language()
 void Language::update()
 {
 }
+
 
 } // widget
 } // dnw

@@ -27,13 +27,13 @@ namespace widget {
 Mode::Mode(System const &system, Parent *parent)
   : Widget(system, parent)
   , toolbar(this)
-  , guestButton(nullptr)
-  , adminButton(nullptr)
+  , guestButton(nullptr) // TODO mustafa: remove this
+  , adminButton(nullptr) // TODO mustafa: remove this
 {
   addWidget(&toolbar);
 
-  guestButton = new PushButton("Guest", this);
-  adminButton = new PushButton("Admin", this);
+  guestButton = new PushButton(tr("Guest"), this);
+  adminButton = new PushButton(tr("Admin"), this);
 
   toolbar.addButton(guestButton);
   toolbar.addButton(adminButton);
@@ -49,11 +49,13 @@ Mode::~Mode()
 {
 }
 
+// TODO mustafa: remove this
 void Mode::onAdmin()
 {
   changed().emit(String("admin"));
 }
 
+// TODO mustafa: remove this
 void Mode::onGuest()
 {
   changed().emit(String("guest"));
@@ -61,15 +63,8 @@ void Mode::onGuest()
 
 void Mode::update()
 {
-  if (system().language() == "tr") {
-    guestButton->setText("Ziyaretci");
-    adminButton->setText("Yonetici");
-
-    return;
-  }
-
-  guestButton->setText("Guest");
-  adminButton->setText("Admin");
+  // guestButton->setText(tr("Guest"));
+  // adminButton->setText(tr("Admin"));
 }
 
 

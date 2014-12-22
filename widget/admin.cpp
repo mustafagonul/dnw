@@ -30,7 +30,8 @@
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WPushButton>
-#include <Wt/WLabel>
+#include <Wt/WBreak>
+#include <Wt/WTabWidget>
 #include <Wt/WTextEdit>
 
 
@@ -44,8 +45,10 @@ namespace widget {
 using HBoxLayout = Wt::WHBoxLayout;
 using VBoxLayout = Wt::WVBoxLayout;
 using Button = Wt::WPushButton;
-using Label = Wt::WLabel;
+//using Label = Wt::WLabel;
+using TabWidget = Wt::WTabWidget;
 using Container = Wt::WContainerWidget;
+using Break = Wt::WBreak;
 using Length = Wt::WLength;
 
 
@@ -141,39 +144,32 @@ static void configureTextEdit(Wt::WTextEdit *textEdit)
 
 Admin::Admin(System const &system, Parent *parent)
   : Widget(system, parent)
-  , leftEdit(nullptr)
-  , rightEdit(nullptr)
-  , leftTextEdit(nullptr)
-  , rightTextEdit(nullptr)
+  , edits()
+  , textEdits()
 {
   // layout
   auto mainLayout = new VBoxLayout();
   auto topLayout = new HBoxLayout();
-  auto bottomLayout = new HBoxLayout();
-  auto bottomLeftLayout = new VBoxLayout();
-  auto bottomRightLayout = new VBoxLayout();
+  auto bottomLayout = new VBoxLayout();
   setLayout(mainLayout);
   mainLayout->addLayout(topLayout);
   mainLayout->addLayout(bottomLayout);
-  bottomLayout->addLayout(bottomLeftLayout);
-  bottomLayout->addLayout(bottomRightLayout);
-
 
   // Node commands
-  auto addNodeButton = new Button("Add Node", this);
-  auto removeNodeButton = new Button("Remove Node", this);
-  auto moveNodeUpButton = new Button("Move Node Up", this);
-  auto moveNodeDownButton = new Button("Move Node Down", this);
+  auto addNodeButton = new Button(tr("Add Node"), this);
+  auto removeNodeButton = new Button(tr("Remove Node"), this);
+  auto moveNodeUpButton = new Button(tr("Move Node Up"), this);
+  auto moveNodeDownButton = new Button(tr("Move Node Down"), this);
 
   // File commands
-  auto addFileButton = new Button("Add File", this);
-  auto removeFileButton = new Button("Remove File", this);
-  auto moveFileButton = new Button("Move File", this);
+  auto addFileButton = new Button(tr("Add File"), this);
+  auto removeFileButton = new Button(tr("Remove File"), this);
+  auto moveFileButton = new Button(tr("Move File"), this);
 
   // Code commands
-  auto addCodeButton = new Button("Add Code", this);
-  auto removeCodeButton = new Button("Remove Code", this);
-  auto moveCodeButton = new Button("Move Code", this);
+  auto addCodeButton = new Button(tr("Add Code"), this);
+  auto removeCodeButton = new Button(tr("Remove Code"), this);
+  auto moveCodeButton = new Button(tr("Move Code"), this);
 
   topLayout->addWidget(addNodeButton);
   topLayout->addWidget(removeNodeButton);
@@ -186,46 +182,49 @@ Admin::Admin(System const &system, Parent *parent)
   topLayout->addWidget(removeCodeButton);
   topLayout->addWidget(moveCodeButton);
 
+  auto tabWidget = new TabWidget(this);
+  auto codesButton = new Button(tr("Codes"), this);
+  auto filesButton = new Button(tr("Files"), this);
+  bottomLayout->addWidget(tabWidget);
+  bottomLayout->addWidget(new Break(this));
+  bottomLayout->addWidget(new Break(this));
+  bottomLayout->addWidget(codesButton);
+  bottomLayout->addWidget(filesButton);
 
-  // Containers & labels & push
-  auto leftLabel = new Label("Engish", this);
-  auto rightLabel = new Label("Turkish", this);
-  auto leftEditContainer = new Container(this);
-  auto rightEditContainer = new Container(this);
-  auto leftTextEditContainer = new Container(this);
-  auto rightTextEditContainer = new Container(this);
-  auto leftSaveButton = new Button("Save", this);
-  auto rightSaveButton = new Button("Save", this);
-  auto leftUploadButton = new Button("Upload", this);
-  auto rightUploadButton = new Button("Upload", this);
-  auto codesButton = new Button("Codes", this);
-  auto filesButton = new Button("Files", this);
+  auto count = system.languageCount();
+  for (decltype(count) i = 0; i < count; ++i) {
+    // info
+    auto tag = system.languageTag(i);
+    auto str = system.languageStr(i);
 
-  // Edits
-  leftEdit = new InPlaceEdit("Empty", leftEditContainer);
-  rightEdit = new InPlaceEdit("Empty", rightEditContainer);
-  leftTextEdit = new TextEdit(leftTextEditContainer);
-  rightTextEdit = new TextEdit(rightTextEditContainer);
-  configureTextEdit(leftTextEdit);
-  configureTextEdit(rightTextEdit);
-  leftTextEdit->setInline(false);
-  leftTextEdit->setInline(false);
-  leftTextEdit->resize(Length::Auto, 600);
-  rightTextEdit->resize(Length::Auto, 600);
+    // widgets
+    auto container = new Container();
+    auto edit = new InPlaceEdit();
+    auto textEdit = new TextEdit();
+    auto saveButton = new Button(tr("Save"));
+    auto uploadButton = new Button(tr("Upload"));
 
-  bottomLeftLayout->addWidget(leftLabel);
-  bottomLeftLayout->addWidget(leftEditContainer);
-  bottomLeftLayout->addWidget(leftTextEditContainer);
-  bottomLeftLayout->addWidget(leftSaveButton);
-  bottomLeftLayout->addWidget(leftUploadButton);
-  bottomRightLayout->addWidget(rightLabel);
-  bottomRightLayout->addWidget(rightEditContainer);
-  bottomRightLayout->addWidget(rightTextEditContainer);
-  bottomRightLayout->addWidget(rightSaveButton);
-  bottomRightLayout->addWidget(rightUploadButton);
-  mainLayout->addWidget(filesButton);
-  mainLayout->addWidget(codesButton);
+    // arrangement
+    tabWidget->addTab(container, str);
+    container->addWidget(edit);
+    container->addWidget(new Break());
+    container->addWidget(new Break());
+    container->addWidget(textEdit);
+    container->addWidget(saveButton);
+    container->addWidget(uploadButton);
 
+    // text edit
+    configureTextEdit(textEdit);
+    textEdit->setInline(false);
+    textEdit->resize(Length::Auto, 600);
+
+    edit->saveButton()->clicked().connect(std::bind(&Admin::saveName, this, tag, edit));
+    saveButton->clicked().connect(std::bind(&Admin::saveContent, this, tag, textEdit));
+    uploadButton->clicked().connect(std::bind(&Admin::uploadContent, this, tag, textEdit));
+
+    edits.push_back(edit);
+    textEdits.push_back(textEdit);
+  }
 
   // connections
   addNodeButton->clicked().connect(this, &Admin::addNode);
@@ -240,14 +239,6 @@ Admin::Admin(System const &system, Parent *parent)
   addCodeButton->clicked().connect(this, &Admin::addCode);
   removeCodeButton->clicked().connect(this, &Admin::removeCode);
   moveCodeButton->clicked().connect(this, &Admin::moveCode);
-
-
-  leftEdit->saveButton()->clicked().connect(this, &Admin::saveLeftName);
-  rightEdit->saveButton()->clicked().connect(this, &Admin::saveRightName);
-  leftSaveButton->clicked().connect(this, &Admin::saveLeftContent);
-  rightSaveButton->clicked().connect(this, &Admin::saveRightContent);
-  leftUploadButton->clicked().connect(this, &Admin::uploadLeftContent);
-  rightUploadButton->clicked().connect(this, &Admin::uploadRightContent);
 
   codesButton->clicked().connect(this, &Admin::onCodes);
   filesButton->clicked().connect(this, &Admin::onFiles);
@@ -266,18 +257,16 @@ void Admin::update()
   field::Name name(*node);
   field::Content content(*node);
 
-  auto leftName = name.text("en");
-  if (leftName.empty())
-    leftName = EMPTY_NAME;
-  auto rightName = name.text("tr");
-  if (rightName.empty())
-    rightName = EMPTY_NAME;
+  auto count = system().languageCount();
+  for (decltype(count) i = 0; i < count; ++i) {
+    auto tag = system().languageTag(i);
+    auto nameStr = name.text(tag);
+    if (nameStr.empty())
+      nameStr = EMPTY_NAME;
 
-
-  leftEdit->setText(leftName);
-  rightEdit->setText(rightName);
-  leftTextEdit->setText(content.text("en"));
-  rightTextEdit->setText(content.text("tr"));
+    edits[i]->setText(nameStr);
+    textEdits[i]->setText(content.text(tag));
+  }
 }
 
 void Admin::onCodes()
@@ -300,7 +289,7 @@ void Admin::onFiles()
   dialog::resource("Files", file);
 }
 
-void Admin::saveLeftName()
+void Admin::saveName(String const &languageTag, InPlaceEdit *edit)
 {
   auto node = system().node();
   if (node == nullptr) {
@@ -308,19 +297,17 @@ void Admin::saveLeftName()
     return;
   }
 
-
-  auto str = leftEdit->text().toUTF8();
+  auto str = edit->text().toUTF8();
   if (str == EMPTY_NAME)
     str = "";
 
   field::Name name(*node);
-  name.editText("en", str);
+  name.editText(languageTag, str);
 
-
-  changed().emit();
+  changed().emit(system().key());
 }
 
-void Admin::saveRightName()
+void Admin::saveContent(String const &languageTag, TextEdit *textEdit)
 {
   auto node = system().node();
   if (node == nullptr) {
@@ -328,69 +315,23 @@ void Admin::saveRightName()
     return;
   }
 
-  auto str = rightEdit->text().toUTF8();
-  if (str == EMPTY_NAME)
-    str = "";
-
-  field::Name name(*node);
-  name.editText("tr", str);
-
-
-  changed().emit();
-}
-
-void Admin::saveLeftContent()
-{
-  auto node = system().node();
-  if (node == nullptr) {
-    dialog::errorMessageBox("Admin", "Cannot be saved!");
-    return;
-  }
-
-  auto str = leftTextEdit->text().toUTF8();
+  auto str = textEdit->text().toUTF8();
 
   field::Content content(*node);
-  content.editText("en", str);
+  content.editText(languageTag, str);
 
   dialog::messageBox("Admin", "Saved.");
 }
 
-void Admin::saveRightContent()
-{
-  auto node = system().node();
-  if (node == nullptr) {
-    dialog::errorMessageBox("Admin", "Cannot be saved!");
-    return;
-  }
-
-  auto str = rightTextEdit->text().toUTF8();
-
-  field::Content content(*node);
-  content.editText("tr", str);
-
-  dialog::messageBox("Admin", "Saved.");
-}
-
-void Admin::uploadLeftContent()
+void Admin::uploadContent(String const &languageTag, TextEdit *textEdit)
 {
   auto node = system().node();
   if (node == nullptr)
     return;
 
   field::Content content(*node);
-  dialog::uploadText("en", content);
-  leftTextEdit->setText(content.text("en"));
-}
-
-void Admin::uploadRightContent()
-{
-  auto node = system().node();
-  if (node == nullptr)
-    return;
-
-  field::Content content(*node);
-  dialog::uploadText("tr", content);
-  rightTextEdit->setText(content.text("tr"));
+  dialog::uploadText(languageTag, content);
+  textEdit->setText(content.text(languageTag));
 }
 
 void Admin::addNode()
@@ -445,7 +386,7 @@ void Admin::moveNodeUp()
   auto result = dialog::moveNodeUp(*node, system().language());
   if (result) {
     changed().emit(system().key());
-    dialog::messageBox("Admin", "Moved");
+    dialog::messageBox("Admin", "Moved.");
   }
 }
 
@@ -460,7 +401,7 @@ void Admin::moveNodeDown()
   auto result = dialog::moveNodeDown(*node, system().language());
   if (result) {
     changed().emit(system().key());
-    dialog::messageBox("Admin", "Moved");
+    dialog::messageBox("Admin", "Moved.");
   }
 }
 

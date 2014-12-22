@@ -69,7 +69,7 @@ void resource(String const &name, field::Resource const &resource)
     return;
   }
 
-  Dialog dialog(name);
+  Dialog dialog(Dialog::tr(name));
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -100,7 +100,7 @@ void resource(String const &name, field::Resource const &resource)
 void addResource(String const &name, field::Resource const &resource)
 {
   // Dialog
-  Dialog dialog(name);
+  Dialog dialog(Dialog::tr(name));
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -108,7 +108,7 @@ void addResource(String const &name, field::Resource const &resource)
 
   // File upload
   auto fileUpload = new FileUpload(dialog.contents());
-  auto button = new Button("Add", dialog.contents());
+  auto button = new Button(Button::tr("Add"), dialog.contents());
   fileUpload->setProgressBar(new ProgressBar());
   fileUpload->setMultiple(false);
 
@@ -140,7 +140,7 @@ void addResource(String const &name, field::Resource const &resource)
   // Exec
   auto result = dialog.exec();
   if (result == Dialog::Accepted)
-    messageBox("Admin", "Added");
+    messageBox("Admin", "Added.");
 }
 
 void removeResource(String const &name, field::Resource const &resource)
@@ -152,7 +152,7 @@ void removeResource(String const &name, field::Resource const &resource)
   }
 
   // Dialog
-  Dialog dialog("Add File");
+  Dialog dialog(Dialog::tr(name));
   dialog.setClosable(true);
   dialog.setResizable(true);
   dialog.rejectWhenEscapePressed();
@@ -166,7 +166,7 @@ void removeResource(String const &name, field::Resource const &resource)
   selectionBox->setCurrentIndex(0);
 
   // Remove button
-  auto button = new Button("Remove", dialog.contents());
+  auto button = new Button(Button::tr("Remove"), dialog.contents());
   button->clicked().connect(std::bind([&] {
     auto result = booleanMessageBox("Admin", "Do you want to remove?");
     if (result)
