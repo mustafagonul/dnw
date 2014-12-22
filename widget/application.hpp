@@ -20,7 +20,9 @@
 #define DNW_WIDGET_APPLICATION_HPP
 
 #include "widget/fwd.hpp"
-#include "system/fwd.hpp"
+#include "system/filesystem/config.hpp"
+#include "system/filesystem/node.hpp"
+#include "system/system.hpp"
 #include "authentication/session.hpp"
 #include <Wt/WApplication>
 #include <Wt/WPushButton>
@@ -33,11 +35,13 @@ namespace dnw {
     private:
       using Environment = Wt::WEnvironment;
       using Container   = Wt::WContainerWidget;
+      using Config      = dnw::system::filesystem::Config;
+      using Node        = dnw::system::filesystem::Node;
       using System      = dnw::system::System;
       using Session     = dnw::authentication::Session;
 
     public:
-      explicit Application(System &system, Environment const &);
+      explicit Application(Environment const &);
       virtual ~Application();
 
     private:
@@ -50,7 +54,9 @@ namespace dnw {
       bool setPasswordDialog();
 
     private:
-      System    &system;
+      Config    config;
+      Node      node;
+      System    system;
       Session   session;
 
       Tree      *tree;

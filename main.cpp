@@ -17,15 +17,7 @@
 **/
 
 #include <Wt/WApplication>
-#include "system/system.hpp"
-#include "system/filesystem/config.hpp"
-#include "system/filesystem/node.hpp"
 #include "widget/application.hpp"
-
-
-dnw::system::filesystem::Config conf;
-dnw::system::filesystem::Node node;
-dnw::system::System sys(conf, node);
 
 
 using namespace Wt;
@@ -33,7 +25,7 @@ using namespace Wt;
 
 WApplication *createApplication(const WEnvironment& env)
 {
-  return new dnw::widget::Application(sys, env);
+  return new dnw::widget::Application(env);
 }
 
 

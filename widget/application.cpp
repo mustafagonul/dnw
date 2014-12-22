@@ -58,9 +58,11 @@ static void setMessages()
   app->messageResourceBundle().use("messages/general");
 }
 
-Application::Application(System &sys, Environment const &env)
+Application::Application(Environment const &env)
   : Wt::WApplication(env)
-  , system(sys)
+  , config()
+  , node()
+  , system(config, node)
   , session()
   , tree(nullptr)
   , mode(nullptr)
