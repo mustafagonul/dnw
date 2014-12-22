@@ -29,10 +29,12 @@
 #include "dialog/node.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
+#include <Wt/WToolBar>
 #include <Wt/WPushButton>
 #include <Wt/WBreak>
 #include <Wt/WTabWidget>
 #include <Wt/WTextEdit>
+#include <Wt/WCssDecorationStyle>
 
 
 #define EMPTY_NAME ("!!!! EMPTY !!!!")
@@ -45,11 +47,22 @@ namespace widget {
 using HBoxLayout = Wt::WHBoxLayout;
 using VBoxLayout = Wt::WVBoxLayout;
 using Button = Wt::WPushButton;
-//using Label = Wt::WLabel;
+using Toolbar = Wt::WToolBar;
 using TabWidget = Wt::WTabWidget;
 using Container = Wt::WContainerWidget;
 using Break = Wt::WBreak;
 using Length = Wt::WLength;
+
+
+static void setBorder(Wt::WWidget *widget)
+{
+  auto style = widget->decorationStyle();
+
+  Wt::WBorder border(Wt::WBorder::Solid);
+  style.setBorder(border);
+
+  widget->setDecorationStyle(style);
+}
 
 
 static void configureTextEdit(Wt::WTextEdit *textEdit)
@@ -147,6 +160,7 @@ Admin::Admin(System const &system, Parent *parent)
   , edits()
   , textEdits()
 {
+  /*
   // layout
   auto mainLayout = new VBoxLayout();
   auto topLayout = new HBoxLayout();
@@ -154,43 +168,55 @@ Admin::Admin(System const &system, Parent *parent)
   setLayout(mainLayout);
   mainLayout->addLayout(topLayout);
   mainLayout->addLayout(bottomLayout);
+  */
 
   // Node commands
-  auto addNodeButton = new Button(tr("Add Node"), this);
-  auto removeNodeButton = new Button(tr("Remove Node"), this);
-  auto moveNodeUpButton = new Button(tr("Move Node Up"), this);
-  auto moveNodeDownButton = new Button(tr("Move Node Down"), this);
+  auto nodeToolbar = new Toolbar(this);
+  auto addNodeButton = new Button(tr("Add Node"));
+  auto removeNodeButton = new Button(tr("Remove Node"));
+  auto moveNodeUpButton = new Button(tr("Move Node Up"));
+  auto moveNodeDownButton = new Button(tr("Move Node Down"));
+  addWidget(nodeToolbar);
+  nodeToolbar->addButton(addNodeButton);
+  nodeToolbar->addButton(removeNodeButton);
+  nodeToolbar->addButton(moveNodeUpButton);
+  nodeToolbar->addButton(moveNodeDownButton);
 
   // File commands
-  auto addFileButton = new Button(tr("Add File"), this);
-  auto removeFileButton = new Button(tr("Remove File"), this);
-  auto moveFileButton = new Button(tr("Move File"), this);
+  auto fileToolbar = new Toolbar(this);
+  auto addFileButton = new Button(tr("Add File"));
+  auto removeFileButton = new Button(tr("Remove File"));
+  auto moveFileButton = new Button(tr("Move File"));
+  addWidget(fileToolbar);
+  fileToolbar->addButton(addFileButton);
+  fileToolbar->addButton(removeFileButton);
+  fileToolbar->addButton(moveFileButton);
 
   // Code commands
-  auto addCodeButton = new Button(tr("Add Code"), this);
-  auto removeCodeButton = new Button(tr("Remove Code"), this);
-  auto moveCodeButton = new Button(tr("Move Code"), this);
+  auto codeToolbar = new Toolbar(this);
+  auto addCodeButton = new Button(tr("Add Code"));
+  auto removeCodeButton = new Button(tr("Remove Code"));
+  auto moveCodeButton = new Button(tr("Move Code"));
+  addWidget(codeToolbar);
+  codeToolbar->addButton(addCodeButton);
+  codeToolbar->addButton(removeCodeButton);
+  codeToolbar->addButton(moveCodeButton);
 
-  topLayout->addWidget(addNodeButton);
-  topLayout->addWidget(removeNodeButton);
-  topLayout->addWidget(moveNodeUpButton);
-  topLayout->addWidget(moveNodeDownButton);
-  topLayout->addWidget(addFileButton);
-  topLayout->addWidget(removeFileButton);
-  topLayout->addWidget(moveFileButton);
-  topLayout->addWidget(addCodeButton);
-  topLayout->addWidget(removeCodeButton);
-  topLayout->addWidget(moveCodeButton);
 
-  auto tabWidget = new TabWidget(this);
-  auto codesButton = new Button(tr("Codes"), this);
-  auto filesButton = new Button(tr("Files"), this);
-  bottomLayout->addWidget(tabWidget);
-  bottomLayout->addWidget(new Break(this));
-  bottomLayout->addWidget(new Break(this));
-  bottomLayout->addWidget(codesButton);
-  bottomLayout->addWidget(filesButton);
+  // Tab Widget / Text Edits
+  auto tabWidget = new TabWidget();
+  auto resourceToolbar = new Toolbar();
+  auto codesButton = new Button(tr("Codes"));
+  auto filesButton = new Button(tr("Files"));
+  addWidget(new Break());
+  addWidget(new Break());
+  addWidget(tabWidget);
+  addWidget(new Break());
+  addWidget(resourceToolbar);
+  resourceToolbar->addButton(codesButton);
+  resourceToolbar->addButton(filesButton);
 
+  // Tabs
   auto count = system.languageCount();
   for (decltype(count) i = 0; i < count; ++i) {
     // info
@@ -201,8 +227,10 @@ Admin::Admin(System const &system, Parent *parent)
     auto container = new Container();
     auto edit = new InPlaceEdit();
     auto textEdit = new TextEdit();
+    auto toolbar = new Toolbar();
     auto saveButton = new Button(tr("Save"));
     auto uploadButton = new Button(tr("Upload"));
+    auto pasteButton = new Button(tr("Paste"));
 
     // arrangement
     tabWidget->addTab(container, str);
@@ -210,8 +238,10 @@ Admin::Admin(System const &system, Parent *parent)
     container->addWidget(new Break());
     container->addWidget(new Break());
     container->addWidget(textEdit);
-    container->addWidget(saveButton);
-    container->addWidget(uploadButton);
+    container->addWidget(toolbar);
+    toolbar->addButton(saveButton);
+    toolbar->addButton(uploadButton);
+    toolbar->addButton(pasteButton);
 
     // text edit
     configureTextEdit(textEdit);
