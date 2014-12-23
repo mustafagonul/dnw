@@ -231,6 +231,7 @@ Admin::Admin(System const &system, Parent *parent)
     auto toolbar = new Toolbar();
     auto saveButton = new Button(tr("Save"));
     auto uploadButton = new Button(tr("Upload"));
+    auto resetButton = new Button(tr("Reset"));
     auto pasteButton = new Button(tr("Paste"));
 
     // arrangement
@@ -242,6 +243,7 @@ Admin::Admin(System const &system, Parent *parent)
     container->addWidget(toolbar);
     toolbar->addButton(saveButton);
     toolbar->addButton(uploadButton);
+    toolbar->addButton(resetButton);
     toolbar->addButton(pasteButton);
 
     // text edit
@@ -252,6 +254,7 @@ Admin::Admin(System const &system, Parent *parent)
     edit->saveButton()->clicked().connect(std::bind(&Admin::saveName, this, tag, edit));
     saveButton->clicked().connect(std::bind(&Admin::saveContent, this, tag, textEdit));
     uploadButton->clicked().connect(std::bind(&Admin::uploadContent, this, tag, textEdit));
+    resetButton->clicked().connect(std::bind(&Admin::resetContent, this, tag, textEdit));
     pasteButton->clicked().connect(std::bind(&Admin::pasteContent, this, tag, textEdit));
 
     edits.push_back(edit);
@@ -363,6 +366,16 @@ void Admin::uploadContent(String const &languageTag, TextEdit *textEdit)
 
   field::Content content(*node);
   dialog::uploadText(languageTag, content);
+  textEdit->setText(content.text(languageTag));
+}
+
+void Admin::resetContent(String const &languageTag, TextEdit *textEdit)
+{
+  auto node = system().node();
+  if (node == nullptr)
+    return;
+
+  field::Content content(*node);
   textEdit->setText(content.text(languageTag));
 }
 
