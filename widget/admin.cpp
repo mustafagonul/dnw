@@ -27,6 +27,7 @@
 #include "dialog/resource.hpp"
 #include "dialog/text.hpp"
 #include "dialog/node.hpp"
+#include "dialog/select.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WToolBar>
@@ -251,6 +252,7 @@ Admin::Admin(System const &system, Parent *parent)
     edit->saveButton()->clicked().connect(std::bind(&Admin::saveName, this, tag, edit));
     saveButton->clicked().connect(std::bind(&Admin::saveContent, this, tag, textEdit));
     uploadButton->clicked().connect(std::bind(&Admin::uploadContent, this, tag, textEdit));
+    pasteButton->clicked().connect(std::bind(&Admin::pasteContent, this, tag, textEdit));
 
     edits.push_back(edit);
     textEdits.push_back(textEdit);
@@ -362,6 +364,51 @@ void Admin::uploadContent(String const &languageTag, TextEdit *textEdit)
   field::Content content(*node);
   dialog::uploadText(languageTag, content);
   textEdit->setText(content.text(languageTag));
+}
+
+void Admin::pasteContent(String const &languageTag, TextEdit *textEdit)
+{
+  Strings tags;
+  Strings strs;
+
+  auto count = system().languageCount();
+  for (decltype(count) i = 0; i < count; ++i) {
+    String tag = system().languageTag(i);
+    String str = system().languageStr(i);
+
+    if (languageTag == tag)
+      continue;
+
+    tags.push_back(tag);
+    strs.push_back(str);
+  }
+
+  // if there is not other language.
+  if (tags.size() < 1) {
+    dialog::errorMessageBox("Admin", "There is no other language!");
+    return;
+  }
+
+  // if there is only one another language to make copy & paste
+  // if there is more than one language there should be an election.
+  Index selection = 0;
+  if (tags.size() > 1) {
+    auto result = dialog::select("Select Language", strs, selection);
+    if (result == false)
+      return;
+  }
+
+  // node
+  auto node = system().node();
+  if (node == nullptr)
+    return;
+
+  // pasting
+  field::Content content{*node};
+  auto other = content.text(tags[selection]);
+  auto text = textEdit->text().toUTF8();
+  text += other;
+  textEdit->setText(text);
 }
 
 void Admin::addNode()

@@ -61,6 +61,7 @@ namespace dnw {
       void saveName(String const &languageTag, InPlaceEdit *edit);
       void saveContent(String const &languageTag, TextEdit *textEdit);
       void uploadContent(String const &languageTag, TextEdit *textEdit);
+      void pasteContent(String const &languageTag, TextEdit *textEdit);
 
       // Resources
       void onCodes();

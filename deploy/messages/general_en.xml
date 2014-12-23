@@ -54,6 +54,8 @@
 
 <message id='Ok'>Ok</message>
 
+<message id='Cancel'>Cancel</message>
+
 <message id='There is no node!'>There is no node!</message>
 
 <message id='Do you want to remove node?'>Do you want to remove node?</message>
@@ -77,6 +79,10 @@
 <message id='Upload'>Upload</message>
 
 <message id='Paste'>Paste</message>
+
+<message id='There is no other language!'>There is no other language!</message>
+
+<message id='Select Language'>Select Language</message>
 
 
 </messages>

@@ -54,6 +54,8 @@
 
 <message id='Ok'>Tamam</message>
 
+<message id='Cancel'>Vazgeç</message>
+
 <message id='There is no node!'>Düğüm yok!</message>
 
 <message id='Do you want to remove node?'>Düğümü kaldırmak istiyor musunuz?</message>
@@ -77,6 +79,10 @@
 <message id='Upload'>Yükle</message>
 
 <message id='Paste'>Yapıştır</message>
+
+<message id='There is no other language!'>Başka dil yok!</message>
+
+<message id='Select Language'>Dil Seç</message>
 
 
 </messages>
