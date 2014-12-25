@@ -2,21 +2,43 @@ project(dnw)
 
 cmake_minimum_required(VERSION 2.8)
 
-file(GLOB_RECURSE files ${dnw_SOURCE_DIR} *.cpp *.hpp )
 
 include_directories(.)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CURDIR ${PROJECT_SOURCE_DIR})
 
-
-# moving from deploy directory to build directory
-set(deploydir ${PROJECT_SOURCE_DIR}/deploy/)
-file(GLOB children RELATIVE ${deploydir} ${deploydir}/*)
-foreach(child ${children})
-  file(COPY ${deploydir}/${child} DESTINATION ${PROJECT_BINARY_DIR})
+# getting library files
+set(LIBFILES "")
+file(GLOB CHILDREN RELATIVE ${CURDIR} ${CURDIR}/*)
+foreach(CHILD ${CHILDREN})
+  if(IS_DIRECTORY ${CURDIR}/${CHILD})
+    file(GLOB_RECURSE FILES ${CURDIR}/${CHILD} *.cpp *.hpp)
+    list(APPEND LIBFILES ${FILES})
+  endif()
 endforeach()
   
+  
+# getting executable files
+file(GLOB EXEFILES RELATIVE ${CURDIR} *.cpp *.hpp)
+    
 
-add_executable(${PROJECT_NAME} ${files})
+# moving from deploy directory to build directory
+set(DEPLOYDIR ${CURDIR}/deploy/)
+file(GLOB CHILDREN RELATIVE ${DEPLOYDIR} ${DEPLOYDIR}/*)
+foreach(CHILD ${CHILDREN})
+  file(COPY ${DEPLOYDIR}/${CHILD} DESTINATION ${PROJECT_BINARY_DIR})
+endforeach()
 
-target_link_libraries(${PROJECT_NAME} wt wthttp boost_regex boost_filesystem boost_system crypto)
+# setting targets
+set(TARGET_EXE "${PROJECT_NAME}_exe")
+set(TARGET_LIB "${PROJECT_NAME}")
+  
+
+# targets
+add_executable(${TARGET_EXE} ${EXEFILES})
+add_library(${TARGET_LIB} SHARED ${LIBFILES})
+
+# libraries
+target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system dl)
+target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)

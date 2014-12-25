@@ -16,20 +16,24 @@
  *
 **/
 
-#include "application.hpp"
+#ifndef DNW_APPLICATION_HPP
+#define DNW_APPLICATION_HPP
+
+#include <Wt/WApplication>
 
 
-using namespace Wt;
+namespace dnw {
 
+  class Application : public Wt::WApplication {
+  private:
+    using Environment = Wt::WEnvironment;
 
-WApplication *createApplication(const WEnvironment& env)
-{
-  return new dnw::Application(env);
+  public:
+    explicit Application(Environment const &);
+    virtual ~Application();
+  };
+
 }
 
 
-int main(int argc, char **argv)
-{
-  return WRun(argc, argv, &createApplication);
-}
-
+#endif // DNW_APPLICATION_HPP

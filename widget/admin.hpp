@@ -57,6 +57,10 @@ namespace dnw {
       void removeCode();
       void moveCode();
 
+      // Config commands
+      void nodeConfig();
+      void globalConfig();
+
       // Save & upload
       void saveName(String const &languageTag, InPlaceEdit *edit);
       void saveContent(String const &languageTag, TextEdit *textEdit);

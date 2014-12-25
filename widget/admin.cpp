@@ -203,6 +203,13 @@ Admin::Admin(System const &system, Parent *parent)
   codeToolbar->addButton(removeCodeButton);
   codeToolbar->addButton(moveCodeButton);
 
+  // Config commands
+  auto configToolbar = new Toolbar{this};
+  auto nodeConfigButton = new Button{tr("Node Config")};
+  auto globalConfigButton = new Button{tr("Global Config")};
+  addWidget(configToolbar);
+  configToolbar->addButton(nodeConfigButton);
+  configToolbar->addButton(globalConfigButton);
 
   // Tab Widget / Text Edits
   auto tabWidget = new TabWidget();
@@ -277,6 +284,9 @@ Admin::Admin(System const &system, Parent *parent)
 
   codesButton->clicked().connect(this, &Admin::onCodes);
   filesButton->clicked().connect(this, &Admin::onFiles);
+
+  nodeConfigButton->clicked().connect(this, &Admin::nodeConfig);
+  globalConfigButton->clicked().connect(this, &Admin::globalConfig);
 }
 
 Admin::~Admin()
@@ -551,6 +561,16 @@ void Admin::removeCode()
 void Admin::moveCode()
 {
   // TODO mustafa:
+}
+
+void Admin::nodeConfig()
+{
+
+}
+
+void Admin::globalConfig()
+{
+
 }
 
 
