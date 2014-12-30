@@ -7,16 +7,13 @@ include_directories(.)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 set(CURDIR ${PROJECT_SOURCE_DIR})
-set(EXEDIRS "boost")
-
 
 
 # getting library files
 set(LIBFILES "")
 file(GLOB CHILDREN RELATIVE ${CURDIR} ${CURDIR}/*)
 foreach(CHILD ${CHILDREN})
-  list(FIND EXEDIRS ${CHILD} DIRINDEX)
-  if(IS_DIRECTORY ${CURDIR}/${CHILD} AND ${DIRINDEX} GREATER -1)
+  if(IS_DIRECTORY ${CURDIR}/${CHILD})
     file(GLOB_RECURSE FILES ${CURDIR}/${CHILD} *.cpp *.hpp)
     list(APPEND LIBFILES ${FILES})
   endif()
@@ -25,10 +22,6 @@ endforeach()
   
 # getting executable files
 file(GLOB EXEFILES ${CURDIR} *.cpp *.hpp)
-foreach(EXEDIR ${EXEDIRS})
-  file(GLOB_RECURSE FILES ${CURDIR}/${EXEDIR} ${CURDIR}/${EXEDIR}/*)
-  list(APPEND EXEFILES ${FILES})
-endforeach()
     
 
 # moving from deploy directory to build directory
@@ -50,5 +43,5 @@ add_library(${TARGET_LIB} SHARED ${LIBFILES})
 
 
 # libraries
-target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system dl)
+target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system boost_iostreams dl)
 target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)
