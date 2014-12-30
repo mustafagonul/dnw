@@ -20,6 +20,7 @@
 #define DNW_APPLICATION_HPP
 
 #include <Wt/WApplication>
+#include "utility/common.hpp"
 
 
 namespace dnw {
@@ -31,6 +32,17 @@ namespace dnw {
   public:
     explicit Application(Environment const &);
     virtual ~Application();
+
+  private:
+    bool checkLibrary() const;
+    void buildLibrary();
+    void loadLibrary();
+    void unloadLibrary();
+    void writeLine(String const &str);
+    void runCommand(String const &prefix, String const &command);
+
+  private:
+    void *libraryHandle;
   };
 
 }

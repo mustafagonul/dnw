@@ -32,6 +32,7 @@ namespace dnw {
       using InPlaceEdits   = std::vector<InPlaceEdit *>;
       using TextEdit       = Wt::WTextEdit;
       using TextEdits      = std::vector<TextEdit *>;
+      using Signal         = Wt::Signal<>;
 
     public:
       Admin(System const &system, Parent *parent = nullptr);
@@ -39,6 +40,9 @@ namespace dnw {
 
     public:
       virtual void update() final;
+
+    public:
+      Signal &rebuild() { return rebuildSignal; }
 
     private:
       // Child commands
@@ -60,6 +64,7 @@ namespace dnw {
       // Config commands
       void nodeConfig();
       void globalConfig();
+      void rebuildConfig();
 
       // Save & upload
       void saveName(String const &languageTag, InPlaceEdit *edit);
@@ -75,6 +80,7 @@ namespace dnw {
     private:
       InPlaceEdits edits;
       TextEdits    textEdits;
+      Signal       rebuildSignal;
     };
 
   }

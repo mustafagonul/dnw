@@ -6,6 +6,7 @@
 #include "system/filesystem/node.hpp"
 #include "system/system.hpp"
 #include "authentication/session.hpp"
+#include "application.hpp"
 #include <Wt/WContainerWidget>
 
 
@@ -20,12 +21,17 @@ namespace dnw {
       using Session = authentication::Session;
       using Parent = Wt::WContainerWidget;
       using Container = Wt::WContainerWidget;
+      using Signal = Wt::Signal<>;
 
     public:
       explicit Main(Parent *parent = nullptr);
       virtual ~Main();
 
+    public:
+      Signal &rebuild() { return rebuildSignal; }
+
     private:
+      void onRebuild();
       void onMode(Any const &);
       void onLanguage(Any const &);
       void onKey(Any const &);
@@ -36,6 +42,7 @@ namespace dnw {
       Node      node;
       System    system;
       Session   session;
+      Signal    rebuildSignal;
 
       Tree      *tree;
       Mode      *mode;

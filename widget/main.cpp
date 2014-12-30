@@ -53,6 +53,7 @@ Main::Main(Parent *parent)
   , node()
   , system(config, node)
   , session()
+  , rebuildSignal()
   , tree(nullptr)
   , mode(nullptr)
   , language(nullptr)
@@ -109,6 +110,11 @@ Main::~Main()
 {
 }
 
+void Main::onRebuild()
+{
+  rebuild().emit();
+}
+
 void Main::onMode(Any const &any)
 try
 {
@@ -133,7 +139,10 @@ try
   if (mode == "admin") {
     container->clear();
 
-    workspace = new Admin(system);
+    auto admin = new Admin(system);
+    admin->rebuild().connect(this, &Main::onRebuild);
+
+    workspace = admin;
     container->addWidget(workspace);
     workspace->update();
     workspace->changed().connect(this, &Main::onKey);

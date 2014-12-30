@@ -26,6 +26,7 @@ namespace widget {
 Widget::Widget(System const &system, Parent *parent)
   : Wt::WContainerWidget(parent)
   , m_system(system)
+  , m_changed()
 {
 }
 

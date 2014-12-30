@@ -160,6 +160,7 @@ Admin::Admin(System const &system, Parent *parent)
   : Widget(system, parent)
   , edits()
   , textEdits()
+  , rebuildSignal()
 {
   /*
   // layout
@@ -207,9 +208,11 @@ Admin::Admin(System const &system, Parent *parent)
   auto configToolbar = new Toolbar{this};
   auto nodeConfigButton = new Button{tr("Node Config")};
   auto globalConfigButton = new Button{tr("Global Config")};
+  auto rebuildButton = new Button{tr("Rebuild")};
   addWidget(configToolbar);
   configToolbar->addButton(nodeConfigButton);
   configToolbar->addButton(globalConfigButton);
+  configToolbar->addButton(rebuildButton);
 
   // Tab Widget / Text Edits
   auto tabWidget = new TabWidget();
@@ -287,6 +290,7 @@ Admin::Admin(System const &system, Parent *parent)
 
   nodeConfigButton->clicked().connect(this, &Admin::nodeConfig);
   globalConfigButton->clicked().connect(this, &Admin::globalConfig);
+  rebuildButton->clicked().connect(this, &Admin::rebuildConfig);
 }
 
 Admin::~Admin()
@@ -571,6 +575,11 @@ void Admin::nodeConfig()
 void Admin::globalConfig()
 {
 
+}
+
+void Admin::rebuildConfig()
+{
+  rebuildSignal.emit();
 }
 
 
