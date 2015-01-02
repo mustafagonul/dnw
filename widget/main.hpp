@@ -52,8 +52,7 @@ namespace dnw {
 
     };
 
-
-    extern "C" void *createInstance(void);
+    extern "C" std::shared_ptr<Main> createInstance(void);
   }
 }
 

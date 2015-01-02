@@ -39,13 +39,11 @@ static void setMessages()
   app->messageResourceBundle().use("messages/general");
 }
 
-void *createInstance()
+std::shared_ptr<Main> createInstance()
 {
   dnw::authentication::Session::configureAuth();
 
-  auto main = new Main();
-
-  return reinterpret_cast<void *>(main);
+  return std::make_shared<Main>();
 }
 
 Main::Main(Parent *parent)
