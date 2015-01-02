@@ -53,7 +53,7 @@ namespace dnw {
     };
 
 
-    extern "C" void *createInstance();
+    extern "C" void *createInstance(void);
   }
 }
 
