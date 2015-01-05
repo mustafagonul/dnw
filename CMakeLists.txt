@@ -4,10 +4,15 @@ cmake_minimum_required(VERSION 2.8)
 
 include_directories(.)
 
-
+# variables
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS}")
 set(CURDIR ${PROJECT_SOURCE_DIR})
+
+
+# packages
+find_package(Wt REQUIRED)
+find_package(Boost COMPONENTS system filesystem iostreams regex program_options REQUIRED)
 
 
 # getting library files
