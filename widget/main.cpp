@@ -39,7 +39,7 @@ static void setMessages()
   app->messageResourceBundle().use("messages/general");
 }
 
-std::shared_ptr<Main> createInstance()
+MainPtr createInstance()
 {
   dnw::authentication::Session::configureAuth();
 

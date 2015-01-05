@@ -6,7 +6,6 @@
 #include "system/filesystem/node.hpp"
 #include "system/system.hpp"
 #include "authentication/session.hpp"
-#include "application.hpp"
 #include <Wt/WContainerWidget>
 
 
@@ -52,7 +51,9 @@ namespace dnw {
 
     };
 
-    extern "C" std::shared_ptr<Main> createInstance(void);
+    using MainPtr = std::shared_ptr<Main>;
+
+    extern "C" MainPtr createInstance(void);
   }
 }
 
