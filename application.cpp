@@ -107,16 +107,6 @@ void Application::runCommand(String const &prefix, String const &cmd)
   String line;
   while (std::getline(outs, line))
     writeLine(prefix + ": " + line);
-
-
-  /*
-  bp::context ctx;
-  ctx.stdout_behavior = bp::silence_stream();
-  ctx.stderr_behavior = bp::silence_stream();
-  ctx.environment = bp::self::get_environment();
-
-  bp::launch_shell(cmd, ctx);
-  */
 }
 
 Application::Application(Environment const &env)
@@ -154,7 +144,6 @@ bool Application::checkLibrary() const
   if (ptr == nullptr)
     return false;
 
-
   return true;
 }
 
@@ -177,7 +166,7 @@ void Application::buildLibrary()
 
   // commands
   static const auto gitCommand = "git clone https://github.com/mustafagonul/dnw.git";
-  static const auto cmakeCommand = "cmake -DCMAKE_BUILD_TYPE=Debug ../dnw";
+  static const auto cmakeCommand = "cmake -DCMAKE_BUILD_TYPE=Release ../dnw";
   static const auto makeCommand = "make dnw";
 
   // getting repository
@@ -197,7 +186,8 @@ void Application::buildLibrary()
 
   // copying dynamic library (with message)
   writeLine("Copying...");
-  fs::copy_file(dir / g_libraryName, cwd / g_libraryName, fs::copy_option::overwrite_if_exists);
+  fs::remove(cwd / g_libraryName);
+  fs::copy(dir / g_libraryName, cwd / g_libraryName);
   for (fs::directory_iterator iter(rep / "deploy");
        iter != fs::directory_iterator(); ++iter) {
     auto source = iter->path();
@@ -257,6 +247,7 @@ void Application::loadLibrary()
   mainPtr = function();
 
   // Adding main
+  root()->clear();
   root()->addWidget(mainPtr.get());
 
   // Connections

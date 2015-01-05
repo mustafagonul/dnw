@@ -29,6 +29,7 @@ namespace dnw {
   class Application : public Wt::WApplication {
   private:
     using Environment = Wt::WEnvironment;
+    using Handle = void *;
     using MainPtr = widget::MainPtr;
 
   public:
@@ -44,7 +45,7 @@ namespace dnw {
     void runCommand(String const &prefix, String const &command);
 
   private:
-    void *libraryHandle;
+    Handle  libraryHandle;
     MainPtr mainPtr;
   };
 
