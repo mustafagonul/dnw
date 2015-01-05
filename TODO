@@ -10,7 +10,7 @@
 * Write a read me for github. (a few words added)
 * Write a coding standard including doxygen.
 * Authentication (Done)
-* Copy to left / Copy to right
+* Copy to left / Copy to right (done)
 * Move file / Move code
 * binary update
 * tree update (done)
@@ -24,7 +24,7 @@
 * move admin into system namespace
 * codes in content
 * code formatting
-* Base language
+* Base language (done)
 * Multi language (done)
 * Suspicious
 * History

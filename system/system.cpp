@@ -39,7 +39,7 @@ System::System(Config &config, Node &root)
   , m_currentKey(root.rootKey())
 {
   static const String languageHeader = "languages";
-  static const String baseLanguageHeader = "base_language";
+  static const String globalConfigHeader = "global_config";
 
   using OStr = boost::optional<String>;
 
@@ -66,7 +66,7 @@ System::System(Config &config, Node &root)
 
   // if there is base language
   OStr base;
-  if ((base = config.value(baseLanguageHeader, "base"))) {
+  if ((base = config.value(globalConfigHeader, "base_language"))) {
     m_baseLanguageTag = base.value();
     m_currentLanguageTag = base.value();
 
