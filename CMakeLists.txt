@@ -6,6 +6,7 @@ include_directories(.)
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS}")
 set(CURDIR ${PROJECT_SOURCE_DIR})
 
 
@@ -14,14 +15,15 @@ set(LIBFILES "")
 file(GLOB CHILDREN RELATIVE ${CURDIR} ${CURDIR}/*)
 foreach(CHILD ${CHILDREN})
   if(IS_DIRECTORY ${CURDIR}/${CHILD})
-    file(GLOB_RECURSE FILES ${CURDIR}/${CHILD} *.cpp *.hpp)
-    list(APPEND LIBFILES ${FILES})
+    set(CHILDDIR ${CURDIR}/${CHILD})
+    file(GLOB_RECURSE CHILDFILES ${CHILDDIR} ${CHILDDIR}/*.cpp ${CHILDDIR}/*.hpp)
+    list(APPEND LIBFILES ${CHILDFILES})    
   endif()
 endforeach()
-  
+
   
 # getting executable files
-file(GLOB EXEFILES ${CURDIR} *.cpp *.hpp)
+file(GLOB EXEFILES ${CURDIR} ${CURDIR}/*.cpp ${CURDIR}/*.hpp)
     
 
 # moving from deploy directory to build directory

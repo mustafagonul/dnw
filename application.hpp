@@ -20,6 +20,7 @@
 #define DNW_APPLICATION_HPP
 
 #include <Wt/WApplication>
+#include "widget/main.hpp"
 #include "utility/common.hpp"
 
 
@@ -28,6 +29,7 @@ namespace dnw {
   class Application : public Wt::WApplication {
   private:
     using Environment = Wt::WEnvironment;
+    using MainPtr = widget::MainPtr;
 
   public:
     explicit Application(Environment const &);
@@ -43,6 +45,7 @@ namespace dnw {
 
   private:
     void *libraryHandle;
+    MainPtr mainPtr;
   };
 
 }

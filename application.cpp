@@ -29,11 +29,58 @@ namespace fs = boost::filesystem;
 namespace bp = boost::process;
 
 
+
 namespace dnw {
 
 
 static const auto g_libraryName = "libdnw.so";
 static const auto g_libraryFunction = "createInstance";
+
+
+static bool copy_recursive(fs::path source, fs::path destination)
+try {
+  // source check
+  if (fs::exists(source) == false)
+    return false;
+
+  // if the source is directory
+  if (fs::is_directory(source)) {
+    // destination check
+    if (fs::exists(destination) == false)
+      return false;
+    // if the destination is not directory
+    if (fs::is_directory(destination) == false)
+      return false;
+
+    // creating directory
+    destination /= source.filename();
+    if (fs::create_directory(destination) == false)
+      return false;
+
+    // item loop
+    for (fs::directory_iterator iter(source); iter != fs::directory_iterator(); ++iter) {
+      auto itemSource = iter->path();
+      auto itemDestination = destination / itemSource.filename();
+
+      if (copy_recursive(itemSource, itemDestination) == false)
+        return false;
+    }
+
+    return true;
+  }
+
+  // it the source is regular file
+  if (fs::is_regular_file(source)) {
+    fs::copy_file(source, destination, fs::copy_option::overwrite_if_exists);
+    return true;
+  }
+
+  // others
+  return false;
+}
+catch (...) {
+  return false;
+}
 
 
 void Application::writeLine(String const &line)
@@ -56,14 +103,26 @@ void Application::runCommand(String const &prefix, String const &cmd)
   auto child = bp::launch_shell(exec, ctx);
   auto &outs = child.get_stdout();
 
+
   String line;
   while (std::getline(outs, line))
     writeLine(prefix + ": " + line);
+
+
+  /*
+  bp::context ctx;
+  ctx.stdout_behavior = bp::silence_stream();
+  ctx.stderr_behavior = bp::silence_stream();
+  ctx.environment = bp::self::get_environment();
+
+  bp::launch_shell(cmd, ctx);
+  */
 }
 
 Application::Application(Environment const &env)
   : Wt::WApplication(env)
   , libraryHandle(nullptr)
+  , mainPtr(nullptr)
 {
   // UTF8
   Wt::WString::setDefaultEncoding(Wt::UTF8);
@@ -90,8 +149,11 @@ bool Application::checkLibrary() const
     return false;
 
   auto ptr = dlsym(handle, g_libraryFunction);
+  dlclose(handle);
+
   if (ptr == nullptr)
     return false;
+
 
   return true;
 }
@@ -115,7 +177,7 @@ void Application::buildLibrary()
 
   // commands
   static const auto gitCommand = "git clone https://github.com/mustafagonul/dnw.git";
-  static const auto cmakeCommand = "cmake -DCMAKE_BUILD_TYPE=Release ../dnw";
+  static const auto cmakeCommand = "cmake -DCMAKE_BUILD_TYPE=Debug ../dnw";
   static const auto makeCommand = "make dnw";
 
   // getting repository
@@ -139,9 +201,11 @@ void Application::buildLibrary()
   for (fs::directory_iterator iter(rep / "deploy");
        iter != fs::directory_iterator(); ++iter) {
     auto source = iter->path();
-    auto destination = cwd / iter->path().filename();
-    fs::remove_all(destination);
-    fs::copy(source, destination);
+    auto destination = cwd;
+    auto directory = cwd / source.filename();
+
+    fs::remove_all(directory);
+    copy_recursive(source, destination);
   }
 
   // deleting directories
@@ -149,15 +213,17 @@ void Application::buildLibrary()
   fs::remove_all(rep);
 
   // completion message
-  writeLine("Completed.");
+  writeLine("Completed...");
 
   // loading library
+  writeLine("Loading...");
   loadLibrary();
 }
 
 void Application::loadLibrary()
 {
-  root()->clear();
+  // In case
+  unloadLibrary();
 
   // Library path
   auto path = fs::current_path() / g_libraryName;
@@ -166,39 +232,48 @@ void Application::loadLibrary()
   // Loading library
   libraryHandle = dlopen(pathStr.c_str(), RTLD_NOW);
   if (libraryHandle == nullptr) {
-    new Wt::WText("Library load error!", root());
+    writeLine("Library load error!");
+    return;
+  }
+
+  // checking error
+  char *error = dlerror();
+  if (error) {
+    writeLine(error);
     return;
   }
 
   // Getting function
-  using Function = decltype(dnw::widget::createInstance);
   auto ptr = dlsym(libraryHandle, g_libraryFunction);
-  char *error = nullptr;
-  if ((error = dlerror()) != nullptr) {
-    new Wt::WText(error, root());
+  error = dlerror();
+  if (error) {
+    writeLine(error);
     return;
   }
 
   // Calling function
   using Function = decltype(dnw::widget::createInstance);
   auto function = reinterpret_cast<Function *>(ptr);
-  auto mainPtr = function();
-  auto main = reinterpret_cast<dnw::widget::Main *>(mainPtr);
+  mainPtr = function();
 
   // Adding main
-  root()->addWidget(main);
+  root()->addWidget(mainPtr.get());
 
   // Connections
-  main->rebuild().connect(this, &Application::buildLibrary);
+  mainPtr->rebuild().connect(this, &Application::buildLibrary);
 }
 
 void Application::unloadLibrary()
 {
-  root()->clear();
+  if (mainPtr) {
+    root()->removeWidget(mainPtr.get());
+    mainPtr = nullptr;
+  }
 
-  if (libraryHandle)
-    dlclose(libraryHandle);
+  if (libraryHandle == nullptr)
+    return;
 
+  dlclose(libraryHandle);
   libraryHandle = nullptr;
 }
 
