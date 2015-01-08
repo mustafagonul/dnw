@@ -63,7 +63,7 @@ target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system
 # install
 if(NOT DNW_TARGET_OUTPUT)
   message(WARNING "DNW_TARGET_OUTPUT is not set. Default value ('/srv/http/dnw/') is used!")
-  set(DNW_TARGET_OUTPUT "/srv/http/dnw/")
+  set(DNW_TARGET_OUTPUT "/srv/http/dnw")
 endif()
 
 install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${DNW_TARGET_OUTPUT})
