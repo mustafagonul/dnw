@@ -12,7 +12,7 @@ set(CURDIR ${PROJECT_SOURCE_DIR})
 
 # packages
 find_package(Wt REQUIRED)
-find_package(Boost COMPONENTS system filesystem iostreams regex program_options REQUIRED)
+find_package(Boost COMPONENTS system filesystem regex program_options REQUIRED)
 
 
 # getting library files
@@ -61,9 +61,26 @@ target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system dl)
 target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)
 
 # install
-set(TARGET_OUTPUT "/srv/http/dnw/")
-install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${TARGET_OUTPUT})
-install(DIRECTORY ${DEPLOYDIRS} DESTINATION ${TARGET_OUTPUT})
-install(FILES ${DEPLOYFILES} DESTINATION ${TARGET_OUTPUT})
+if(NOT DNW_TARGET_OUTPUT)
+  message(WARNING "DNW_TARGET_OUTPUT is not set. Default value ('/srv/http/dnw/') is used!")
+  set(DNW_TARGET_OUTPUT "/srv/http/dnw/")
+endif()
+
+install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${DNW_TARGET_OUTPUT})
+install(DIRECTORY ${DEPLOYDIRS} DESTINATION ${DNW_TARGET_OUTPUT})
+install(FILES ${DEPLOYFILES} DESTINATION ${DNW_TARGET_OUTPUT})
+
+if (NOT WT_RESOURCE_DIR)
+  message(WARNING "WT_RESOURCE_DIR is not set. Default value ('/usr/share/Wt/resources') is used!")
+  set(WT_RESOURCE_DIR "/usr/share/Wt/resources")
+endif()
+
+if (EXISTS ${WT_RESOURCE_DIR} AND IS_DIRECTORY ${WT_RESOURCE_DIR})
+  set(WT_RESOURCE_LINK "${DNW_TARGET_OUTPUT}/resources")
+  install(CODE "execute_process(COMMAND rm ${WT_RESOURCE_LINK})"
+               "execute_process(COMMAND ln -s ${WT_RESOURCE_DIR} ${WT_RESOURCE_LINK})")
+else()
+  message(WARNING "Resource directory cannot be found!")
+endif()
 
 
