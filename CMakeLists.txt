@@ -57,7 +57,7 @@ add_library(${TARGET_LIB} SHARED ${LIBFILES})
 
 
 # libraries
-target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system boost_iostreams dl)
+target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system dl)
 target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)
 
 # install
