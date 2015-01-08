@@ -64,6 +64,6 @@ target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system
 set(TARGET_OUTPUT "/srv/http/dnw/")
 install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${TARGET_OUTPUT})
 install(DIRECTORY ${DEPLOYDIRS} DESTINATION ${TARGET_OUTPUT})
-install(FILE ${DEPLOYFILES} DESTINATION ${TARGET_OUTPUT})
+install(FILES ${DEPLOYFILES} DESTINATION ${TARGET_OUTPUT})
 
 
