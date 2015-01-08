@@ -32,7 +32,7 @@ file(GLOB EXEFILES ${CURDIR} ${CURDIR}/*.cpp ${CURDIR}/*.hpp)
     
 
 # moving from deploy directory to build directory
-set(DEPLOYDIR ${CURDIR}/deploy/)
+set(DEPLOYDIR ${CURDIR}/deploy)
 set(DEPLOYDIRS "")
 set(DEPLOYFILES "")
 file(GLOB CHILDREN RELATIVE ${DEPLOYDIR} ${DEPLOYDIR}/*)

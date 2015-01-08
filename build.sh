@@ -12,3 +12,5 @@ mkdir dnw_release
 cd dnw_release/
 cmake -DCMAKE_BUILD_TYPE=Release ../dnw
 make -j$(nproc)
+make install
+
