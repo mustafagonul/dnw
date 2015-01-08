@@ -76,14 +76,15 @@ if (NOT WT_RESOURCE_DIR)
 endif()
 
 if (EXISTS "${WT_RESOURCE_DIR}" AND IS_DIRECTORY "${WT_RESOURCE_DIR}")
-  set(WT_RESOURCE_LINK "${DNW_TARGET_OUTPUT}/resources")
-  #install(CODE "execute_process(COMMAND rm -f ${WT_RESOURCE_LINK})")
-  #install(CODE "execute_process(COMMAND ln -s ${WT_RESOURCE_DIR} ${WT_RESOURCE_LINK})")
-  
-  install(CODE "execute_process(COMMAND rm -rf ${WT_RESOURCE_LINK})")
-  install(CODE "execute_process(COMMAND cp -R ${WT_RESOURCE_DIR} ${WT_RESOURCE_LINK})")
+  set(WT_RESOURCE_TARGET "${DNW_TARGET_OUTPUT}/resources")
+  #install(CODE "execute_process(COMMAND rm -f ${WT_RESOURCE_TARGET})")
+  #install(CODE "execute_process(COMMAND ln -s ${WT_RESOURCE_DIR} ${WT_RESOURCE_TARGET})")
+  install(CODE "execute_process(COMMAND rm -rf ${WT_RESOURCE_TARGET})")
+  install(CODE "execute_process(COMMAND cp -R ${WT_RESOURCE_DIR} ${WT_RESOURCE_TARGET})")
 else()
   message(WARNING "Resource directory cannot be found!")
 endif()
+
+install(CODE "execute_process(COMMAND chmod 700 -R ${DNW_TARGET_OUTPUT})")
 
 
