@@ -77,7 +77,7 @@ endif()
 
 if (EXISTS "${WT_RESOURCE_DIR}" AND IS_DIRECTORY "${WT_RESOURCE_DIR}")
   set(WT_RESOURCE_LINK "${DNW_TARGET_OUTPUT}/resources")
-  install(CODE "execute_process(COMMAND rm ${WT_RESOURCE_LINK})")
+  install(CODE "execute_process(COMMAND rm -f ${WT_RESOURCE_LINK})")
   install(CODE "execute_process(COMMAND ln -s ${WT_RESOURCE_DIR} ${WT_RESOURCE_LINK})")
 else()
   message(WARNING "Resource directory cannot be found!")
