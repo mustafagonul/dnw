@@ -17,9 +17,12 @@
 **/
 
 #include "application.hpp"
+#include <boost/interprocess/sync/file_lock.hpp>
 
 
+using namespace std;
 using namespace Wt;
+using namespace boost::interprocess;
 
 
 WApplication *createApplication(const WEnvironment& env)
@@ -28,8 +31,64 @@ WApplication *createApplication(const WEnvironment& env)
 }
 
 
-int main(int argc, char **argv)
+int main()
 {
-  return WRun(argc, argv, &createApplication);
+  // lock file name
+  #ifndef NDEBUG // debug mode
+    static const auto lockFileName = "mustafagonul-dnw-debug.lockfile";
+  #else
+    static const auto lockFileName = "mustafagonul-dnw.lockfile";
+  #endif
+
+
+  try {
+    // creating file if not exits
+    ofstream file;
+    file.open(lockFileName);
+    file.close();
+
+    // locking file
+    file_lock flock(lockFileName);
+    if (flock.try_lock() == false) {
+      std::cerr << "Already Running !!!" << std::endl;
+
+      return -1;
+    }
+  }
+  catch (...) {
+    std::cerr << "Lock File Error !!!" << std::endl;
+
+    return -1;
+  }
+
+  // parameters
+#ifndef NDEBUG // debug mode
+  const char *argv[] = {
+    "dnw_exe",
+    "--docroot=.",
+    "--http-address=0.0.0.0",
+    "--http-port=8080",
+  };
+#else // release mode
+  const char *argv[] = {
+    "dnw_exe",
+    "--docroot=.",
+    "--http-address=0.0.0.0",
+    "--http-port=80",
+  };
+#endif
+
+  // server running
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  int result = 0;
+  try {
+    result = WRun(argc, const_cast<char **>(argv), &createApplication);
+  }
+  catch (...) {
+    result = -1;
+  }
+
+  // result
+  return result;
 }
 
