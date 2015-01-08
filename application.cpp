@@ -23,6 +23,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
 #include <dlfcn.h>
+#include <mutex>
 
 
 namespace fs = boost::filesystem;
@@ -33,8 +34,13 @@ namespace bp = boost::process;
 namespace dnw {
 
 
+using Mutex = std::recursive_mutex;
+using Guard = std::lock_guard<Mutex>;
+
+
 static const auto g_libraryName = "libdnw.so";
 static const auto g_libraryFunction = "createInstance";
+static Mutex g_mutex;
 
 
 static bool copy_recursive(fs::path source, fs::path destination)
@@ -132,6 +138,8 @@ Application::Application(Environment const &env)
 
 bool Application::checkLibrary() const
 {
+  Guard guard(g_mutex);
+
   auto path = fs::current_path() / g_libraryName;
   auto pathStr = path.string();
   auto handle = dlopen(pathStr.c_str(), RTLD_NOW);
@@ -149,6 +157,8 @@ bool Application::checkLibrary() const
 
 void Application::buildLibrary()
 {
+  Guard guard(g_mutex);
+
   // unloading library
   unloadLibrary();
 
@@ -212,6 +222,8 @@ void Application::buildLibrary()
 
 void Application::loadLibrary()
 {
+  Guard guard(g_mutex);
+
   // In case
   unloadLibrary();
 
@@ -256,6 +268,8 @@ void Application::loadLibrary()
 
 void Application::unloadLibrary()
 {
+  Guard guard(g_mutex);
+
   if (mainPtr) {
     root()->removeWidget(mainPtr.get());
     mainPtr = nullptr;
