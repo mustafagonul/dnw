@@ -66,18 +66,17 @@ int main()
 
 
   // parameters
-  string docroot = "--docroot=" + current_path().string();
 #ifndef NDEBUG // debug mode
   const char *argv[] = {
     "dnw_exe",
-    docroot.c_str(),
+    "--docroot=.",
     "--http-address=0.0.0.0",
     "--http-port=8080",
   };
 #else // release mode
   const char *argv[] = {
     "dnw_exe",
-    docroot.c_str(),
+    "--docroot=.",
     "--http-address=0.0.0.0",
     "--http-port=80",
   };
