@@ -33,9 +33,11 @@ file(GLOB EXEFILES ${CURDIR} ${CURDIR}/*.cpp ${CURDIR}/*.hpp)
 
 # moving from deploy directory to build directory
 set(DEPLOYDIR ${CURDIR}/deploy/)
+set(DEPLOYS "")
 file(GLOB CHILDREN RELATIVE ${DEPLOYDIR} ${DEPLOYDIR}/*)
 foreach(CHILD ${CHILDREN})
   file(COPY ${DEPLOYDIR}/${CHILD} DESTINATION ${PROJECT_BINARY_DIR})
+  list(APPEND DEPLOYS ${DEPLOYDIR}/${CHILD})
 endforeach()
 
 
