@@ -18,11 +18,13 @@
 
 #include "application.hpp"
 #include <boost/interprocess/sync/file_lock.hpp>
+#include <boost/filesystem.hpp>
 
 
 using namespace std;
 using namespace Wt;
 using namespace boost::interprocess;
+using namespace boost::filesystem;
 
 
 WApplication *createApplication(const WEnvironment& env)
@@ -61,18 +63,21 @@ int main()
     return -1;
   }
 
+
+
   // parameters
+  string docroot = "--docroot=" + current_path().string();
 #ifndef NDEBUG // debug mode
   const char *argv[] = {
     "dnw_exe",
-    "--docroot=.",
+    docroot.c_str(),
     "--http-address=0.0.0.0",
     "--http-port=8080",
   };
 #else // release mode
   const char *argv[] = {
     "dnw_exe",
-    "--docroot=\".;/resources\"",
+    docroot.c_str(),
     "--http-address=0.0.0.0",
     "--http-port=80",
   };
