@@ -33,11 +33,16 @@ file(GLOB EXEFILES ${CURDIR} ${CURDIR}/*.cpp ${CURDIR}/*.hpp)
 
 # moving from deploy directory to build directory
 set(DEPLOYDIR ${CURDIR}/deploy/)
-set(DEPLOYS "")
+set(DEPLOYDIRS "")
+set(DEPLOYFILES "")
 file(GLOB CHILDREN RELATIVE ${DEPLOYDIR} ${DEPLOYDIR}/*)
 foreach(CHILD ${CHILDREN})
   file(COPY ${DEPLOYDIR}/${CHILD} DESTINATION ${PROJECT_BINARY_DIR})
-  list(APPEND DEPLOYS ${DEPLOYDIR}/${CHILD})
+  if(IS_DIRECTORY ${DEPLOYDIR}/${CHILD})
+    list(APPEND DEPLOYDIRS ${DEPLOYDIR}/${CHILD})
+  else()
+    list(APPEND DEPLOYFILES ${DEPLOYDIR}/${CHILD})
+  endif()
 endforeach()
 
 
@@ -58,6 +63,7 @@ target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system
 # install
 set(TARGET_OUTPUT "/srv/http/dnw/")
 install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${TARGET_OUTPUT})
-install(DIRECTORY ${DEPLOYS} DESTINATION ${TARGET_OUTPUT})
+install(DIRECTORY ${DEPLOYDIRS} DESTINATION ${TARGET_OUTPUT})
+install(FILE ${DEPLOYFILES} DESTINATION ${TARGET_OUTPUT})
 
 
