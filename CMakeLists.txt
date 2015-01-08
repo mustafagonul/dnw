@@ -52,3 +52,10 @@ add_library(${TARGET_LIB} SHARED ${LIBFILES})
 # libraries
 target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system boost_iostreams dl)
 target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)
+
+# install
+set(TARGET_OUTPUT "/srv/http/dnw/")
+install(TARGETS ${TARGET_EXE} ${TARGET_LIB} DESTINATION ${TARGET_OUTPUT})
+install(DIRECTORY ${DEPLOYDIR}/* DESTINATION ${TARGET_OUTPUT})
+
+
