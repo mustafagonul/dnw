@@ -65,16 +65,16 @@ int main()
 #ifndef NDEBUG // debug mode
   const char *argv[] = {
     "dnw_exe",
-    "--docroot", ".",
-    "--http-address", "0.0.0.0",
-    "--http-port", "8080",
+    "--docroot=.",
+    "--http-address=0.0.0.0",
+    "--http-port=8080",
   };
 #else // release mode
   const char *argv[] = {
     "dnw_exe",
-    "--docroot", ".",
-    "--http-address", "0.0.0.0",
-    "--http-port", "80",
+    "--docroot=\".;/resources\"",
+    "--http-address=0.0.0.0",
+    "--http-port=80",
   };
 #endif
 
