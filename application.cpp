@@ -77,6 +77,8 @@ try {
 
   // it the source is regular file
   if (fs::is_regular_file(source)) {
+    if (fs::is_directory(destination))
+      destination /= source.filename();
     fs::copy_file(source, destination, fs::copy_option::overwrite_if_exists);
     return true;
   }
