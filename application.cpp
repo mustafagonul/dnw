@@ -18,6 +18,7 @@
 
 #include "application.hpp"
 #include "widget/main.hpp"
+#include <Wt/WEnvironment>
 #include <Wt/WBootstrapTheme>
 #include <Wt/WText>
 #include <boost/filesystem.hpp>
@@ -90,6 +91,17 @@ catch (...) {
   return false;
 }
 
+static void logConnetion(Wt::WEnvironment const &env)
+{
+  static Mutex mutex;
+  Guard guard(mutex);
+
+
+  std::ofstream file;
+  file.open("connection_log.txt");
+  file << boost::posix_time::second_clock::local_time() << "    " << env.clientAddress() << std::endl;
+  file.close();
+}
 
 void Application::writeLine(String const &line)
 {
@@ -130,6 +142,9 @@ Application::Application(Environment const &env)
 
   // Title
   setTitle("Dnw");
+
+  // connection log
+  logConnetion(env);
 
   // library
   if (checkLibrary() == false)
