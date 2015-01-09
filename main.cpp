@@ -72,6 +72,7 @@ int main()
     "--docroot=.",
     "--http-address=0.0.0.0",
     "--http-port=8080",
+    "--gdb",
   };
 #else // release mode
   const char *argv[] = {
