@@ -98,7 +98,7 @@ static void logConnetion(Wt::WEnvironment const &env)
 
 
   std::ofstream file;
-  file.open("connection_log.txt");
+  file.open("connection_log.txt", std::ofstream::out | std::ofstream::app);
   file << boost::posix_time::second_clock::local_time() << "    " << env.clientAddress() << std::endl;
   file.close();
 }
