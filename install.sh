@@ -3,7 +3,7 @@
 
 # get this file with 
 #
-# wget https://raw.githubusercontent.com/mustafagonul/dnw/master/build.sh
+# wget https://raw.githubusercontent.com/mustafagonul/dnw/master/install.sh
 #
 # and run it :)
 
