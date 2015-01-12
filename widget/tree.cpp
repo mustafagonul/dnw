@@ -77,6 +77,9 @@ void Tree::update()
 
 void Tree::onItemClick(Index index)
 {
+  if (index.isValid() == false)
+    return;
+
   auto data = model.data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
 
@@ -85,6 +88,9 @@ void Tree::onItemClick(Index index)
 
 void Tree::onItemDoubleClick(Index index)
 {
+  if (index.isValid() == false)
+    return;
+
   if (view.isExpanded(index))
     view.collapse(index);
   else
@@ -93,6 +99,9 @@ void Tree::onItemDoubleClick(Index index)
 
 void Tree::onExpanded(Index index)
 {
+  if (index.isValid() == false)
+   return;
+
   using std::less;
 
   auto data = model.data(index, Wt::UserRole);
@@ -103,6 +112,9 @@ void Tree::onExpanded(Index index)
 
 void Tree::onCollapsed(Index index)
 {
+  if (index.isValid() == false)
+    return;
+
   using std::less;
 
   auto data = model.data(index, Wt::UserRole);
