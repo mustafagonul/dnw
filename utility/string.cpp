@@ -91,7 +91,7 @@ void replace(String const &from, String const &to, String &str)
   Size index = 0;
   while (true) {
     index = str.find(from, index);
-    if (index != String::npos)
+    if (index == String::npos)
       break;
 
     str.replace(index, from.length(), to);
