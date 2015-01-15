@@ -17,6 +17,7 @@
 **/
 
 #include "utility/string.hpp"
+#include <regex>
 #include <sstream>
 
 
@@ -87,17 +88,32 @@ void replace(String const &from, String const &to, String &str)
   if (from.empty())
     return;
 
-  size_t start_pos = 0;
-  while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-    str.replace(start_pos, from.length(), to);
-    start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+  Size index = 0;
+  while (true) {
+    index = str.find(from, index);
+    if (index != String::npos)
+      break;
+
+    str.replace(index, from.length(), to);
+
+    index += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+  }
+}
+
+void convert(Map const &map, String &str)
+{
+  for (auto const &pair : map) {
+    String const &o = pair.first;
+    String const &n = pair.second;
+
+    replace(o, n, str);
   }
 }
 
 /*
-void html::replaceExpression(std::string &str, std::string const &expressionStr, std::string (*convertor)(std::string const &))
+static void convert(String const &outerExpStr, String const *innerExpStr, Map const &map, String &str)
 {
-  boost::regex expression(expressionStr);
+  boost::regex expression(outerExpStr);
   boost::match_results<std::string::const_iterator> what;
 
   auto begin = str.cbegin();
@@ -107,7 +123,13 @@ void html::replaceExpression(std::string &str, std::string const &expressionStr,
   while (boost::regex_search(begin, end, what, expression))
   {
     std::copy(begin, what[0].first, std::back_inserter(result));
-    result += convertor(what.str());
+
+    auto current = what.str();
+    if (innerExpStr)
+      convert(*innerExpStr, nullptr, map, current);
+    else
+      convert(map, current);
+    result += current;
 
     begin = what[0].second;
   }
@@ -116,6 +138,49 @@ void html::replaceExpression(std::string &str, std::string const &expressionStr,
   str = result;
 }
 */
+
+void convert(String const &expStr, Map const &map, String &str)
+{
+  std::regex expression{expStr};
+  String result;
+
+  while (true) {
+    std::smatch matches;
+    std::regex_search(str, matches, expression);
+
+    if (matches.empty()) {
+      result += str;
+      break;
+    }
+
+    auto size = matches.size();
+    if (size > 1) {
+      auto iter = matches[0].first;
+      for (decltype(size) i = 1; i < size; ++i) {
+        auto match = matches[i].str();
+        convert(map, match);
+
+        result += String(iter, matches[i].first);
+        result += match;
+
+        iter = matches[i].second;
+      }
+
+      result += String(matches[size - 1].second, matches[0].second);
+    }
+    else {
+      auto match = matches[0].str();
+      convert(map, match);
+
+      result += match;
+    }
+
+    result += matches.prefix().str();
+    str = matches.suffix().str();
+  }
+
+  str = result;
+}
 
 
 } // string

@@ -25,11 +25,14 @@
 #define DNW_UTILITY_STRING_HPP
 
 #include "utility/common.hpp"
+#include <map>
 
 
 namespace dnw {
   namespace utility {
     namespace string {
+
+      using Map  = std::map<String, String>;
 
       /**
        * @brief Splits @a str with @a delimiter into @a result.
@@ -70,6 +73,13 @@ namespace dnw {
        */
       void replace(String const &from, String const &to, String &str);
 
+
+      // TODO mustafa: doxygen
+      void convert(Map const &map, String &str);
+
+
+      // TODO mustafa: doxygen
+      void convert(String const &expression, Map const &map, String &str);
     }
   }
 }
