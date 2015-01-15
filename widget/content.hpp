@@ -39,10 +39,6 @@ namespace dnw {
       // void on
 
     private:
-      String convert(String const &str) const;
-      String convert(String const &str, String const &expression) const;
-
-    private:
       using FileMap = std::map<String, String>;
 
       FileMap fileMap;

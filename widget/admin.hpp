@@ -20,7 +20,10 @@
 #define DNW_WIDGET_ADMIN_HPP
 
 #include "widget/widget.hpp"
+#include "wt/stringresource.hpp"
 #include <Wt/WInPlaceEdit>
+#include <Wt/WResource>
+
 
 
 namespace dnw {
@@ -32,10 +35,14 @@ namespace dnw {
       using InPlaceEdits   = std::vector<InPlaceEdit *>;
       using TextEdit       = Wt::WTextEdit;
       using TextEdits      = std::vector<TextEdit *>;
+      using Resource       = Wt::WResource;
+      using Resources      = std::vector<Resource *>;
+      using FileListJs     = wt::StringResource;
       using Signal         = Wt::Signal<>;
+      using FileMap        = std::map<String, String>;
 
     public:
-      Admin(System const &system, Parent *parent = nullptr);
+      explicit Admin(System const &system, Parent *parent = nullptr);
       virtual ~Admin();
 
     public:
@@ -78,8 +85,15 @@ namespace dnw {
       void onFiles();
 
     private:
+      void updateFileList();
+
+    private:
       InPlaceEdits edits;
       TextEdits    textEdits;
+      Resources    resources;
+      FileListJs   imageListJs;
+      FileListJs   linkListJs;
+      FileMap      fileMap;
       Signal       rebuildSignal;
     };
 

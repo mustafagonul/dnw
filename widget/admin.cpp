@@ -28,6 +28,8 @@
 #include "dialog/text.hpp"
 #include "dialog/node.hpp"
 #include "dialog/select.hpp"
+#include "utility/string.hpp"
+#include "wt/stringresource.hpp"
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
 #include <Wt/WToolBar>
@@ -36,9 +38,9 @@
 #include <Wt/WTabWidget>
 #include <Wt/WTextEdit>
 #include <Wt/WCssDecorationStyle>
-
-
-#define EMPTY_NAME ("!!!! EMPTY !!!!")
+#include <Wt/WFileResource>
+#include <Wt/Utils>
+#include <algorithm>
 
 
 namespace dnw {
@@ -54,7 +56,7 @@ using Container = Wt::WContainerWidget;
 using Break = Wt::WBreak;
 using Length = Wt::WLength;
 
-
+/*
 static void setBorder(Wt::WWidget *widget)
 {
   auto style = widget->decorationStyle();
@@ -64,9 +66,11 @@ static void setBorder(Wt::WWidget *widget)
 
   widget->setDecorationStyle(style);
 }
+*/
 
-
-static void configureTextEdit(Wt::WTextEdit *textEdit)
+static void configureTextEdit(Wt::WTextEdit *textEdit,
+                              String const &imageListJs,
+                              String const &linkListJs)
 {
   // General options
   /*
@@ -154,12 +158,22 @@ static void configureTextEdit(Wt::WTextEdit *textEdit)
                           "cite,abbr,acronym,del,ins,attribs,|,"
                           "visualchars,nonbreaking,template,blockquote,pagebreak,|,"
                           "insertfile,insertimage");
+
+  textEdit->setConfigurationSetting("relative_urls", false);
+  textEdit->setConfigurationSetting("remove_script_host", false);
+  textEdit->setConfigurationSetting("convert_urls", false);
+  textEdit->setConfigurationSetting("external_link_list_url", linkListJs);
+  textEdit->setConfigurationSetting("external_image_list_url", imageListJs);
 }
 
 Admin::Admin(System const &system, Parent *parent)
   : Widget(system, parent)
   , edits()
   , textEdits()
+  , resources()
+  , imageListJs(this)
+  , linkListJs(this)
+  , fileMap()
   , rebuildSignal()
 {
   /*
@@ -171,6 +185,11 @@ Admin::Admin(System const &system, Parent *parent)
   mainLayout->addLayout(topLayout);
   mainLayout->addLayout(bottomLayout);
   */
+
+	// File lists mime type
+  imageListJs.setMimeType("application/javascript");
+  linkListJs.setMimeType("application/javascript");
+
 
   // Node commands
   auto nodeToolbar = new Toolbar(this);
@@ -256,8 +275,11 @@ Admin::Admin(System const &system, Parent *parent)
     toolbar->addButton(resetButton);
     toolbar->addButton(pasteButton);
 
+    // edit
+    edit->setPlaceholderText(tr("!!! EMPTY !!!"));
+
     // text edit
-    configureTextEdit(textEdit);
+    configureTextEdit(textEdit, Wt::WLink(&imageListJs).url(), Wt::WLink(&linkListJs).url());
     textEdit->setInline(false);
     textEdit->resize(Length::Auto, 600);
 
@@ -299,22 +321,28 @@ Admin::~Admin()
 
 void Admin::update()
 {
+  // getting node
   auto node = system().node();
   if (node == nullptr)
     return;
 
+  // updating file list
+  updateFileList();
+
+  // setting names and contents
   field::Name name(*node);
   field::Content content(*node);
-
   auto count = system().languageCount();
   for (decltype(count) i = 0; i < count; ++i) {
     auto tag = system().languageTag(i);
     auto nameStr = name.text(tag);
-    if (nameStr.empty())
-      nameStr = EMPTY_NAME;
+    auto contentStr = content.text(tag);
+    using dnw::utility::string::convert;
+    convert(R"rsl(<img .*?src="(\S*?)".*?>)rsl", fileMap, contentStr);
+    convert(R"rsl(<a .*?href="(\S*?)".*?>)rsl", fileMap, contentStr);
 
     edits[i]->setText(nameStr);
-    textEdits[i]->setText(content.text(tag));
+    textEdits[i]->setText(contentStr);
   }
 }
 
@@ -338,6 +366,78 @@ void Admin::onFiles()
   dialog::resource("Files", file);
 }
 
+enum class ListType {
+  Image,
+  Link,
+};
+
+static void generateFileListJs(ListType listType, dnw::utility::string::Map const &fileMap, String &str)
+{
+  std::ostringstream stream;
+
+  switch (listType) {
+  case ListType::Image:
+    stream << "var tinyMCEImageList = new Array(" << std::endl;
+    break;
+  case ListType::Link:
+    stream << "var tinyMCELinkList = new Array(" << std::endl;
+    break;
+  }
+
+  for (unsigned i = 0; i < fileMap.size(); ++i) {
+    auto iter = fileMap.begin();
+    std::advance(iter, i);
+
+    if (iter != fileMap.begin())
+      stream << "," << std::endl;
+
+    stream << "[\"" << iter->first << "\", \"" << iter->second << "\"]";
+  }
+  stream << ");" << std::endl;
+
+  str = stream.str();
+}
+
+void Admin::updateFileList()
+{
+  // getting node
+  auto node = system().node();
+  if (node == nullptr)
+    return;
+
+
+  // deleting resources and clearing file map
+  for (auto ptr : resources) {
+    removeChild(ptr);
+    delete ptr;
+  }
+  resources.clear();
+  fileMap.clear();
+
+
+  // adding resources
+  field::File file(*node);
+  auto fileCount = file.resourceCount();
+  for (decltype(fileCount) i = 0; i < fileCount; ++i) {
+    auto name = file.resourceName(i);
+    auto path = file.resourcePath(i);
+    auto res = new Wt::WFileResource(path, this);
+
+    Wt::WLink link(res);
+    fileMap[name] = link.url();
+    resources.push_back(res);
+  }
+
+
+  // File lists
+  String list;
+  generateFileListJs(ListType::Image, fileMap, list);
+  imageListJs.setString(list);
+  generateFileListJs(ListType::Link, fileMap, list);
+  linkListJs.setString(list);
+}
+
+
 void Admin::saveName(String const &languageTag, InPlaceEdit *edit)
 {
   auto node = system().node();
@@ -347,9 +447,6 @@ void Admin::saveName(String const &languageTag, InPlaceEdit *edit)
   }
 
   auto str = edit->text().toUTF8();
-  if (str == EMPTY_NAME)
-    str = "";
-
   field::Name name(*node);
   name.editText(languageTag, str);
 
@@ -364,7 +461,22 @@ void Admin::saveContent(String const &languageTag, TextEdit *textEdit)
     return;
   }
 
+  // converting
+  using dnw::utility::string::convert;
+  using Wt::Utils::htmlEncode;
+
+  FileMap map;
+  for (auto &item : fileMap) {
+    auto filename = item.first;
+    auto link = htmlEncode(item.second); // NOTE: There is a hack here. TinyMce returns the image links 
+                                         // of content htmlEncoded, so you should make the conversion with
+                                         // html encoded links.
+    map[link] = filename;
+  }
+
   auto str = textEdit->text().toUTF8();
+  convert(R"rsl(<img .*?src="(\S*?)".*?>)rsl", map, str);
+  convert(R"rsl(<a .*?href="(\S*?)".*?>)rsl", map, str);
 
   field::Content content(*node);
   content.editText(languageTag, str);
@@ -519,6 +631,8 @@ void Admin::addFile()
 
   field::File file(*node);
   dialog::addResource("Add File", file);
+
+  updateFileList();
 }
 
 void Admin::removeFile()
@@ -531,6 +645,8 @@ void Admin::removeFile()
 
   field::File file(*node);
   dialog::removeResource("Remove File", file);
+
+  updateFileList();
 }
 
 void Admin::moveFile()

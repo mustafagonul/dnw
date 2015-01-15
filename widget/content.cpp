@@ -27,6 +27,7 @@
 #include <Wt/WBreak>
 #include <Wt/WFileResource>
 #include <Wt/WLink>
+#include <boost/regex.hpp>
 #include "system/node.hpp"
 
 
@@ -86,49 +87,14 @@ void Content::update()
   addWidget(new Wt::WBreak());
 
   // content
+  using dnw::utility::string::convert;
+
   auto content = field::Content(*node).text(system().language());
-  content = convert(content, "<img [[:print:]]*>");
-  content = convert(content, "<a href=[[:print:]]*>");
+  convert(R"rsl(<img .*?src="(\S*?)".*?>)rsl", fileMap, content);
+  convert(R"rsl(<a .*?href="(\S*?)".*?>)rsl", fileMap, content);
 
   auto text = new Wt::WText(content, Wt::XHTMLUnsafeText);
   addWidget(text);
-}
-
-String Content::convert(String const &str) const
-{
-  using dnw::utility::string::replace;
-
-  String result = str;
-
-  for (auto const &file : fileMap) {
-    String const &oldFilename = file.first;
-    String const &newFilename = file.second;
-
-    replace(oldFilename, newFilename, result);
-  }
-
-  return result;
-}
-
-String Content::convert(String const &str, String const &expressionStr) const
-{
-  boost::regex expression(expressionStr);
-  boost::match_results<std::string::const_iterator> what;
-
-  auto begin = str.cbegin();
-  auto end = str.cend();
-
-  std::string result;
-  while (boost::regex_search(begin, end, what, expression))
-  {
-    std::copy(begin, what[0].first, std::back_inserter(result));
-    result += convert(what.str());
-
-    begin = what[0].second;
-  }
-  std::copy(begin, end, std::back_inserter(result));
-
-  return result;
 }
 
 
