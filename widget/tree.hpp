@@ -49,6 +49,9 @@ namespace dnw {
     public:
       virtual void update() final;
 
+    public:
+      Signal &itemChanged();
+
     private:
       void onItemClick(Index);
       void onItemDoubleClick(Index);
@@ -61,9 +64,11 @@ namespace dnw {
       void expandItem(Item &);
 
     private:
-      View view;
-      Model model;
-      Keys keys;
+      View   view;
+      Model  model;
+      Keys   keys;
+
+      Signal itemChangedSignal;
     };
 
   }

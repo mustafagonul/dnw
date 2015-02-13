@@ -99,8 +99,10 @@ bool password(authentication::Session &session)
     session.login().login(user, Wt::Auth::WeakLogin);
     Wt::Auth::PasswordPromptDialog promptDialog(session.login(), &session.authModel());
 
-    if (promptDialog.exec() == Wt::Auth::PasswordPromptDialog::Rejected ||
-        session.login().loggedIn() == false) {
+    auto dialogResult = promptDialog.exec();
+    auto sessionResult = session.login().loggedIn();
+    if (dialogResult == Wt::Auth::PasswordPromptDialog::Rejected ||
+        sessionResult == false) {
       session.login().logout();
       return false;
     }

@@ -174,7 +174,7 @@ Admin::Admin(System const &system, Parent *parent)
   , imageListJs(this)
   , linkListJs(this)
   , fileMap()
-  , rebuildSignal()
+  , itemChangedSignal()
 {
   /*
   // layout
@@ -312,7 +312,6 @@ Admin::Admin(System const &system, Parent *parent)
 
   nodeConfigButton->clicked().connect(this, &Admin::nodeConfig);
   globalConfigButton->clicked().connect(this, &Admin::globalConfig);
-  rebuildButton->clicked().connect(this, &Admin::rebuildConfig);
 }
 
 Admin::~Admin()
@@ -344,6 +343,11 @@ void Admin::update()
     edits[i]->setText(nameStr);
     textEdits[i]->setText(contentStr);
   }
+}
+
+Admin::Signal &Admin::itemChanged()
+{
+  return itemChangedSignal;
 }
 
 void Admin::onCodes()
@@ -450,7 +454,7 @@ void Admin::saveName(String const &languageTag, InPlaceEdit *edit)
   field::Name name(*node);
   name.editText(languageTag, str);
 
-  changed().emit(system().key());
+  itemChanged().emit(system().key());
 }
 
 void Admin::saveContent(String const &languageTag, TextEdit *textEdit)
@@ -571,7 +575,7 @@ void Admin::addNode()
   }
 
   auto k = last->currentKey();
-  changed().emit(k);
+  itemChanged().emit(k);
 
   dialog::messageBox("Admin", "Added.");
 }
@@ -586,7 +590,7 @@ void Admin::removeNode()
 
   auto result = dialog::removeNode(*node, system().language());
   if (result) {
-    changed().emit(system().key());
+    itemChanged().emit(system().key());
     dialog::messageBox("Admin", "Removed.");
   }
 }
@@ -601,7 +605,7 @@ void Admin::moveNodeUp()
 
   auto result = dialog::moveNodeUp(*node, system().language());
   if (result) {
-    changed().emit(system().key());
+    itemChanged().emit(system().key());
     dialog::messageBox("Admin", "Moved.");
   }
 }
@@ -616,7 +620,7 @@ void Admin::moveNodeDown()
 
   auto result = dialog::moveNodeDown(*node, system().language());
   if (result) {
-    changed().emit(system().key());
+    itemChanged().emit(system().key());
     dialog::messageBox("Admin", "Moved.");
   }
 }
@@ -691,11 +695,6 @@ void Admin::nodeConfig()
 void Admin::globalConfig()
 {
 
-}
-
-void Admin::rebuildConfig()
-{
-  rebuildSignal.emit();
 }
 
 

@@ -35,10 +35,14 @@ namespace dnw {
       virtual ~Mode();
 
     public:
-      virtual void update();
+      virtual void update() final;
+
+    public:
+      Signal &modeChanged();
 
     private:
-      Toolbar toolbar;
+      Toolbar m_toolbar;
+      Signal  m_modeChanged;
     };
 
   }

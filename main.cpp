@@ -87,6 +87,8 @@ int main()
   int argc = sizeof(argv) / sizeof(argv[0]);
   int result = 0;
   try {
+    dnw::authentication::Session::configureAuth();
+
     result = WRun(argc, const_cast<char **>(argv), &createApplication);
   }
   catch (...) {

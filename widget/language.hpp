@@ -39,11 +39,15 @@ namespace dnw {
       virtual ~Language();
 
     public:
-      virtual void update();
+      virtual void update() final;
+
+    public:
+      Signal &languageChanged();
 
     private:
-      Toolbar     toolbar;
-      PushButtons pushbuttons;
+      Toolbar     m_toolbar;
+      PushButtons m_pushbuttons;
+      Signal      m_languageChanged;
     };
 
   }

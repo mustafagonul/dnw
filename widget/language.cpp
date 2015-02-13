@@ -26,8 +26,9 @@ namespace widget {
 
 Language::Language(System const &system, Parent *parent)
   : Widget(system, parent)
-  , toolbar(this)
-  , pushbuttons()
+  , m_toolbar(this)
+  , m_pushbuttons()
+  , m_languageChanged()
 {
   // if there is not enough language, there is nothing to create
   Size languageCount = system.languageCount();
@@ -35,7 +36,7 @@ Language::Language(System const &system, Parent *parent)
     return;
 
   // adding toolbar
-  addWidget(&toolbar);
+  addWidget(&m_toolbar);
 
   // buttons
   for (Size i = 0; i < languageCount; ++i) {
@@ -43,12 +44,12 @@ Language::Language(System const &system, Parent *parent)
     auto languageTag = system.languageTag(i);
 
     PushButton *button = new PushButton(languageStr, this);
-    toolbar.addButton(button);
+    m_toolbar.addButton(button);
 
-    pushbuttons[button] = languageTag;
+    m_pushbuttons[button] = languageTag;
 
     button->clicked().connect(std::bind([this](String const &l){
-      changed().emit(String(l));
+      languageChanged().emit(String(l));
     }, languageTag));
   }
 }
@@ -59,6 +60,11 @@ Language::~Language()
 
 void Language::update()
 {
+}
+
+Language::Signal &Language::languageChanged()
+{
+  return m_languageChanged;
 }
 
 

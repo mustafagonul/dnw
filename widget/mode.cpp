@@ -27,23 +27,23 @@ namespace widget {
 
 Mode::Mode(System const &system, Parent *parent)
   : Widget(system, parent)
-  , toolbar(this)
+  , m_toolbar(this)
 {
   using PushButton = Wt::WPushButton;
 
-  addWidget(&toolbar);
+  addWidget(&m_toolbar);
 
   auto guestButton = new PushButton(tr("Guest"), this);
   auto adminButton = new PushButton(tr("Admin"), this);
 
-  toolbar.addButton(guestButton);
-  toolbar.addButton(adminButton);
+  m_toolbar.addButton(guestButton);
+  m_toolbar.addButton(adminButton);
 
   guestButton->clicked().connect(std::bind([this]{
-    changed().emit(String("guest"));
+    modeChanged().emit(String("guest"));
   }));
   adminButton->clicked().connect(std::bind([this]{
-    changed().emit(String("admin"));
+    modeChanged().emit(String("admin"));
   }));
 }
 
@@ -53,6 +53,11 @@ Mode::~Mode()
 
 void Mode::update()
 {
+}
+
+Mode::Signal &Mode::modeChanged()
+{
+  return m_modeChanged;
 }
 
 

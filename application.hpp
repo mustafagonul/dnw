@@ -30,23 +30,10 @@ namespace dnw {
   private:
     using Environment = Wt::WEnvironment;
     using Handle = void *;
-    using MainPtr = widget::MainPtr;
 
   public:
     explicit Application(Environment const &);
     virtual ~Application();
-
-  private:
-    bool checkLibrary() const;
-    void buildLibrary();
-    void loadLibrary();
-    void unloadLibrary();
-    void writeLine(String const &str);
-    void runCommand(String const &prefix, String const &command);
-
-  private:
-    Handle  libraryHandle;
-    MainPtr mainPtr;
   };
 
 }

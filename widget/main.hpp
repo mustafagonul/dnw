@@ -26,14 +26,11 @@ namespace dnw {
       explicit Main(Parent *parent = nullptr);
       virtual ~Main();
 
-    public:
-      Signal &rebuild() { return rebuildSignal; }
-
     private:
       void onRebuild();
-      void onMode(Any const &);
-      void onLanguage(Any const &);
-      void onKey(Any const &);
+      void onModeChange(Any const &);
+      void onLanguageChange(Any const &);
+      void onItemChange(Any const &);
       void onMain(Any const &);
 
     private:
@@ -50,10 +47,6 @@ namespace dnw {
       Widget    *workspace;
 
     };
-
-    using MainPtr = std::shared_ptr<Main>;
-
-    extern "C" MainPtr createInstance(void);
   }
 }
 

@@ -5,34 +5,20 @@ cmake_minimum_required(VERSION 2.8)
 include_directories(.)
 
 # variables
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wl,--no-undefined -Wl,--no-allow-shlib-undefined")
-set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS}")
-set(CURDIR ${PROJECT_SOURCE_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 
 # packages
-find_package(Wt REQUIRED)
+#find_package(Wt REQUIRED)
 find_package(Boost COMPONENTS system filesystem regex program_options REQUIRED)
-
-
-# getting library files
-set(LIBFILES "")
-file(GLOB CHILDREN RELATIVE ${CURDIR} ${CURDIR}/*)
-foreach(CHILD ${CHILDREN})
-  if(IS_DIRECTORY ${CURDIR}/${CHILD})
-    set(CHILDDIR ${CURDIR}/${CHILD})
-    file(GLOB_RECURSE CHILDFILES ${CHILDDIR} ${CHILDDIR}/*.cpp ${CHILDDIR}/*.hpp)
-    list(APPEND LIBFILES ${CHILDFILES})    
-  endif()
-endforeach()
 
   
 # getting executable files
-file(GLOB EXEFILES ${CURDIR} ${CURDIR}/*.cpp ${CURDIR}/*.hpp)
+file(GLOB_RECURSE FILES ${PROJECT_SOURCE_DIR} *.cpp *.hpp )
     
 
 # moving from deploy directory to build directory
-set(DEPLOYDIR ${CURDIR}/deploy)
+set(DEPLOYDIR ${PROJECT_SOURCE_DIR}/deploy)
 set(DEPLOYDIRS "")
 set(DEPLOYFILES "")
 file(GLOB CHILDREN RELATIVE ${DEPLOYDIR} ${DEPLOYDIR}/*)
@@ -44,21 +30,17 @@ foreach(CHILD ${CHILDREN})
     list(APPEND DEPLOYFILES ${DEPLOYDIR}/${CHILD})
   endif()
 endforeach()
-
-
-# setting targets
-set(TARGET_EXE "${PROJECT_NAME}_exe")
-set(TARGET_LIB "${PROJECT_NAME}")
   
 
 # targets
-add_executable(${TARGET_EXE} ${EXEFILES})
-add_library(${TARGET_LIB} SHARED ${LIBFILES})
+add_executable(${PROJECT_NAME} ${FILES})
 
 
 # libraries
-target_link_libraries(${TARGET_EXE} wt wthttp boost_filesystem boost_system dl)
-target_link_libraries(${TARGET_LIB} wt boost_regex boost_filesystem boost_system crypto)
+target_link_libraries(${PROJECT_NAME} debug wtd debug wthttpd)
+target_link_libraries(${PROJECT_NAME} optimized wt optimized wthttp)
+target_link_libraries(${PROJECT_NAME} general boost_regex boost_filesystem boost_system crypto)
+
 
 # install
 if(NOT DNW_TARGET_OUTPUT)

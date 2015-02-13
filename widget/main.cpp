@@ -39,13 +39,6 @@ static void setMessages()
   app->messageResourceBundle().use("messages/general");
 }
 
-MainPtr createInstance()
-{
-  dnw::authentication::Session::configureAuth();
-
-  return std::make_shared<Main>();
-}
-
 Main::Main(Parent *parent)
   : config()
   , node()
@@ -96,9 +89,9 @@ Main::Main(Parent *parent)
   bottomLayout->addWidget(container);
 
   // Connections
-  mode->changed().connect(this, &Main::onMode);
-  language->changed().connect(this, &Main::onLanguage);
-  tree->changed().connect(this, &Main::onKey);
+  mode->modeChanged().connect(this, &Main::onModeChange);
+  language->languageChanged().connect(this, &Main::onLanguageChange);
+  tree->itemChanged().connect(this, &Main::onItemChange);
 
   // Main update
   workspace->update();
@@ -108,12 +101,7 @@ Main::~Main()
 {
 }
 
-void Main::onRebuild()
-{
-  rebuild().emit();
-}
-
-void Main::onMode(Any const &any)
+void Main::onModeChange(Any const &any)
 try
 {
   auto mode = boost::any_cast<String>(any);
@@ -138,12 +126,11 @@ try
     container->clear();
 
     auto admin = new Admin(system);
-    admin->rebuild().connect(this, &Main::onRebuild);
+    admin->update();
+    admin->itemChanged().connect(this, &Main::onItemChange);
 
     workspace = admin;
     container->addWidget(workspace);
-    workspace->update();
-    workspace->changed().connect(this, &Main::onKey);
 
     return;
   }
@@ -151,7 +138,7 @@ try
 catch (...) {
 }
 
-void Main::onLanguage(Any const &any)
+void Main::onLanguageChange(Any const &any)
 try
 {
   auto lang = boost::any_cast<String>(any);
@@ -167,7 +154,7 @@ try
 catch (...) {
 }
 
-void Main::onKey(Any const &key)
+void Main::onItemChange(Any const &key)
 {
   system.setKey(key);
 

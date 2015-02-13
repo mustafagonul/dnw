@@ -50,6 +50,7 @@ Tree::Tree(System const &system, Parent *parent)
   , view(this)
   , model(this)
   , keys()
+  , itemChangedSignal()
 {
   view.clicked().connect(this, &Tree::onItemClick);
   view.doubleClicked().connect(this, &Tree::onItemDoubleClick);
@@ -75,6 +76,11 @@ void Tree::update()
   expandModel();
 }
 
+Tree::Signal &Tree::itemChanged()
+{
+  return itemChangedSignal;
+}
+
 void Tree::onItemClick(Index index)
 {
   if (index.isValid() == false)
@@ -83,7 +89,7 @@ void Tree::onItemClick(Index index)
   auto data = model.data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
 
-  changed().emit(key);
+  itemChanged().emit(key);
 }
 
 void Tree::onItemDoubleClick(Index index)

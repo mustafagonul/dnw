@@ -38,7 +38,6 @@ namespace dnw {
       using Resource       = Wt::WResource;
       using Resources      = std::vector<Resource *>;
       using FileListJs     = wt::StringResource;
-      using Signal         = Wt::Signal<>;
       using FileMap        = std::map<String, String>;
 
     public:
@@ -49,7 +48,7 @@ namespace dnw {
       virtual void update() final;
 
     public:
-      Signal &rebuild() { return rebuildSignal; }
+      Signal &itemChanged();
 
     private:
       // Child commands
@@ -71,7 +70,6 @@ namespace dnw {
       // Config commands
       void nodeConfig();
       void globalConfig();
-      void rebuildConfig();
 
       // Save & upload
       void saveName(String const &languageTag, InPlaceEdit *edit);
@@ -94,7 +92,7 @@ namespace dnw {
       FileListJs   imageListJs;
       FileListJs   linkListJs;
       FileMap      fileMap;
-      Signal       rebuildSignal;
+      Signal       itemChangedSignal;
     };
 
   }
