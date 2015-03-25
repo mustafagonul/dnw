@@ -97,12 +97,18 @@ static void logConnetion(Wt::WEnvironment const &env)
 
 Application::Application(Environment const &env)
   : Wt::WApplication(env)
+  , config()
+  , node()
+  , system(config, node)
+  , session()
 {
   // UTF8
   Wt::WString::setDefaultEncoding(Wt::UTF8);
 
   // Theme
-  setTheme(new Wt::WBootstrapTheme());
+  auto theme = new Wt::WBootstrapTheme();
+  theme->setResponsive(true);
+  setTheme(theme);
 
   // Title
   setTitle("Dnw");
@@ -111,7 +117,7 @@ Application::Application(Environment const &env)
   logConnetion(env);
 
   // main
-  auto main = new dnw::widget::Main();
+  auto main = new dnw::widget::Main(system, session);
   root()->addWidget(main);
 }
 

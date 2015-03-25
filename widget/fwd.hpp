@@ -23,9 +23,7 @@
 namespace dnw {
   namespace widget {
 
-    class Mode;
-    class Language;
-
+    class NavigationBar;
     class Widget;
     class Content;
     class Admin;

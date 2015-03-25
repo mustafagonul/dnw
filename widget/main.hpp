@@ -2,10 +2,9 @@
 #define DNW_WIDGET_MAIN_HPP
 
 #include "widget/fwd.hpp"
-#include "system/filesystem/config.hpp"
-#include "system/filesystem/node.hpp"
-#include "system/system.hpp"
-#include "authentication/session.hpp"
+#include "system/fwd.hpp"
+#include "authentication/fwd.hpp"
+#include "utility/common.hpp"
 #include <Wt/WContainerWidget>
 
 
@@ -14,38 +13,30 @@ namespace dnw {
 
     class Main : public Wt::WContainerWidget {
     private:
-      using Config = dnw::system::filesystem::Config;
-      using Node = dnw::system::filesystem::Node;
-      using System = system::System;
-      using Session = authentication::Session;
       using Parent = Wt::WContainerWidget;
       using Container = Wt::WContainerWidget;
-      using Signal = Wt::Signal<>;
+      using System = dnw::system::System;
+      using Session = dnw::authentication::Session;
 
     public:
-      explicit Main(Parent *parent = nullptr);
+      Main(System &system,
+           Session &session,
+           Parent *parent = nullptr);
       virtual ~Main();
 
     private:
-      void onRebuild();
       void onModeChange(Any const &);
       void onLanguageChange(Any const &);
       void onItemChange(Any const &);
-      void onMain(Any const &);
 
     private:
-      Config    config;
-      Node      node;
-      System    system;
-      Session   session;
-      Signal    rebuildSignal;
+      System    &system;
+      Session   &session;
 
-      Tree      *tree;
-      Mode      *mode;
-      Language  *language;
-      Container *container;
-      Widget    *workspace;
-
+      NavigationBar *navigationBar;
+      Tree          *tree;
+      Container     *workspaceContainer;
+      Widget        *workspace;
     };
   }
 }

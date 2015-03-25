@@ -20,7 +20,10 @@
 #define DNW_APPLICATION_HPP
 
 #include <Wt/WApplication>
-#include "widget/main.hpp"
+#include "system/filesystem/config.hpp"
+#include "system/filesystem/node.hpp"
+#include "system/system.hpp"
+#include "authentication/session.hpp"
 #include "utility/common.hpp"
 
 
@@ -28,12 +31,21 @@ namespace dnw {
 
   class Application : public Wt::WApplication {
   private:
+    using Config = dnw::system::filesystem::Config;
+    using Node = dnw::system::filesystem::Node;
+    using System = dnw::system::System;
+    using Session = dnw::authentication::Session;
     using Environment = Wt::WEnvironment;
-    using Handle = void *;
 
   public:
     explicit Application(Environment const &);
     virtual ~Application();
+
+  private:
+    Config    config;
+    Node      node;
+    System    system;
+    Session   session;
   };
 
 }

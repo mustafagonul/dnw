@@ -1,7 +1,6 @@
 #include "widget/main.hpp"
+#include "widget/navigationbar.hpp"
 #include "widget/tree.hpp"
-#include "widget/mode.hpp"
-#include "widget/language.hpp"
 #include "widget/admin.hpp"
 #include "widget/content.hpp"
 #include "dialog/password.hpp"
@@ -9,7 +8,6 @@
 #include <Wt/WApplication>
 #include <Wt/WHBoxLayout>
 #include <Wt/WVBoxLayout>
-#include <Wt/WBreak>
 
 
 namespace dnw {
@@ -18,10 +16,9 @@ namespace widget {
 
 using HBoxLayout = Wt::WHBoxLayout;
 using VBoxLayout = Wt::WVBoxLayout;
-using Break = Wt::WBreak;
 
 
-static void setLanguage(String const &language)
+static void setLocale(String const &language)
 {
   auto app = Wt::WApplication::instance();
   if (app == nullptr)
@@ -39,58 +36,45 @@ static void setMessages()
   app->messageResourceBundle().use("messages/general");
 }
 
-Main::Main(Parent *parent)
-  : config()
-  , node()
-  , system(config, node)
-  , session()
-  , rebuildSignal()
+Main::Main(System &system_, Session &session_, Parent *parent)
+  : system(system_)
+  , session(session_)
+  , navigationBar(nullptr)
   , tree(nullptr)
-  , mode(nullptr)
-  , language(nullptr)
-  , container(nullptr)
+  , workspaceContainer(nullptr)
   , workspace(nullptr)
 {
   // Language
   setMessages();
-  setLanguage(system.language());
+  setLocale(system.language());
 
-  // Layouts
-  auto mainLayout = new HBoxLayout;
-  auto leftLayout = new VBoxLayout;
-  auto rightLayout = new VBoxLayout;
-  auto topLayout = new HBoxLayout;
-  auto bottomLayout = new VBoxLayout;
+  // Layout
+  auto main = new HBoxLayout;
+  auto right = new Container{this};
+  auto left = new Container{this};
 
   // Items
-  container = new Container{this};
   tree = new Tree{system, this};
-  mode = new Mode{system, this};
-  language = new Language{system, this};
+  navigationBar = new NavigationBar{system, this};
+  workspaceContainer = new Container{this};
 
-  // main
+  // Main
   workspace = new Content{system};
-  container->setOverflow(Container::OverflowAuto);
-  container->addWidget(workspace);
+  workspaceContainer->setOverflow(Container::OverflowAuto);
+  workspaceContainer->addWidget(workspace);
 
   // Layout settings
-  setLayout(mainLayout);
-  mainLayout->addLayout(leftLayout, 1);
-  mainLayout->addLayout(rightLayout, 4);
-  leftLayout->addWidget(tree);
-  rightLayout->addLayout(topLayout);
-  rightLayout->addWidget(new Break{this});
-  rightLayout->addWidget(new Break{this});
-  rightLayout->addWidget(new Break{this});
-  rightLayout->addWidget(new Break{this});
-  rightLayout->addLayout(bottomLayout, 1, Wt::AlignTop);
-  topLayout->addWidget(language, 1, Wt::AlignLeft);
-  topLayout->addWidget(mode, 1, Wt::AlignRight);
-  bottomLayout->addWidget(container);
+  setLayout(main);
+  main->addWidget(right, 10);
+  main->addStretch(1);
+  main->addWidget(left, 40);
+  right->addWidget(tree);
+  left->addWidget(navigationBar);
+  left->addWidget(workspaceContainer);
 
   // Connections
-  mode->modeChanged().connect(this, &Main::onModeChange);
-  language->languageChanged().connect(this, &Main::onLanguageChange);
+  navigationBar->modeChanged().connect(this, &Main::onModeChange);
+  navigationBar->languageChanged().connect(this, &Main::onLanguageChange);
   tree->itemChanged().connect(this, &Main::onItemChange);
 
   // Main update
@@ -113,24 +97,24 @@ try
     mode = "guest";
 
   if (mode == "guest") {
-    container->clear();
+    workspaceContainer->clear();
 
     workspace = new Content(system);
-    container->addWidget(workspace);
+    workspaceContainer->addWidget(workspace);
     workspace->update();
 
     return;
   }
 
   if (mode == "admin") {
-    container->clear();
+    workspaceContainer->clear();
 
     auto admin = new Admin(system);
     admin->update();
     admin->itemChanged().connect(this, &Main::onItemChange);
 
     workspace = admin;
-    container->addWidget(workspace);
+    workspaceContainer->addWidget(workspace);
 
     return;
   }
@@ -141,15 +125,16 @@ catch (...) {
 void Main::onLanguageChange(Any const &any)
 try
 {
+  // changes system language
   auto lang = boost::any_cast<String>(any);
-
   system.setLanguage(lang);
-  setLanguage(system.language());
 
-  mode->update();
+  // changes locale language
+  setLocale(system.language()); // TODO mustafa: give a more proper name to this function
+
+  navigationBar->update();
   tree->update();
   workspace->update();
-  language->update();
 }
 catch (...) {
 }
@@ -158,6 +143,7 @@ void Main::onItemChange(Any const &key)
 {
   system.setKey(key);
 
+  navigationBar->update();
   tree->update();
   workspace->update();
 }
