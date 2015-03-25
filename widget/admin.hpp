@@ -48,7 +48,7 @@ namespace dnw {
       virtual void update() final;
 
     public:
-      Signal &itemChanged();
+      Signal &itemChanged(); // TODO mustafa: should be change later
 
     private:
       // Child commands

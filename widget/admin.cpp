@@ -227,11 +227,9 @@ Admin::Admin(System const &system, Parent *parent)
   auto configToolbar = new Toolbar{this};
   auto nodeConfigButton = new Button{tr("Node Config")};
   auto globalConfigButton = new Button{tr("Global Config")};
-  auto rebuildButton = new Button{tr("Rebuild")};
   addWidget(configToolbar);
   configToolbar->addButton(nodeConfigButton);
   configToolbar->addButton(globalConfigButton);
-  configToolbar->addButton(rebuildButton);
 
   // Tab Widget / Text Edits
   auto tabWidget = new TabWidget();
@@ -265,6 +263,7 @@ Admin::Admin(System const &system, Parent *parent)
 
     // arrangement
     tabWidget->addTab(container, str);
+    container->addWidget(new Break());
     container->addWidget(edit);
     container->addWidget(new Break());
     container->addWidget(new Break());
