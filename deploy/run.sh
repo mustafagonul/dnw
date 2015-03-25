@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./dnw_exe > /dev/null 2>&1 &
+./dnw > /dev/null 2>&1 &
