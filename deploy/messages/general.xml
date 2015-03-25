@@ -86,5 +86,15 @@
 
 <message id='Select Language'>Select Language</message>
 
+<message id='Search'>Search</message>
+
+<message id='Node Config'>Node Config</message>
+
+<message id='Global Config'>Global Config</message>
+
+<message id='!!! EMPTY !!!'>!!! EMPTY !!!</message>
+
+<message id='Contents'>Contents</message>
+
 
 </messages>
