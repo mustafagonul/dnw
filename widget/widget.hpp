@@ -42,15 +42,11 @@ namespace dnw {
     public:
       virtual void update() = 0;
 
-    public:
-      // Signal &changed();
-
     protected:
       System const &system() const;
 
     private:
       System const &m_system;
-      // Signal m_changed;
     };
 
   }
