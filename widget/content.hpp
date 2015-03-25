@@ -29,7 +29,7 @@ namespace dnw {
 
     class Content : public Widget {
     public:
-      Content(System const &system, Parent *parent = nullptr);
+      explicit Content(System const &system, Parent *parent = nullptr);
       virtual ~Content();
 
     public:
