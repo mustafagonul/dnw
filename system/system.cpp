@@ -109,6 +109,20 @@ String System::language() const
   return m_currentLanguageTag;
 }
 
+String System::languageStr() const
+{
+  auto iter = std::find(m_languageTags.begin(), m_languageTags.end(), m_currentLanguageTag);
+  if (iter == m_languageTags.end())
+    return String();
+
+  auto index = std::distance(m_languageTags.begin(), iter);
+
+  if (index >= m_languageStrs.size())
+    return String();
+
+  return m_languageStrs[index];
+}
+
 System::NodePtr System::node() const
 {
   return m_root.clone(key());
