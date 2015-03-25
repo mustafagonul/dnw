@@ -132,9 +132,12 @@ void Tree::onCollapsed(Index index)
 void Tree::populateModel()
 {
   model.clear();
+  model.insertColumn(0);
+  model.setHeaderData(0, tr("Contents"));
 
   auto root = new Item();
-  auto rootKey = system().node()->rootKey();
+  auto rootNode = system().root();
+  auto rootKey = rootNode->rootKey();
 
   model.appendRow(root);
 

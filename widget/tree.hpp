@@ -43,7 +43,7 @@ namespace dnw {
       using Keys    = std::set<Any, Comparator>;
 
     public:
-      Tree(System const &system, Parent *parent = nullptr);
+      explicit Tree(System const &system, Parent *parent = nullptr);
       virtual ~Tree();
 
     public:
