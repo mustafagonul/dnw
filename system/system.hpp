@@ -45,6 +45,7 @@ namespace dnw {
       String  language() const;
       String  languageStr() const;
       NodePtr node() const;
+      NodePtr node(Any const &key) const;
       NodePtr root() const;
       Any     key() const;
 

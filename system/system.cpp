@@ -128,6 +128,11 @@ System::NodePtr System::node() const
   return m_root.clone(key());
 }
 
+System::NodePtr System::node(Any const &key) const
+{
+  return m_root.clone(key);
+}
+
 System::NodePtr System::root() const
 {
   return m_root.root();
