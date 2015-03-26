@@ -33,6 +33,7 @@ namespace dnw {
   using String = std::string;
   using Strings = std::vector<std::string>;
   using Any = boost::any;
+  using Anys = std::vector<Any>;
 
 }
 
