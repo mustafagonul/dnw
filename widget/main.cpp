@@ -77,7 +77,8 @@ Main::Main(System &system_, Session &session_, Parent *parent)
   workspaceContainer = new Container{this};
 
   // Main
-  workspace = new Content{system};
+  auto content = new Content{system};
+  workspace = content;
   workspaceContainer->setOverflow(Container::OverflowAuto);
   workspaceContainer->addWidget(workspace);
 
@@ -91,9 +92,12 @@ Main::Main(System &system_, Session &session_, Parent *parent)
   left->addWidget(workspaceContainer);
 
   // Connections
+  content->itemChanged().connect(this, &Main::onItemChange);
   navigationBar->modeChanged().connect(this, &Main::onModeChange);
   navigationBar->languageChanged().connect(this, &Main::onLanguageChange);
+  navigationBar->search().connect(content, &Content::onSearch);
   tree->itemChanged().connect(this, &Main::onItemChange);
+
 
   // Main update
   workspace->update();
@@ -117,7 +121,10 @@ try
   if (mode == "guest") {
     workspaceContainer->clear();
 
-    workspace = new Content(system);
+    auto content = new Content(system);
+    content->itemChanged().connect(this, &Main::onItemChange);
+    navigationBar->search().connect(content, &Content::onSearch);
+    workspace = content;
     workspaceContainer->addWidget(workspace);
     workspace->update();
 

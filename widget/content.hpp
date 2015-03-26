@@ -28,6 +28,10 @@ namespace dnw {
   namespace widget {
 
     class Content : public Widget {
+    private:
+      using FileMap = std::map<String, String>;
+      using Node = dnw::system::Node;
+
     public:
       explicit Content(System const &system, Parent *parent = nullptr);
       virtual ~Content();
@@ -35,14 +39,20 @@ namespace dnw {
     public:
       virtual void update() final;
 
-    private:
-      // void on
+    public:
+      void onSearch(Any const &any);
+      Signal &itemChanged();
 
     private:
-      using FileMap = std::map<String, String>;
+      void createContent();
+      void createSearch(String const &str);
+      void search(String const &str, Anys &results);
+      void search(Node const &node, String const &str, Anys &results);
 
+    private:
       FileMap fileMap;
       String  current;
+      Signal  itemChangedSignal;
     };
 
   }

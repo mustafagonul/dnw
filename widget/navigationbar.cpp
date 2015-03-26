@@ -59,8 +59,6 @@ NavigationBar::NavigationBar(System const &system, Parent *parent)
   bar->addMenu(modeMenu);
   bar->addSearch(searchEdit);
 
-
-
   // items
   languageItem = new Item{""};
   modeItem = new Item{""};
@@ -103,6 +101,15 @@ NavigationBar::NavigationBar(System const &system, Parent *parent)
     modeChanged().emit(String{"admin"});
     modeItem->setText(tr("Admin"));
   }));
+
+  // search
+  searchEdit->enterPressed().connect(std::bind([this, searchEdit]{
+    auto str = searchEdit->text().toUTF8();
+    if (str.empty())
+      return;
+
+    search().emit(str);
+  }));
 }
 
 NavigationBar::~NavigationBar()
@@ -121,6 +128,11 @@ NavigationBar::Signal &NavigationBar::modeChanged()
 NavigationBar::Signal &NavigationBar::languageChanged()
 {
   return languageChangedSignal;
+}
+
+NavigationBar::Signal &NavigationBar::search()
+{
+  return searchSignal;
 }
 
 

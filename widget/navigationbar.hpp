@@ -37,6 +37,7 @@ namespace dnw {
     public:
       Signal &modeChanged();
       Signal &languageChanged();
+      Signal &search();
 
     private:
       using Item = Wt::WMenuItem;
@@ -44,6 +45,7 @@ namespace dnw {
     private:
       Signal modeChangedSignal;
       Signal languageChangedSignal;
+      Signal searchSignal;
       Item  *languageItem;
       Item  *modeItem;
     };

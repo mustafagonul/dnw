@@ -18,17 +18,19 @@
 
 #include "widget/content.hpp"
 #include "system/system.hpp"
+#include "system/node.hpp"
 #include "field/name.hpp"
 #include "field/content.hpp"
 #include "field/file.hpp"
 #include "field/code.hpp"
 #include "utility/string.hpp"
 #include <Wt/WText>
+#include <Wt/WPushButton>
 #include <Wt/WBreak>
 #include <Wt/WFileResource>
 #include <Wt/WLink>
+#include <Wt/WMessageBox>
 #include <boost/regex.hpp>
-#include "system/node.hpp"
 
 
 namespace dnw {
@@ -47,6 +49,23 @@ Content::~Content()
 }
 
 void Content::update()
+{
+  createContent();
+}
+
+void Content::onSearch(Any const &any)
+{
+  auto str = boost::any_cast<String>(any);
+
+  createSearch(str);
+}
+
+Content::Signal &Content::itemChanged()
+{
+  return itemChangedSignal;
+}
+
+void Content::createContent()
 {
   // clearing childs
   clear();
@@ -95,6 +114,72 @@ void Content::update()
 
   auto text = new Wt::WText(content, Wt::XHTMLUnsafeText);
   addWidget(text);
+}
+
+void Content::createSearch(String const &str)
+{
+  // searching
+  Anys results;
+  search(str, results);
+
+  // checks if there are results
+  if (results.empty()) {
+    Wt::WMessageBox::show(tr("Find"), tr("No matches found!"), Wt::Ok);
+    return;
+  }
+
+  // clearing
+  clear();
+
+  // generating results
+  for (auto &key : results) {
+    auto node = system().node(key);
+    if (node == nullptr)
+      continue;
+
+    field::Name name{*node};
+    auto language = system().language();
+    auto str = name.text(language);
+    auto button = new Wt::WPushButton{str};
+
+    button->clicked().connect(std::bind([this](Any const &key) {
+      itemChanged().emit(key);
+    }, key));
+
+    addWidget(button);
+    addWidget(new Wt::WBreak);
+  }
+}
+
+void Content::search(String const &str, Anys &results)
+{
+  results.clear();
+
+  auto root = system().root();
+  if (root == nullptr)
+    return;
+
+  search(*root, str, results);
+}
+
+void Content::search(Node const &node, String const &str, Anys &results)
+{
+  auto language = system().language();
+
+  field::Name name{node};
+  if (name.searchText(language, str, false)) {
+    auto key = node.currentKey();
+    results.push_back(key);
+  }
+
+  auto count = node.nodeCount();
+  for (decltype(count) i = 0; i < count; ++i) {
+    auto sub = node.node(i);
+    if (sub == nullptr)
+      continue;
+
+    search(*sub, str, results);
+  }
 }
 
 
