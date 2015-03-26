@@ -17,6 +17,7 @@
 **/
 
 #include "field/text.hpp"
+#include <boost/algorithm/string.hpp>
 
 
 namespace dnw {
@@ -36,6 +37,19 @@ bool Text::textExists(String const &language) const
 bool Text::editText(String const &language, String const &data) const
 {
   return edit(language, data);
+}
+
+bool Text::searchText(String const &language, String const &data, bool caseSensitive) const
+{
+  auto txt = text(language);
+  auto exp = data;
+
+  if (caseSensitive == false) {
+    boost::to_upper(txt);
+    boost::to_upper(exp);
+  }
+
+  return txt.find(exp) != String::npos;
 }
 
 String Text::text(String const &language) const

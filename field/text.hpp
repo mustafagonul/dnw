@@ -45,7 +45,7 @@ namespace dnw {
 
     public:
       /**
-       * @brief Checks if text exists in the given @a language
+       * @brief Checks if text exists in the given @a language.
        * @param language
        * @return Success value
        */
@@ -58,6 +58,14 @@ namespace dnw {
        * @return Success value
        */
       bool editText(String const &language, String const &data) const;
+
+      /**
+       * @brief Search the string given with the @a data parameter in the file given @a langauge.
+       * @param language
+       * @param data
+       * @param Success value
+       */
+      bool searchText(String const &language, String const &data, bool caseSensitive) const;
 
       /**
        * @brief Returns text of the node in the given @a language.
