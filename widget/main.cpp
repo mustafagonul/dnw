@@ -21,6 +21,7 @@
 #include "widget/tree.hpp"
 #include "widget/admin.hpp"
 #include "widget/content.hpp"
+#include "widget/index.hpp"
 #include "dialog/password.hpp"
 #include "system/system.hpp"
 #include <Wt/WApplication>
@@ -107,39 +108,63 @@ Main::~Main()
 {
 }
 
+void Main::update()
+{
+  // changes locale language
+  setLocale(system.language()); // TODO mustafa: give a more proper name to this function
+
+  // tree & navigation bar
+  navigationBar->update();
+  tree->update();
+
+  // workspace
+  if (workspace)
+    workspace->update();
+}
+
+void Main::showIndex()
+{
+  auto index = new Index(system);
+
+  setWorkspace(index);
+}
+
+void Main::showContent()
+{
+  auto content = new Content(system);
+  content->itemChanged().connect(this, &Main::onItemChange);
+  navigationBar->search().connect(content, &Content::onSearch);
+
+  setWorkspace(content);
+}
+
 void Main::onModeChange(Any const &any)
 try
 {
+  // getting mode string
   auto mode = boost::any_cast<String>(any);
 
+  // checks if there is a password
   if (dialog::checkPassword() == false)
     mode = "guest";
 
+  // if the mode is admin, then asks for a password
   if (mode == "admin" && dialog::password(session) == false)
     mode = "guest";
 
+  // guest mode flow
   if (mode == "guest") {
-    workspaceContainer->clear();
-
-    auto content = new Content(system);
-    content->itemChanged().connect(this, &Main::onItemChange);
-    navigationBar->search().connect(content, &Content::onSearch);
-    workspace = content;
-    workspaceContainer->addWidget(workspace);
-    workspace->update();
+    showContent();
 
     return;
   }
 
+  // admin mode flow
   if (mode == "admin") {
-    workspaceContainer->clear();
-
     auto admin = new Admin(system);
-    admin->update();
     admin->itemChanged().connect(this, &Main::onItemChange);
 
-    workspace = admin;
-    workspaceContainer->addWidget(workspace);
+    setWorkspace(admin);
 
     return;
   }
@@ -154,12 +179,7 @@ try
   auto lang = boost::any_cast<String>(any);
   system.setLanguage(lang);
 
-  // changes locale language
-  setLocale(system.language()); // TODO mustafa: give a more proper name to this function
-
-  navigationBar->update();
-  tree->update();
-  workspace->update();
+  update();
 }
 catch (...) {
 }
@@ -168,9 +188,18 @@ void Main::onItemChange(Any const &key)
 {
   system.setKey(key);
 
-  navigationBar->update();
-  tree->update();
-  workspace->update();
+  update();
+}
+
+void Main::setWorkspace(Widget *w)
+{
+  workspaceContainer->clear();
+  workspace = w;
+
+  if (workspace) {
+    workspaceContainer->addWidget(workspace);
+    workspace->update();
+  }
 }
 
 

@@ -42,10 +42,18 @@ namespace dnw {
            Parent *parent = nullptr);
       virtual ~Main();
 
+    public:
+      void update();
+      void showIndex();
+      void showContent();
+
     private:
       void onModeChange(Any const &);
       void onLanguageChange(Any const &);
       void onItemChange(Any const &);
+
+    private:
+      void setWorkspace(Widget *);
 
     private:
       System    &system;
