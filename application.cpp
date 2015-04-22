@@ -18,6 +18,7 @@
 
 #include "application.hpp"
 #include "widget/main.hpp"
+#include "utility/string.hpp"
 #include <Wt/WEnvironment>
 #include <Wt/WBootstrapTheme>
 // #include <boost/filesystem.hpp>
@@ -101,6 +102,7 @@ Application::Application(Environment const &env)
   , node()
   , system(config, node)
   , session()
+  , main(nullptr)
 {
   // UTF8
   Wt::WString::setDefaultEncoding(Wt::UTF8);
@@ -113,16 +115,68 @@ Application::Application(Environment const &env)
   // Title
   setTitle("Dnw");
 
-  // connection log
+  // Connection log
   logConnetion(env);
 
-  // main
-  auto main = new dnw::widget::Main(system, session);
+  // Main
+  main = new dnw::widget::Main(system, session);
   root()->addWidget(main);
+
+  // Internal path
+  auto path = internalPath();
+  handleInternalPath(path);
+  internalPathChanged().connect(this, &Application::onInternalPathChange);
+
 }
 
 Application::~Application()
 {
+}
+
+void Application::onInternalPathChange(String const &path)
+{
+  handleInternalPath(path);
+
+  main->update();
+}
+
+void Application::handleInternalPath(String const &path)
+{
+  // if there is no internal path, there is nothing to do.
+  if (path.empty())
+    return;
+
+  // if index is given as internal path, show index.
+  if (path == "/index") {
+    main->showIndex();
+
+    return;
+  }
+
+  // splits
+  Strings strings;
+  utility::string::split(path, '/', strings);
+
+  // if there is only language, goes to root
+  if (strings.size() == 1) {
+    auto language = strings.front();
+    // TODO mustafa: check language
+
+    main->showContent();
+    system.setLanguage(language);
+    system.setKey(system.root()->currentKey());
+  }
+
+  // if there is language and also key, goes to node
+  if (strings.size() == 2) {
+    auto language = strings[0];
+    auto key = strings[1];
+
+    // TODO mustafa: check language and key
+    main->showContent();
+    system.setLanguage(language);
+    system.setKey(key);
+  }
 }
 
 

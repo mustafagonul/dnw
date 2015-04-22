@@ -25,6 +25,7 @@
 #include "system/system.hpp"
 #include "authentication/session.hpp"
 #include "utility/common.hpp"
+#include "widget/fwd.hpp"
 
 
 namespace dnw {
@@ -35,6 +36,7 @@ namespace dnw {
     using Node = dnw::system::filesystem::Node;
     using System = dnw::system::System;
     using Session = dnw::authentication::Session;
+    using Main = dnw::widget::Main;
     using Environment = Wt::WEnvironment;
 
   public:
@@ -42,10 +44,16 @@ namespace dnw {
     virtual ~Application();
 
   private:
+    void onInternalPathChange(String const &);
+    void handleInternalPath(String const &);
+
+  private:
     Config    config;
     Node      node;
     System    system;
     Session   session;
+
+    Main *main;
   };
 
 }
