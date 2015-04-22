@@ -39,6 +39,8 @@ using Menu = Wt::WMenu;
 using PopupMenu = Wt::WPopupMenu;
 using Item = Wt::WMenuItem;
 using LineEdit = Wt::WLineEdit;
+using Text = Wt::WText;
+using Link = Wt::WLink;
 
 
 NavigationBar::NavigationBar(System const &system, Parent *parent)
@@ -50,18 +52,24 @@ NavigationBar::NavigationBar(System const &system, Parent *parent)
 {
   // bar & menus
   auto bar = new Bar{this};
+  auto searchEdit = new LineEdit;
+  auto contentsMenu = new Menu;
   auto languageMenu = new Menu;
   auto modeMenu = new Menu;
-  auto searchEdit = new LineEdit;
   searchEdit->setEmptyText(tr("Search"));
   bar->setResponsive(true);
+  bar->addSearch(searchEdit);
+  bar->addMenu(contentsMenu);
   bar->addMenu(languageMenu);
   bar->addMenu(modeMenu);
-  bar->addSearch(searchEdit);
+
 
   // items
   languageItem = new Item{""};
   modeItem = new Item{""};
+  Link contentsLink(Link::InternalPath, "/index");
+  contentsMenu->addItem("Index", new Text(tr("Index")))->setLink(contentsLink);
+  contentsMenu->itemAt(0)->setSelectable(false);
   languageMenu->addItem(languageItem);
   modeMenu->addItem(modeItem);
 
