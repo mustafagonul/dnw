@@ -63,9 +63,11 @@ namespace dnw {
       void expandModel();
       void expandItem(Item &);
 
+      void createViewAndModel();
+
     private:
-      View   view;
-      Model  model;
+      View   *view;
+      Model  *model;
       Keys   keys;
 
       Signal itemChangedSignal;

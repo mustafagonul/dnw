@@ -47,22 +47,11 @@ bool operator==(Any const &a1, Any const &a2)
 
 Tree::Tree(System const &system, Parent *parent)
   : Widget(system, parent)
-  , view(this)
-  , model(this)
+  , view(nullptr)
+  , model(nullptr)
   , keys()
   , itemChangedSignal()
 {
-  view.clicked().connect(this, &Tree::onItemClick);
-  view.doubleClicked().connect(this, &Tree::onItemDoubleClick);
-  view.expanded().connect(this, &Tree::onExpanded);
-  view.collapsed().connect(this, &Tree::onCollapsed);
-
-  view.setModel(&model);
-  view.setSelectionMode(Wt::SingleSelection);
-  view.expandToDepth(1);
-  view.setColumnBorder(Wt::WColor(Wt::black));
-  view.setSortingEnabled(false);
-
   Tree::update();
 }
 
@@ -72,6 +61,7 @@ Tree::~Tree()
 
 void Tree::update()
 {
+  createViewAndModel();
   populateModel();
   expandModel();
 }
@@ -86,7 +76,7 @@ void Tree::onItemClick(Index index)
   if (index.isValid() == false)
     return;
 
-  auto data = model.data(index, Wt::UserRole);
+  auto data = model->data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
 
   itemChanged().emit(key);
@@ -97,10 +87,10 @@ void Tree::onItemDoubleClick(Index index)
   if (index.isValid() == false)
     return;
 
-  if (view.isExpanded(index))
-    view.collapse(index);
+  if (view->isExpanded(index))
+    view->collapse(index);
   else
-    view.expand(index);
+    view->expand(index);
 }
 
 void Tree::onExpanded(Index index)
@@ -110,7 +100,7 @@ void Tree::onExpanded(Index index)
 
   using std::less;
 
-  auto data = model.data(index, Wt::UserRole);
+  auto data = model->data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
 
   keys.insert(key);
@@ -123,7 +113,7 @@ void Tree::onCollapsed(Index index)
 
   using std::less;
 
-  auto data = model.data(index, Wt::UserRole);
+  auto data = model->data(index, Wt::UserRole);
   auto key = boost::any_cast<String>(data);
 
   keys.erase(key);
@@ -131,15 +121,14 @@ void Tree::onCollapsed(Index index)
 
 void Tree::populateModel()
 {
-  model.clear();
-  model.insertColumn(0);
-  model.setHeaderData(0, tr("Contents"));
+  model->insertColumn(0);
+  model->setHeaderData(0, tr("Contents"));
 
   auto root = new Item();
   auto rootNode = system().root();
   auto rootKey = rootNode->rootKey();
 
-  model.appendRow(root);
+  model->appendRow(root);
 
   populateItem(rootKey, *root);
 }
@@ -150,7 +139,7 @@ void Tree::populateItem(Any const &key, Item &item)
   if (clone == nullptr)
     return;
 
-  auto name = String("   ") + field::Name(*clone).text(system().language());
+  auto name = /*String("   ") + */field::Name(*clone).text(system().language());
   auto count = clone->nodeCount();
 
   item.setText(name);
@@ -173,37 +162,59 @@ void Tree::populateItem(Any const &key, Item &item)
 
 void Tree::expandModel()
 {
-  view.expanded().setBlocked(true);
-  view.collapsed().setBlocked(true);
+  view->expanded().setBlocked(true);
+  view->collapsed().setBlocked(true);
 
   keys.insert(system().key());
 
-  auto root = model.item(0, 0);
+  auto root = model->item(0, 0);
   if (root == nullptr)
     return;
 
   expandItem(*root);
 
-  view.expanded().setBlocked(false);
-  view.collapsed().setBlocked(false);
+  view->expanded().setBlocked(false);
+  view->collapsed().setBlocked(false);
 }
 
 void Tree::expandItem(Item &item)
 {
   auto any = item.data();
   if (keys.find(any) == keys.end())
-    view.collapse(item.index());
+    view->collapse(item.index());
   else
-    view.expand(item.index());
+    view->expand(item.index());
 
   if (any == system().key())
-    view.select(item.index());
+    view->select(item.index());
 
   auto count = item.rowCount();
   for (decltype(count) i = 0; i < count; ++i) {
     auto subItem = item.child(i, 0);
     expandItem(*subItem);
   }
+}
+
+void Tree::createViewAndModel()
+{
+  // clears
+  clear();
+
+  // creates
+  view = new View(this);
+  model = new Model(this);
+
+  // sets
+  view->clicked().connect(this, &Tree::onItemClick);
+  view->doubleClicked().connect(this, &Tree::onItemDoubleClick);
+  view->expanded().connect(this, &Tree::onExpanded);
+  view->collapsed().connect(this, &Tree::onCollapsed);
+
+  view->setModel(model);
+  view->setSelectionMode(Wt::SingleSelection);
+  view->expandToDepth(1);
+  view->setColumnBorder(Wt::WColor(Wt::black));
+  view->setSortingEnabled(false);
 }
 
 
