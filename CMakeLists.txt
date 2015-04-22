@@ -37,7 +37,8 @@ add_executable(${PROJECT_NAME} ${FILES})
 
 
 # libraries
-target_link_libraries(${PROJECT_NAME} debug wtd debug wthttpd)
+# target_link_libraries(${PROJECT_NAME} boost_regex boost_filesystem boost_system crypto wt wthttp)
+target_link_libraries(${PROJECT_NAME} debug wt debug wthttp)
 target_link_libraries(${PROJECT_NAME} optimized wt optimized wthttp)
 target_link_libraries(${PROJECT_NAME} general boost_regex boost_filesystem boost_system crypto)
 
