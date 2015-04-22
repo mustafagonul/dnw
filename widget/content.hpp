@@ -40,11 +40,13 @@ namespace dnw {
       virtual void update() final;
 
     public:
+      void onShowAll();
       void onSearch(Any const &any);
       Signal &itemChanged();
 
     private:
       void createContent();
+      void createShowAll();
       void createSearch(String const &str);
       void search(String const &str, Anys &results);
       void search(Node const &node, String const &str, Anys &results);

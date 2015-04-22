@@ -30,6 +30,7 @@
 #include <Wt/WFileResource>
 #include <Wt/WLink>
 #include <Wt/WMessageBox>
+#include <functional>
 #include <boost/regex.hpp>
 
 
@@ -51,6 +52,11 @@ Content::~Content()
 void Content::update()
 {
   createContent();
+}
+
+void Content::onShowAll()
+{
+  createShowAll();
 }
 
 void Content::onSearch(Any const &any)
@@ -114,6 +120,12 @@ void Content::createContent()
 
   auto text = new Wt::WText(content, Wt::XHTMLUnsafeText);
   addWidget(text);
+}
+
+void Content::createShowAll()
+{
+
+
 }
 
 void Content::createSearch(String const &str)
