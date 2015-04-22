@@ -20,8 +20,12 @@
 *.out
 *.app
 
+# Qt-Creator user files
+*.user
+
 # Directories
 /Debug
 /data
 /resources
 /.project
+
