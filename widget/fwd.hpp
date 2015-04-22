@@ -28,6 +28,7 @@ namespace dnw {
     class Content;
     class Admin;
     class Tree;
+    class Main;
 
   }
 }
