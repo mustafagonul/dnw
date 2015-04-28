@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2014 Mustafa Gönül
+ *
+ * dnw is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * dnw is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+**/
+
 #include "widget/index.hpp"
 #include "system/system.hpp"
 #include "system/node.hpp"
@@ -29,7 +47,7 @@ void Index::update()
   using NodeInfoMap = std::map<String, String>;
   using GetInfo = std::function<void (Node const &, String const &, NodeInfoMap &)>;
 
-  GetInfo getInfo = [&getInfo](system::Node const &node, String const &language, NodeInfoMap &map) {
+  GetInfo getInfo = [&getInfo](Node const &node, String const &language, NodeInfoMap &map) {
     field::Name name(node);
     auto nameStr = name.text(language);
     auto linkStr = boost::any_cast<String>(node.currentKey());

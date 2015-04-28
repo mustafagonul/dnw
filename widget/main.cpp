@@ -138,6 +138,14 @@ void Main::showContent()
   setWorkspace(content);
 }
 
+void Main::showAdmin()
+{
+  auto admin = new Admin(system);
+  admin->itemChanged().connect(this, &Main::onItemChange);
+
+  setWorkspace(admin);
+}
+
 void Main::onModeChange(Any const &any)
 try
 {
@@ -161,10 +169,7 @@ try
 
   // admin mode flow
   if (mode == "admin") {
-    auto admin = new Admin(system);
-    admin->itemChanged().connect(this, &Main::onItemChange);
-
-    setWorkspace(admin);
+    showAdmin();
 
     return;
   }

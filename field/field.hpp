@@ -108,6 +108,13 @@ namespace dnw {
        */
       String path(String const &name) const;
 
+      /**
+       * @ Returns last modification time.
+       * @param name
+       * @return Last modification time.
+       */
+      Time time(String const &name) const;
+
 
     protected:
       Node const &node;     /**< node */

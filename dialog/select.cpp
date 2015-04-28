@@ -20,19 +20,20 @@
 #include <Wt/WDialog>
 #include <Wt/WSelectionBox>
 #include <Wt/WPushButton>
+#include <Wt/WRadioButton>
+#include <Wt/WButtonGroup>
 
 
 namespace dnw {
 namespace dialog {
 
-
-using Dialog = Wt::WDialog;
-using SelectionBox = Wt::WSelectionBox;
-using Button = Wt::WPushButton;
-
-
-bool select(String const &title, Strings const &strings, Index &current)
+bool selectWithSelectionBox(String const &title, Strings const &strings, Index &current)
 {
+  using Dialog = Wt::WDialog;
+  using SelectionBox = Wt::WSelectionBox;
+  using Button = Wt::WPushButton;
+
+
   Dialog dialog{Dialog::tr(title)};
 
   auto selectionBox = new SelectionBox;
@@ -51,6 +52,43 @@ bool select(String const &title, Strings const &strings, Index &current)
   auto result = dialog.exec();
   if (result == Dialog::Accepted) {
     current = selectionBox->currentIndex();
+    return true;
+  }
+
+  return false;
+}
+
+bool selectWithButtonGroup(String const &title, Strings const &strings, Index &current)
+{
+  using Dialog = Wt::WDialog;
+  using Button = Wt::WPushButton;
+  using Radio = Wt::WRadioButton;
+  using Group = Wt::WButtonGroup;
+
+  Dialog dialog{Dialog::tr(title)};
+
+  auto group = new Group{dialog.contents()};
+  auto okButton = new Button{Button::tr("Ok")};
+  auto cancelButton = new Button{Button::tr("Cancel")};
+
+  for (auto &str : strings) {
+    auto radio = new Radio;
+    radio->setText(str);
+    radio->setInline(false);
+    group->addButton(radio);
+  }
+
+  group->setSelectedButtonIndex(current);
+
+  dialog.contents()->addWidget(okButton);
+  dialog.contents()->addWidget(cancelButton);
+
+  okButton->clicked().connect(std::bind([&]{ dialog.accept(); }));
+  cancelButton->clicked().connect(std::bind([&]{ dialog.reject(); }));
+
+  auto result = dialog.exec();
+  if (result == Dialog::Accepted) {
+    current = group->selectedButtonIndex();
     return true;
   }
 

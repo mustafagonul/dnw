@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 #include <boost/any.hpp>
+#include <ctime>
+#include <utility/result.hpp>
 
 
 namespace dnw {
@@ -34,6 +36,8 @@ namespace dnw {
   using Strings = std::vector<std::string>;
   using Any = boost::any;
   using Anys = std::vector<Any>;
+  using Time = std::time_t;
+  using Result = dnw::utility::Result;
 
 }
 

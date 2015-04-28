@@ -57,6 +57,11 @@ String Text::text(String const &language) const
   return data(language);
 }
 
+Time Text::lastModification(String const &language) const
+{
+  return time(language);
+}
+
 
 } // field
 } // dnw

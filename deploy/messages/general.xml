@@ -80,7 +80,9 @@
 
 <message id='Reset'>Reset</message>
 
-<message id='Paste'>Paste</message>
+<message id='Paste Content'>Paste Content</message>
+
+<message id='Paste Name'>Paste Name</message>
 
 <message id='There is no other language!'>There is no other language!</message>
 

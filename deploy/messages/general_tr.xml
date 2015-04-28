@@ -80,7 +80,9 @@
 
 <message id='Reset'>Sıfırla</message>
 
-<message id='Paste'>Yapıştır</message>
+<message id='Paste Content'>İçeriği Yapıştır</message>
+
+<message id='Paste Name'>İsmi Yapıştır</message>
 
 <message id='There is no other language!'>Başka dil yok!</message>
 

@@ -33,14 +33,16 @@ namespace dnw {
       using Parent = Wt::WContainerWidget;
       using Signal = Wt::Signal<Any>;
 
+
     protected:
-      Widget(System const &system, Parent *parent = nullptr);
+      explicit Widget(System const &system, Parent *parent = nullptr);
 
     public:
       virtual ~Widget() = 0;
 
     public:
-      virtual void update() = 0;
+      virtual void update();
+      virtual void regenerate();
 
     protected:
       System const &system() const;

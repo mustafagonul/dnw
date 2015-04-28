@@ -40,7 +40,6 @@ namespace dnw {
       virtual void update() final;
 
     public:
-      void onShowAll();
       void onSearch(Any const &any);
       Signal &itemChanged();
 

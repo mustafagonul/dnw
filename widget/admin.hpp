@@ -19,33 +19,20 @@
 #ifndef DNW_WIDGET_ADMIN_HPP
 #define DNW_WIDGET_ADMIN_HPP
 
-#include "widget/widget.hpp"
-#include "wt/stringresource.hpp"
-#include <Wt/WInPlaceEdit>
-#include <Wt/WResource>
-
+#include "widget/decorator.hpp"
 
 
 namespace dnw {
   namespace widget {
 
-    class Admin : public Widget {
-    private:
-      using InPlaceEdit    = Wt::WInPlaceEdit;
-      using InPlaceEdits   = std::vector<InPlaceEdit *>;
-      using TextEdit       = Wt::WTextEdit;
-      using TextEdits      = std::vector<TextEdit *>;
-      using Resource       = Wt::WResource;
-      using Resources      = std::vector<Resource *>;
-      using FileListJs     = wt::StringResource;
-      using FileMap        = std::map<String, String>;
-
+    class Admin : public Decorator {
     public:
       explicit Admin(System const &system, Parent *parent = nullptr);
       virtual ~Admin();
 
     public:
       virtual void update() final;
+      virtual void regenerate() final;
 
     public:
       Signal &itemChanged(); // TODO mustafa: should be change later
@@ -71,31 +58,16 @@ namespace dnw {
       void nodeConfig();
       void globalConfig();
 
-      // Save & upload
-      void saveName(String const &languageTag, InPlaceEdit *edit);
-      void saveContent(String const &languageTag, TextEdit *textEdit);
-      void uploadContent(String const &languageTag, TextEdit *textEdit);
-      void resetContent(String const &languageTag, TextEdit *textEdit);
-      void pasteContent(String const &languageTag, TextEdit *textEdit);
-
-      // Resources
-      void onCodes();
-      void onFiles();
+      // Widgets
+      void editor();
+      void suspicious();
 
     private:
-      void updateFileList();
-
-    private:
-      InPlaceEdits edits;
-      TextEdits    textEdits;
-      Resources    resources;
-      FileListJs   imageListJs;
-      FileListJs   linkListJs;
-      FileMap      fileMap;
-      Signal       itemChangedSignal;
+      Signal itemChangedSignal;
     };
 
   }
 }
 
 #endif // DNW_WIDGET_ADMIN_HPP
+

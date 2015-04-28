@@ -65,6 +65,11 @@ String Field::path(String const &name) const
   return node.path(field, name);
 }
 
+Time Field::time(String const &name) const
+{
+  return node.time(field, name);
+}
+
 
 } // field
 } // dnw

@@ -73,6 +73,13 @@ namespace dnw {
        * @return Name of the node in the given @a language.
        */
       String text(String const &language) const;
+
+      /**
+       * @brief Returns last modification time of the node in the given @a language.
+       * @param language
+       * @return Last modification time of the node in the given @a language.
+       */
+      Time lastModification(String const &language) const;
     };
 
   }

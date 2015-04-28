@@ -25,7 +25,8 @@
 namespace dnw {
   namespace dialog {
 
-    bool select(String const &title, Strings const &strings, Index &current);
+    bool selectWithSelectionBox(String const &title, Strings const &strings, Index &current);
+    bool selectWithButtonGroup(String const &title, Strings const &strings, Index &current);
 
   }
 }

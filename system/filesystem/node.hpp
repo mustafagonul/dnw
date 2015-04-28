@@ -182,7 +182,16 @@ namespace dnw {
          * @param name
          * @return Path of the file in the given field
          */
-        String path(String const &field, String const &name) const;
+        virtual String path(String const &field, String const &name) const;
+
+
+        /**
+         * @brief Returns last modification time of the data
+         * @param field
+         * @param name
+         * @return Last modification time of the data in the @a field
+         */
+        virtual Time time(String const &field, String const &name) const;
 
         /** @} */ // end of field functions
 

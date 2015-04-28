@@ -44,8 +44,10 @@ namespace dnw {
 
     public:
       void update();
+
       void showIndex();
       void showContent();
+      void showAdmin();
 
     private:
       void onModeChange(Any const &);

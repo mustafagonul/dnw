@@ -400,6 +400,21 @@ catch (...)
   return "";
 }
 
+Time Node::time(const String &field, const String &name) const
+try {
+  if (name.empty() == true)
+    return 0;
+
+  fs::path p = keyToDirectory(key());
+  p /= field;
+  p /= name;
+
+  return fs::last_write_time(p);
+}
+catch (...) {
+  return 0;
+}
+
 Key const &Node::key() const
 {
   return m_key;

@@ -38,6 +38,14 @@ Widget::System const &Widget::system() const
   return m_system;
 }
 
+void Widget::update()
+{
+}
+
+void Widget::regenerate()
+{
+}
+
 
 } // widget
 } // dnw

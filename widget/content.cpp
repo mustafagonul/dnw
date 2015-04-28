@@ -54,11 +54,6 @@ void Content::update()
   createContent();
 }
 
-void Content::onShowAll()
-{
-  createShowAll();
-}
-
 void Content::onSearch(Any const &any)
 {
   auto str = boost::any_cast<String>(any);
@@ -120,12 +115,6 @@ void Content::createContent()
 
   auto text = new Wt::WText(content, Wt::XHTMLUnsafeText);
   addWidget(text);
-}
-
-void Content::createShowAll()
-{
-
-
 }
 
 void Content::createSearch(String const &str)
