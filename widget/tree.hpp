@@ -58,12 +58,15 @@ namespace dnw {
       void onExpanded(Index);
       void onCollapsed(Index);
 
+      void createViewAndModel();
+      void updateKeys();
+
       void populateModel();
       void populateItem(Any const &, Item &);
       void expandModel();
       void expandItem(Item &);
 
-      void createViewAndModel();
+
 
     private:
       View   *view;

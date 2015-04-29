@@ -62,6 +62,7 @@ Tree::~Tree()
 void Tree::update()
 {
   createViewAndModel();
+  updateKeys();
   populateModel();
   expandModel();
 }
@@ -130,7 +131,7 @@ void Tree::populateModel()
 
   model->appendRow(root);
 
-  populateItem(rootKey, *root);
+    populateItem(rootKey, *root);
 }
 
 void Tree::populateItem(Any const &key, Item &item)
@@ -164,8 +165,6 @@ void Tree::expandModel()
 {
   view->expanded().setBlocked(true);
   view->collapsed().setBlocked(true);
-
-  keys.insert(system().key());
 
   auto root = model->item(0, 0);
   if (root == nullptr)
@@ -215,6 +214,29 @@ void Tree::createViewAndModel()
   view->expandToDepth(1);
   view->setColumnBorder(Wt::WColor(Wt::black));
   view->setSortingEnabled(false);
+}
+
+void Tree::updateKeys()
+{
+  auto current = system().node();
+  auto root = system().root();
+  if (current == nullptr)
+    return;
+  if (root == nullptr)
+    return;
+
+
+  while (true) {
+    auto currentKey = current->currentKey();
+    auto rootKey = root->rootKey();
+
+    keys.insert(currentKey);
+
+    if (currentKey == rootKey)
+      break;
+
+    current = current->parent();
+  }
 }
 
 
