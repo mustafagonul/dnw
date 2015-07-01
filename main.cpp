@@ -17,13 +17,11 @@
 **/
 
 #include "application.hpp"
-#include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/filesystem.hpp>
 
 
 using namespace std;
 using namespace Wt;
-using namespace boost::interprocess;
 using namespace boost::filesystem;
 
 
@@ -32,38 +30,13 @@ WApplication *createApplication(const WEnvironment& env)
   return new dnw::Application(env);
 }
 
-
-int main()
+// main
+#ifndef NDEBUG // debug mode
+  int main()
+#else // release mode
+  int main(int argc, const char **argv)
+#endif
 {
-  // lock file name
-  #ifndef NDEBUG // debug mode
-    static const auto lockFileName = "mustafagonul-dnw-debug.lockfile";
-  #else
-    static const auto lockFileName = "mustafagonul-dnw.lockfile";
-  #endif
-
-
-  try {
-    // creating file if not exits
-    ofstream file;
-    file.open(lockFileName);
-    file.close();
-
-    // locking file
-    file_lock flock(lockFileName);
-    if (flock.try_lock() == false) {
-      std::cerr << "Already Running !!!" << std::endl;
-
-      return -1;
-    }
-  }
-  catch (...) {
-    std::cerr << "Lock File Error !!!" << std::endl;
-
-    return -1;
-  }
-
-
 
   // parameters
 #ifndef NDEBUG // debug mode
@@ -74,17 +47,11 @@ int main()
     "--http-port=8080",
     "--gdb",
   };
-#else // release mode
-  const char *argv[] = {
-    "dnw_exe",
-    "--docroot=.",
-    "--http-address=0.0.0.0",
-    "--http-port=80",
-  };
+
+  int argc = sizeof(argv) / sizeof(argv[0]);
 #endif
 
   // server running
-  int argc = sizeof(argv) / sizeof(argv[0]);
   int result = 0;
   try {
     dnw::authentication::Session::configureAuth();
