@@ -1,0 +1,20 @@
+[Unit]
+Description=FastCGI spawner for dnw
+
+[Service]
+ExecStart=/usr/bin/spawn-fcgi -s /var/run/fcgi-dnw.sock -P /var/run/fcgi-dnw.pid -G http -M 0660 -- /srv/http/dnw/dnw
+WorkingDirectory=/srv/http/dnw
+Environment="WT_APP_ROOT=/srv/http/dnw" 
+
+Type=forking
+PIDFile=/var/run/fcgi-dnw.pid
+Restart=always
+SyslogIdentifier=fcgi-dnw
+
+# Security-conscious users may wish to research:
+#   PrivateTmp, PrivateDevices, ProtectSystem, ProtectHome
+#   CapabilityBoundingSet=
+#   NoNewPrivileges
+
+[Install]
+WantedBy=multi-user.target
