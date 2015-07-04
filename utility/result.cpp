@@ -35,7 +35,11 @@ void Result::add(Message const &msg)
 
 void Result::add(Result const &result)
 {
-  std::copy(result.begin(), result.end(), std::back_inserter(m_messages));
+  // std::copy(result.begin(), result.end(), std::back_inserter(m_messages));
+
+  auto count = result.count();
+  for (decltype(count) i = 0; i < count; ++i)
+    m_messages.push_back(result.message(i));
 }
 
 void Result::clear()
