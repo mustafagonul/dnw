@@ -35,7 +35,7 @@ void Result::add(Message const &msg)
 
 void Result::add(Result const &result)
 {
-  std::copy(result.begin(), result.end(), std::back_inserter<Messages>(m_messages));
+  std::copy(result.begin(), result.end(), std::back_inserter(m_messages));
 }
 
 void Result::clear()
